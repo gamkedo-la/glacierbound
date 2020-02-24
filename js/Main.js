@@ -24,7 +24,7 @@ window.onload = function () {
     grid = new Map();
     player = new Player();
 
-    initRenderLoop();
+    loadImages();
 }
 
 function initRenderLoop() {
@@ -62,10 +62,20 @@ function render3DProjectedWalls(){
         var correctedWallDistance = ray.distance * Math.cos(ray.angle - player.rotationAngle);
         //calculate distance to the projection plane
         var distanceProjectionPlane = (canvas.width / 2) / Math.tan(FOV_RADS / 2);
-
         //projected wall height
         var wallStripHeight = (TILE_SIZE / correctedWallDistance ) * distanceProjectionPlane;
-
-        colorRect(i * RAY_INCREMENT_WIDTH, (canvas.height /2) - (wallStripHeight /2), RAY_INCREMENT_WIDTH, wallStripHeight, rgb(100,100, (255 - Math.min( 0.5 * correctedWallDistance, 255)))) ;
+        
+        if (getTileTypeAtPixelCoord(ray.wallHitX, ray.wallHitY) > 1) {
+            let wallX = 0;
+            if (ray.wasHitVertical) wallX = ray.wallHitY / TILE_SIZE;
+            else  wallX = ray.wallHitX / TILE_SIZE;
+            wallX -= Math.floor(wallX);
+            wallX = 1 - wallX;
+    
+            let textureX = Math.floor(mapWallTex.width * wallX);
+            canvasContext.drawImage(mapWallTex, textureX, 0, 1, mapWallTex.height, i * RAY_INCREMENT_WIDTH, (canvas.height /2) - (wallStripHeight /2), RAY_INCREMENT_WIDTH, wallStripHeight);
+        } else {
+            colorRect(i * RAY_INCREMENT_WIDTH, (canvas.height /2) - (wallStripHeight /2), RAY_INCREMENT_WIDTH, wallStripHeight, rgb(100,100, (255 - Math.min( 0.5 * correctedWallDistance, 255)))) ;
+        }
     }
 }

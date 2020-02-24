@@ -26,7 +26,7 @@ function rowAtYCoord(pixelY) {
 
 function isWallTileAtLevelTileCoord(levelTileCol, levelTileRow) {
     var levelTileIndex = levelTileIndexAtColRowCoord(levelTileCol, levelTileRow);
-    return (grid.grid[levelTileIndex] === GRID_WALL);
+    return (grid.grid[levelTileIndex] > 0);
 }
 
 function levelTileIndexAtColRowCoord(tileCol, tileRow) {

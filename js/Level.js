@@ -15,7 +15,7 @@ class Map {
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1,
             1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -48,11 +48,11 @@ function getTileTypeAtPixelCoord(pixelX, pixelY) {
     tileRow = Math.floor(tileRow);
 
     // first check whether the player is within any part of the wall
-    if (tileCol < 0 || tileCol >= TRACK_COLS ||
-        tileRow < 0 || tileRow >= TRACK_ROWS) {
+    if (tileCol < 0 || tileCol >= MAP_NUM_COLS ||
+        tileRow < 0 || tileRow >= MAP_NUM_ROWS) {
         return GRID_WALL; // avoid invalid array access, treat out of bounds as wall
     }
 
-    var gridIndex = trackTileToIndex(tileCol, tileRow);
+    var gridIndex = mapTileToIndex(tileCol, tileRow);
     return grid.grid[gridIndex];
 }
