@@ -9,6 +9,7 @@ class Player {
         this.keyHeld_Backward = false;
         this.keyHeld_TurnLeft = false;
         this.keyHeld_TurnRight = false;
+        this.keyHeld_Strafe = false;
         this.rotationAngle = Math.PI / 2;
         this.moveSpeed = 4.0;
         this.rotationSpeed = 3 * (Math.PI / 180);
@@ -25,11 +26,36 @@ class Player {
     updatePosition() {
 
         if (this.keyHeld_TurnLeft) {
-            this.rotationAngle -= this.rotationSpeed;
+            if (this.keyHeld_Strafe) {
+              var newPos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.rotationAngle - Math.PI/2, this.moveSpeed)
+
+              if (isWallTileAtPixelCoord(newPos[0], newPos[1])) {
+                  return;
+              }
+
+              this.x = newPos[0];
+              this.y = newPos[1];
+            }
+            else {
+              this.rotationAngle -= this.rotationSpeed;
+            }
+
         }
 
         if (this.keyHeld_TurnRight) {
-            this.rotationAngle += this.rotationSpeed;
+            if (this.keyHeld_Strafe) {
+              var newPos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.rotationAngle + Math.PI/2, this.moveSpeed)
+
+              if (isWallTileAtPixelCoord(newPos[0], newPos[1])) {
+                  return;
+              }
+
+              this.x = newPos[0];
+              this.y = newPos[1];
+            }
+            else {
+              this.rotationAngle += this.rotationSpeed;
+            }
         }
 
         if (this.keyHeld_Forward) {
@@ -62,25 +88,26 @@ class Player {
         //colorLineAtAngle(this.x, this.y, this.rotationAngle, 20, "red");
     }
 
-    setupControls(forwardKey, backKey, leftKey, rightKey) {
+    setupControls(forwardKey, backKey, leftKey, rightKey, strafeKey) {
         this.controlKeyForForward = forwardKey;
         this.controlKeyForBackward = backKey;
         this.controlKeyForTurnLeft = leftKey;
         this.controlKeyForTurnRight = rightKey;
+        this.controlKeyForStrafe = strafeKey;
     }
 
     castAllRays(){
-    
+
         var rayAngle = this.rotationAngle - (FOV_RADS / 2);
         this.rays = [];
 
-        
+
         //for (var i = 0; i < NUM_OF_RAYS; i++){
         for (var i = 0; i < NUM_OF_RAYS; i++){ //temp for testing
             var ray = new Ray(rayAngle);
             ray.cast();
             this.rays.push(ray);
-            
+
             rayAngle += RAY_ANGLE_INCREMENT;
         }
     }

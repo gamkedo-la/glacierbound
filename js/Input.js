@@ -1,4 +1,4 @@
-// keyboard keycode constants, determined by printing out evt.keyCode from a key handler  
+// keyboard keycode constants, determined by printing out evt.keyCode from a key handler
 const KEY_LEFT_ARROW = 37;
 const KEY_UP_ARROW = 38;
 const KEY_RIGHT_ARROW = 39;
@@ -7,12 +7,13 @@ const KEY_LETTER_W = 87;
 const KEY_LETTER_A = 65;
 const KEY_LETTER_S = 83;
 const KEY_LETTER_D = 68;
+const KEY_ALT = 18;
 
 function initInput() {
   document.addEventListener("keydown", keyPressed);
   document.addEventListener("keyup", keyReleased);
 
-  player.setupControls(KEY_LETTER_W,KEY_LETTER_S,KEY_LETTER_A,KEY_LETTER_D);
+  player.setupControls(KEY_LETTER_W,KEY_LETTER_S,KEY_LETTER_A,KEY_LETTER_D, KEY_ALT);
 }
 
 function setKeyHoldState(thisKey, setTo) {
@@ -27,6 +28,9 @@ function setKeyHoldState(thisKey, setTo) {
   }
   if(thisKey == player.controlKeyForBackward) {
     player.keyHeld_Backward = setTo;
+  }
+  if(thisKey == player.controlKeyForStrafe) {
+    player.keyHeld_Strafe = setTo;
   }
 }
 
