@@ -13,6 +13,7 @@ var canvasContext;
 
 var player;
 var grid;
+var testObject;
 
 window.onload = function () {
 
@@ -23,6 +24,7 @@ window.onload = function () {
 
     grid = new Map();
     player = new Player();
+    testObject = new GameObject(300, 300, mapWallTex);
 
     loadImages();
 }
@@ -49,11 +51,9 @@ function drawEverything() {
     colorRect(0, canvas.height /2, canvas.width, canvas.height, 'DarkGrey'); //Floor Color
 
     render3DProjectedWalls();
-    
+    testObject.draw();
     grid.draw();
-
     player.draw();
-
 }
 
 function render3DProjectedWalls(){
