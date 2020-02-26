@@ -86,6 +86,6 @@ function render3DProjection(){
         if (testObject.distance >= ray.distance){
             testObject.draw();
         }
-        
     }
+    testObject.draw();
 }
