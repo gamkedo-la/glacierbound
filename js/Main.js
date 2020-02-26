@@ -24,7 +24,7 @@ window.onload = function () {
 
     grid = new Map();
     player = new Player();
-    testObject = new GameObject(300, 275, mapWallTex);
+    testObject = new GameObject(300, 275, mapWallTex, -0.5, 0.5);
 
     loadImages();
 }

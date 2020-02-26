@@ -1,8 +1,10 @@
 class GameObject {
-    constructor(x, y, pic) {
+    constructor(x, y, pic, altitude, scale) {
         this.x = x;
         this.y = y;
+        this.altitude = altitude ? altitude : 0; //screen y offset
         this.pic = pic;
+        this.scale = scale ? scale : 1; //multiple of draw height/width
         this.distance = 0; //distance to player
         this.renderedThisFrame = false;
 
@@ -35,8 +37,9 @@ class GameObject {
             let drawHeight = (TILE_SIZE / dist) * distanceProjectionPlane;
             let drawWidth = (this.pic.width / this.pic.height) * drawHeight;
             let drawX = canvas.width / 2 + Math.tan(drawAngle) * distanceProjectionPlane;
+            let drawY = (canvas.height / 2) - (drawHeight / 2) - (drawHeight * this.altitude);
 
-            canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - drawWidth / 2, (canvas.height / 2) - (drawHeight / 2), drawWidth /2, drawHeight /2);
+            canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - drawWidth / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
 
             this.renderedThisFrame = true;
         }
