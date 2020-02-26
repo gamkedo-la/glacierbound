@@ -17,68 +17,31 @@ class Player {
     }
 
     update() {
-
         this.updatePosition();
         this.castAllRays();
-
     }
 
     updatePosition() {
-
+        let newX = 0, 
+            newY = 0;
         if (this.keyHeld_TurnLeft) {
-            if (this.keyHeld_Strafe) {
-                var newPos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.rotationAngle - Math.PI / 2, this.moveSpeed)
-
-                if (isWallTileAtPixelCoord(newPos[0], newPos[1])) {
-                    return;
-                }
-
-                this.x = newPos[0];
-                this.y = newPos[1];
-            }
-            else {
-                this.rotationAngle -= this.rotationSpeed;
-            }
-
+            if (this.keyHeld_Strafe) newY -= 1;
+            else this.rotationAngle -= this.rotationSpeed;
         }
-
         if (this.keyHeld_TurnRight) {
-            if (this.keyHeld_Strafe) {
-                var newPos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.rotationAngle + Math.PI / 2, this.moveSpeed)
-
-                if (isWallTileAtPixelCoord(newPos[0], newPos[1])) {
-                    return;
-                }
-
-                this.x = newPos[0];
-                this.y = newPos[1];
-            }
-            else {
-                this.rotationAngle += this.rotationSpeed;
-            }
+            if (this.keyHeld_Strafe) newY += 1;
+            else this.rotationAngle += this.rotationSpeed;
         }
+        if (this.keyHeld_Forward) newX += 1;
+        if (this.keyHeld_Backward) newX -= 1;
 
-        if (this.keyHeld_Forward) {
-
-            var newPos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.rotationAngle, this.moveSpeed)
-
-            if (isWallTileAtPixelCoord(newPos[0], newPos[1])) {
-                return;
-            }
-
-            this.x = newPos[0];
-            this.y = newPos[1];
-        }
-
-        if (this.keyHeld_Backward) {
-            var newPos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.rotationAngle, -this.moveSpeed)
-
-            if (isWallTileAtPixelCoord(newPos[0], newPos[1])) {
-                return;
-            }
-
-            this.x = newPos[0];
-            this.y = newPos[1];
+        if (newX === 0 && newY === 0) return;
+        
+        let moveAng = this.rotationAngle + Math.atan2(newY, newX);
+        let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, moveAng, this.moveSpeed);
+        if (!isWallTileAtPixelCoord(movePos[0], movePos[1])) {
+            this.x = movePos[0];
+            this.y = movePos[1];
         }
     }
 
