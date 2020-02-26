@@ -27,34 +27,34 @@ class Player {
 
         if (this.keyHeld_TurnLeft) {
             if (this.keyHeld_Strafe) {
-              var newPos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.rotationAngle - Math.PI/2, this.moveSpeed)
+                var newPos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.rotationAngle - Math.PI / 2, this.moveSpeed)
 
-              if (isWallTileAtPixelCoord(newPos[0], newPos[1])) {
-                  return;
-              }
+                if (isWallTileAtPixelCoord(newPos[0], newPos[1])) {
+                    return;
+                }
 
-              this.x = newPos[0];
-              this.y = newPos[1];
+                this.x = newPos[0];
+                this.y = newPos[1];
             }
             else {
-              this.rotationAngle -= this.rotationSpeed;
+                this.rotationAngle -= this.rotationSpeed;
             }
 
         }
 
         if (this.keyHeld_TurnRight) {
             if (this.keyHeld_Strafe) {
-              var newPos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.rotationAngle + Math.PI/2, this.moveSpeed)
+                var newPos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.rotationAngle + Math.PI / 2, this.moveSpeed)
 
-              if (isWallTileAtPixelCoord(newPos[0], newPos[1])) {
-                  return;
-              }
+                if (isWallTileAtPixelCoord(newPos[0], newPos[1])) {
+                    return;
+                }
 
-              this.x = newPos[0];
-              this.y = newPos[1];
+                this.x = newPos[0];
+                this.y = newPos[1];
             }
             else {
-              this.rotationAngle += this.rotationSpeed;
+                this.rotationAngle += this.rotationSpeed;
             }
         }
 
@@ -96,19 +96,22 @@ class Player {
         this.controlKeyForStrafe = strafeKey;
     }
 
-    castAllRays(){
+    castAllRays() {
 
         var rayAngle = this.rotationAngle - (FOV_RADS / 2);
         this.rays = [];
 
-
-        //for (var i = 0; i < NUM_OF_RAYS; i++){
-        for (var i = 0; i < NUM_OF_RAYS; i++){ //temp for testing
+        for (var i = 0; i < NUM_OF_RAYS; i++) {
             var ray = new Ray(rayAngle);
+            ray.columnID = i;
             ray.cast();
             this.rays.push(ray);
 
             rayAngle += RAY_ANGLE_INCREMENT;
         }
+
+        //re-sorts list of rays from furthest to closest to the player
+        this.rays.sort((a, b) => (a.distance < b.distance) ? 1 : -1);
+
     }
 }

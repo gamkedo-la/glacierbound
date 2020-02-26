@@ -13,6 +13,7 @@ class Ray {
         this.isFacingRight = this.angle > 1.5 * Math.PI || this.angle < 0.5 * Math.PI;
         this.isFacingLeft = !this.isFacingRight;
         this.wasHitVertical = false;
+        this.columnID = 0;
     }
 
     cast() {
