@@ -14,6 +14,8 @@ function initInput() {
   document.addEventListener("keyup", keyReleased);
 
   player.setupControls(KEY_LETTER_W,KEY_LETTER_S,KEY_LETTER_A,KEY_LETTER_D, KEY_ALT);
+
+  initMouse();
 }
 
 function setKeyHoldState(thisKey, setTo) {

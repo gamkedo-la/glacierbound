@@ -3,8 +3,6 @@ class Player {
         this.x = canvas.width / 2;
         this.y = canvas.height / 2;
         this.radius = 5;
-        this.turnDirection = 0; // -1 if left, +1 if right
-        this.walkDirection = 0; // -1 if back, +1 if forward
         this.keyHeld_Forward = false;
         this.keyHeld_Backward = false;
         this.keyHeld_TurnLeft = false;
@@ -22,6 +20,7 @@ class Player {
     }
 
     updatePosition() {
+        if (mouseEnabled) this.updateMouse();
         let newX = 0, 
             newY = 0;
         if (this.keyHeld_TurnLeft) {
@@ -43,6 +42,13 @@ class Player {
             this.x = movePos[0];
             this.y = movePos[1];
         }
+    }
+
+    updateMouse() {
+        player.rotationAngle += mouseDelta.x * (Math.PI/180) * MOUSE_SENS;
+
+        mouseDelta.x = 0;
+        mouseDelta.y = 0;
     }
 
     draw() {
