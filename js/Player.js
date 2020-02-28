@@ -12,6 +12,7 @@ class Player {
         this.moveSpeed = 4.0;
         this.rotationSpeed = 3 * (Math.PI / 180);
         this.rays = [];
+        this.moveSway = 0;
     }
 
     update() {
@@ -35,7 +36,9 @@ class Player {
         if (this.keyHeld_Backward) newX -= 1;
 
         if (newX === 0 && newY === 0) return;
-        
+        this.moveSway += Math.PI/15;
+        this.moveSway %= Math.PI * 4;
+
         let moveAng = this.rotationAngle + Math.atan2(newY, newX);
         let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, moveAng, this.moveSpeed);
         if (!isWallTileAtPixelCoord(movePos[0], movePos[1])) {
@@ -55,6 +58,13 @@ class Player {
         this.rays.forEach(element => element.draw());
         colorCircle(this.x * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.radius * MINIMAP_SCALE_FACTOR, 'red');
         //colorLineAtAngle(this.x, this.y, this.rotationAngle, 20, "red");
+    }
+
+    drawHands() {
+        let xOffset = Math.sin(this.moveSway/2) * 40,
+            yOffset = Math.sin(this.moveSway) * 30;
+        canvasContext.drawImage(leftHandPic, 0, 0, 330, 200, xOffset, canvas.height-160 + yOffset, 330, 200);
+        canvasContext.drawImage(rightHandPic, 0, 0, 330, 200,canvas.width-330 + xOffset, canvas.height-160 + yOffset, 330, 200);
     }
 
     setupControls(forwardKey, backKey, leftKey, rightKey, strafeKey) {
