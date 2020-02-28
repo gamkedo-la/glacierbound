@@ -1,4 +1,6 @@
 var mapWallTex = document.createElement('img');
+var leftHandPic = document.createElement('img');
+var rightHandPic = document.createElement('img');
 
 var imagesToLoad = 0;
 
@@ -6,6 +8,8 @@ function loadImages() {
 	
 	var imageList = [
 		{varName: mapWallTex, fileName: 'wall_blue.png'},
+		{varName: leftHandPic, fileName: 'leftHand.png'},
+		{varName: rightHandPic, fileName: 'rightHand.png'}
 	]
 	
 	imagesToLoad = imageList.length;

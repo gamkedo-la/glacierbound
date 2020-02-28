@@ -55,6 +55,10 @@ function drawEverything() {
     //testObject.draw();
     grid.draw();
     player.draw();
+	canvasContext.drawImage(leftHandPic, 0, 0, 330, 200, 0, canvasContext.canvas.height-200, 330, 200);
+	canvasContext.drawImage(rightHandPic, 0, 0, 330, 200,canvasContext.canvas.width-330, canvasContext.canvas.height-200, 330, 200);
+	
+	
 }
 
 function render3DProjection(){
