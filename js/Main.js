@@ -1,7 +1,7 @@
 const PROJECTION_PLANE_WIDTH = 800;
 const PROJECTION_PLANE_HEIGHT = 600;
 const FOV_DEGREES = 60;
-const FOV_RADS = FOV_DEGREES * (Math.PI /180);
+const FOV_RADS = FOV_DEGREES * (Math.PI / 180);
 const RAY_INCREMENT_WIDTH = 1;
 const NUM_OF_RAYS = PROJECTION_PLANE_WIDTH / RAY_INCREMENT_WIDTH;
 const RAY_ANGLE_INCREMENT = FOV_RADS / NUM_OF_RAYS;
@@ -14,6 +14,7 @@ var canvasContext;
 var player;
 var grid;
 var testObject;
+var projectiles = [];
 
 window.onload = function () {
 
@@ -24,7 +25,7 @@ window.onload = function () {
 
     grid = new Map();
     player = new Player();
-    testObject = new GameObject(300, 275, mapWallTex, -0.5, 0.5);
+    testObject = new GameObject(300, 275, 5, mapWallTex, -0.5, 0.5);
 
     loadImages();
 }
@@ -43,23 +44,34 @@ function initRenderLoop() {
 function moveEverything() {
     player.update();
     testObject.update();
+
+    if (projectiles.length > 0) {
+        for (var j = 0; j < projectiles.length; j++) {
+            projectiles[j].update();
+        }
+    }
 }
 
 function drawEverything() {
 
     // clear the game view by filling it with white
     colorRect(0, 0, canvas.width, canvas.height, 'SlateGrey'); //Ceiling/Sky Color
-    colorRect(0, canvas.height /2, canvas.width, canvas.height, 'DarkGrey'); //Floor Color
+    colorRect(0, canvas.height / 2, canvas.width, canvas.height, 'DarkGrey'); //Floor Color
 
     render3DProjection();
-    //testObject.draw();
     grid.draw();
     player.draw();
     player.drawHands();
+    if (projectiles.length > 0) {
+        for (var i = 0; i < projectiles.length; i++) {
+            projectiles[i].draw2D();
+        }
+    }
+
 }
 
-function render3DProjection(){
-    for (var i = 0; i < NUM_OF_RAYS; i++){
+function render3DProjection() {
+    for (var i = 0; i < NUM_OF_RAYS; i++) {
         var ray = player.rays[i];
 
         //Account for fish-eye effect when storing the distance to the wall
@@ -69,24 +81,38 @@ function render3DProjection(){
         var distanceProjectionPlane = (canvas.width / 2) / Math.tan(FOV_RADS / 2);
 
         //calculate the height of the wall strip on the projection plane
-        var wallStripHeight = (TILE_SIZE / correctedWallDistance ) * distanceProjectionPlane;
-        
+        var wallStripHeight = (TILE_SIZE / correctedWallDistance) * distanceProjectionPlane;
+
         if (getTileTypeAtPixelCoord(ray.wallHitX, ray.wallHitY) > 1) {
             let wallX = 0;
             if (ray.wasHitVertical) wallX = ray.wallHitY / TILE_SIZE;
-            else  wallX = ray.wallHitX / TILE_SIZE;
+            else wallX = ray.wallHitX / TILE_SIZE;
             wallX -= Math.floor(wallX);
             wallX = 1 - wallX;
-    
+
             let textureX = Math.floor(mapWallTex.width * wallX);
-            canvasContext.drawImage(mapWallTex, textureX, 0, 1, mapWallTex.height, ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height /2) - (wallStripHeight /2), RAY_INCREMENT_WIDTH, wallStripHeight);
+            canvasContext.drawImage(mapWallTex, textureX, 0, 1, mapWallTex.height, ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight);
         } else {
-            colorRect(ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height /2) - (wallStripHeight /2), RAY_INCREMENT_WIDTH, wallStripHeight, rgb(100,100, (255 - Math.min( 0.5 * correctedWallDistance, 255)))) ;
+            colorRect(ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight, rgb(100, 100, (255 - Math.min(0.5 * correctedWallDistance, 255))));
         }
 
-        if (testObject.distance >= ray.distance){
+        if (testObject.distance >= ray.distance) {
             testObject.draw();
         }
+
+        //if (projectiles.length > 0) {
+        //    for (var i = 0; i < projectiles.length; i++) {
+        //        if (projectiles[i].distance >= ray.distance) {
+        //            projectiles[i].draw();
+        //        }
+        //    }
+        //}
     }
     testObject.draw();
+    if (projectiles.length > 0) {
+        for (var i = 0; i < projectiles.length; i++) {
+            projectiles[i].draw();
+        }
+    }
+
 }

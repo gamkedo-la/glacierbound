@@ -28,4 +28,4 @@ function colorLineAtAngle(x, y, angle, length, color){
 
 function rgb(r, g, b){
     return "rgb("+r+","+g+","+b+")";
-  }
+}

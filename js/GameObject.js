@@ -1,7 +1,10 @@
 class GameObject {
-    constructor(x, y, pic, altitude, scale) {
+    constructor(x, y, speed, pic, altitude, scale, angle) {
         this.x = x;
         this.y = y;
+        this.direction = angle;
+        this.radius = 5;
+        this.moveSpeed = speed;
         this.altitude = altitude ? altitude : 0; //screen y offset
         this.pic = pic;
         this.scale = scale ? scale : 1; //multiple of draw height/width
@@ -23,11 +26,17 @@ class GameObject {
         }
         this.fwdMove?this.x += 2:this.x -= 2;
 
+        //let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.direction, this.moveSpeed);
+
+        //this.x = movePos[0];
+        //this.y = movePos[1];
+
     }
 
     draw() {
         if (!this.renderedThisFrame) {
-            let distanceProjectionPlane = (canvas.width / 2) / Math.tan(FOV_RADS / 2);//This only changes if canvas width or FOV changes
+
+            let distanceProjectionPlane = (canvas.width / 2) / Math.tan(FOV_RADS / 2); //This only changes if canvas width or FOV changes
             let dist = this.distance;
             let drawAngle = Math.atan2(this.y - player.y, this.x - player.x) - player.rotationAngle;
 
@@ -43,5 +52,9 @@ class GameObject {
 
             this.renderedThisFrame = true;
         }
+    }
+
+    draw2D() {
+        colorCircle(this.x * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.radius * MINIMAP_SCALE_FACTOR, "yellow");
     }
 }

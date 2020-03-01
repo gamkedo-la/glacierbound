@@ -58,7 +58,6 @@ class Ray {
         }
 
         //increment xStep and yStep until it finds a wall
-
         while (nextHorTouchX >= 0 && nextHorTouchX < (TILE_SIZE * MAP_NUM_COLS) && nextHorTouchY >= 0 && nextHorTouchY < TILE_SIZE * MAP_NUM_ROWS) {
             if (isWallTileAtPixelCoord(nextHorTouchX, nextHorTouchY)) {
                 foundHorWallHit = true;
@@ -70,7 +69,6 @@ class Ray {
                 nextHorTouchY += yStep;
             }
         }
-
 
         //Vertical Intercept
         var foundVertWallHit = false;
@@ -108,7 +106,6 @@ class Ray {
         }
 
         //increment xStep and yStep until it finds a wall
-
         while (nextVertTouchX >= 0 && nextVertTouchX < (TILE_SIZE * MAP_NUM_COLS) && nextVertTouchY >= 0 && nextVertTouchY < (TILE_SIZE * MAP_NUM_ROWS)) {
             if (isWallTileAtPixelCoord(nextVertTouchX, nextVertTouchY)) {
                 foundVertWallHit = true;
@@ -142,6 +139,5 @@ class Ray {
     draw() {
         colorLine(player.x * MINIMAP_SCALE_FACTOR, player.y * MINIMAP_SCALE_FACTOR, this.wallHitX * MINIMAP_SCALE_FACTOR, this.wallHitY * MINIMAP_SCALE_FACTOR, "red");
     }
-
 
 }
