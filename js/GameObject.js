@@ -56,5 +56,6 @@ class GameObject {
 
     draw2D() {
         colorCircle(this.x * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.radius * MINIMAP_SCALE_FACTOR, "yellow");
+        colorLineAtAngle(this.x  * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.direction, 10, 'yellow');
     }
 }

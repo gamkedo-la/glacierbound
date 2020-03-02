@@ -25,7 +25,8 @@ window.onload = function () {
 
     grid = new Map();
     player = new Player();
-    testObject = new GameObject(300, 275, 5, mapWallTex, -0.5, 0.5);
+    testObject = new Character(300, 275, 5, mapWallTex, -0.5, 0.5, 0);
+    testObject.target = player;
 
     loadImages();
 }
@@ -61,12 +62,13 @@ function drawEverything() {
     render3DProjection();
     grid.draw();
     player.draw();
+    testObject.draw2D();
     player.drawHands();
-    if (projectiles.length > 0) {
-        for (var i = 0; i < projectiles.length; i++) {
+    
+    for (var i = 0; i < projectiles.length; i++) {
             projectiles[i].draw2D();
-        }
     }
+
 
 }
 
@@ -109,10 +111,9 @@ function render3DProjection() {
         //}
     }
     testObject.draw();
-    if (projectiles.length > 0) {
-        for (var i = 0; i < projectiles.length; i++) {
-            projectiles[i].draw();
-        }
+    for (var i = 0; i < projectiles.length; i++) {
+        projectiles[i].draw();
     }
+
 
 }
