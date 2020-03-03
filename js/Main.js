@@ -25,7 +25,7 @@ window.onload = function () {
 
     grid = new Map();
     player = new Player();
-    testObject = new Character(300, 275, 5, mapWallTex, -0.25, 0.5, 0);
+    testObject = new Character(300, 275, 5, null, -0.25, 0.5, 0);
     testObject.target = player;
     testObject.createSprite('orangered');
 
@@ -69,8 +69,6 @@ function drawEverything() {
     for (var i = 0; i < projectiles.length; i++) {
             projectiles[i].draw2D();
     }
-
-
 }
 
 function render3DProjection() {
@@ -86,19 +84,25 @@ function render3DProjection() {
         //calculate the height of the wall strip on the projection plane
         var wallStripHeight = (TILE_SIZE / correctedWallDistance) * distanceProjectionPlane;
 
-        if (getTileTypeAtPixelCoord(ray.wallHitX, ray.wallHitY) > 1) {
+        let tileValue = getTileTypeAtPixelCoord(ray.wallHitX, ray.wallHitY)
+        if (tileValue > 0) {
+            let type = Math.floor(tileValue);
+            let textureIndex = Math.floor((tileValue - type) * 100);
+            let name = getTileName(type);
+            let texture = textureList[name][textureIndex - 1];
+ 
             let wallX = 0;
             if (ray.wasHitVertical) wallX = ray.wallHitY / TILE_SIZE;
             else wallX = ray.wallHitX / TILE_SIZE;
             wallX -= Math.floor(wallX);
             wallX = 1 - wallX;
 
-            let textureX = Math.floor(mapWallTex.width * wallX);
-            canvasContext.drawImage(mapWallTex, textureX, 0, 1, mapWallTex.height, ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight);
-        } else {
-            colorRect(ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight, rgb(100, 100, (255 - Math.min(0.5 * correctedWallDistance, 255))));
-        }
-
+            let textureX = Math.floor(texture.width * wallX);
+            canvasContext.drawImage(texture, textureX, 0, 1, texture.height, ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight);
+        } 
+    
+        //colorRect(ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight, rgb(100, 100, (255 - Math.min(0.5 * correctedWallDistance, 255))));
+        
         if (testObject.distance >= ray.distance) {
             testObject.draw();
         }

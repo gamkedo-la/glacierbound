@@ -1,15 +1,15 @@
-var mapWallTex = document.createElement('img');
-var mapWallTex2 = document.createElement('img');
 var leftHandPic = document.createElement('img');
 var rightHandPic = document.createElement('img');
 
 var imagesToLoad = 0;
 
+var textureList = {"wall": []};
+
 function loadImages() {
 	
 	var imageList = [
-		{varName: mapWallTex, fileName: 'wall_blue.png'},
-		{varName: mapWallTex2, fileName: 'wall_blue_2.png'},
+		{tileType: 'wall', fileName: 'wall_blue.png'},
+		{tileType: 'wall', fileName: 'wall_blue_2.png'},
 		{varName: leftHandPic, fileName: 'leftHand.png'},
 		{varName: rightHandPic, fileName: 'rightHand.png'}
 	]
@@ -19,6 +19,10 @@ function loadImages() {
 	for (var i=0; i<imageList.length; i++) {
 		if(imageList[i].varName != undefined) {
 			beginLoadingImage(imageList[i].varName, imageList[i].fileName)
+		} else if (imageList[i].tileType != undefined) {
+			let newTexture = document.createElement('img');
+			beginLoadingImage(newTexture, imageList[i].fileName);
+			textureList[imageList[i].tileType].push(newTexture)
 		}
 	}
 }
