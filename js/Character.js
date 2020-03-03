@@ -26,6 +26,15 @@ class Character extends GameObject {
         this.xv = Math.cos(this.direction) * this.moveSpeed;
         this.yv = Math.sin(this.direction) * this.moveSpeed;
 
+        if (getTileTypeAtPixelCoord(this.x, this.y) > 0) {
+            let tileX = this.x - (this.x % TILE_SIZE) + TILE_SIZE/2,
+                tileY = this.y - (this.y % TILE_SIZE) + TILE_SIZE/2,
+                deltaAng = Math.atan2(this.y - tileY, this.x - tileX);
+
+            this.xv = (this.xv + Math.cos(deltaAng) * this.moveSpeed)/2;
+            this.yv = (this.xv + Math.sin(deltaAng) * this.moveSpeed)/2;
+        }
+
         this.x += this.xv;
         this.y += this.yv;
     }
