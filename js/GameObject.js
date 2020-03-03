@@ -48,7 +48,7 @@ class GameObject {
             let drawX = canvas.width / 2 + Math.tan(drawAngle) * distanceProjectionPlane;
             let drawY = (canvas.height / 2) - (drawHeight / 2) - (drawHeight * this.altitude);
 
-            canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - drawWidth / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
+            canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
 
             this.renderedThisFrame = true;
         }
