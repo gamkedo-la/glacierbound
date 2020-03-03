@@ -56,3 +56,11 @@ function getTileTypeAtPixelCoord(pixelX, pixelY) {
     var gridIndex = mapTileToIndex(tileCol, tileRow);
     return grid.grid[gridIndex];
 }
+
+function getTileCoordinates(index) {
+    let x = (index % MAP_NUM_COLS);
+    let y = ((index - x) / MAP_NUM_COLS) * TILE_SIZE;
+        x *= TILE_SIZE;
+
+    return {x: x, y: y};
+}

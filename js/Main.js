@@ -25,8 +25,9 @@ window.onload = function () {
 
     grid = new Map();
     player = new Player();
-    testObject = new Character(300, 275, 5, mapWallTex, -0.5, 0.5, 0);
+    testObject = new Character(300, 275, 5, mapWallTex, -0.25, 0.5, 0);
     testObject.target = player;
+    testObject.createSprite('orangered');
 
     loadImages();
 }
