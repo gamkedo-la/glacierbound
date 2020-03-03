@@ -1,4 +1,5 @@
 var mapWallTex = document.createElement('img');
+var mapWallTex2 = document.createElement('img');
 var leftHandPic = document.createElement('img');
 var rightHandPic = document.createElement('img');
 
@@ -8,6 +9,7 @@ function loadImages() {
 	
 	var imageList = [
 		{varName: mapWallTex, fileName: 'wall_blue.png'},
+		{varName: mapWallTex2, fileName: 'wall_blue_2.png'},
 		{varName: leftHandPic, fileName: 'leftHand.png'},
 		{varName: rightHandPic, fileName: 'rightHand.png'}
 	]
