@@ -1,5 +1,6 @@
 class Ray {
-    constructor(rayAngle) {
+    constructor(origin, rayAngle) {
+        this.origin = origin;
         this.angle = normalizeAngle(rayAngle);
         this.wallHitHorX = 0;
         this.wallHitHorX = 0;
@@ -29,12 +30,12 @@ class Ray {
         this.wallHitHorX = -1000;
 
         //Find the y-Coord of the closest horizontal grid intersection
-        yHorIntercept = Math.floor(player.y / TILE_SIZE) * TILE_SIZE;
+        yHorIntercept = Math.floor(this.origin.y / TILE_SIZE) * TILE_SIZE;
         if (this.isFacingDown) {
             yHorIntercept += TILE_SIZE;
         }
         //Find the x-Coord of the closest horizontal grid intersection
-        xHorIntercept = player.x + ((yHorIntercept - player.y) / Math.tan(this.angle));
+        xHorIntercept = this.origin.x + ((yHorIntercept - this.origin.y) / Math.tan(this.angle));
 
         //calc the increment xStep and yStep
         yStep = TILE_SIZE;
@@ -76,13 +77,13 @@ class Ray {
         this.wallHitVertY = -1000;
 
         //Find the x-Coord of the closest vertical grid intersection
-        xVertIntercept = Math.floor(player.x / TILE_SIZE) * TILE_SIZE;
+        xVertIntercept = Math.floor(this.origin.x / TILE_SIZE) * TILE_SIZE;
         if (this.isFacingRight) {
             xVertIntercept += TILE_SIZE;
         }
 
         //Find the y-Coord of the closest vertical grid intersection
-        yVertIntercept = player.y + ((xVertIntercept - player.x) * Math.tan(this.angle));
+        yVertIntercept = this.origin.y + ((xVertIntercept - this.origin.x) * Math.tan(this.angle));
 
         //calc the increment xStep and yStep
         xStep = TILE_SIZE;
@@ -119,8 +120,8 @@ class Ray {
         }
 
         //Calculate both hor and vert distances and choose the smallest value
-        var horHitDist = DistanceBetweenTwoPixelCoords(player.x, player.y, this.wallHitHorX, this.wallHitHorY);
-        var vertHitDist = DistanceBetweenTwoPixelCoords(player.x, player.y, this.wallHitVertX, this.wallHitVertY);
+        var horHitDist = DistanceBetweenTwoPixelCoords(this.origin.x, this.origin.y, this.wallHitHorX, this.wallHitHorY);
+        var vertHitDist = DistanceBetweenTwoPixelCoords(this.origin.x, this.origin.y, this.wallHitVertX, this.wallHitVertY);
         
         if (horHitDist < vertHitDist){
             this.distance = horHitDist;
@@ -137,7 +138,7 @@ class Ray {
     }
 
     draw() {
-        colorLine(player.x * MINIMAP_SCALE_FACTOR, player.y * MINIMAP_SCALE_FACTOR, this.wallHitX * MINIMAP_SCALE_FACTOR, this.wallHitY * MINIMAP_SCALE_FACTOR, "red");
+        colorLine(this.origin.x * MINIMAP_SCALE_FACTOR, this.origin.y * MINIMAP_SCALE_FACTOR, this.wallHitX * MINIMAP_SCALE_FACTOR, this.wallHitY * MINIMAP_SCALE_FACTOR, "red");
     }
 
 }

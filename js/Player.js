@@ -96,7 +96,7 @@ class Player {
         this.rays = [];
 
         for (var i = 0; i < NUM_OF_RAYS; i++) {
-            var ray = new Ray(rayAngle);
+            var ray = new Ray(this, rayAngle);
             ray.columnID = i;
             ray.cast();
             this.rays.push(ray);
