@@ -46,6 +46,7 @@ function initRenderLoop() {
 function moveEverything() {
     player.update();
     testObject.update();
+    grid.updateDoors()
 
     if (projectiles.length > 0) {
         for (var j = 0; j < projectiles.length; j++) {
@@ -84,16 +85,19 @@ function render3DProjection() {
         //calculate the height of the wall strip on the projection plane
         var wallStripHeight = (TILE_SIZE / correctedWallDistance) * distanceProjectionPlane;
 
-        let tileValue = getTileTypeAtPixelCoord(ray.wallHitX, ray.wallHitY)
+        let tileIndex = mapTileToIndex(Math.floor(ray.wallHitX / TILE_SIZE), Math.floor(ray.wallHitY / TILE_SIZE))
+        let tileValue = grid.grid[tileIndex];
         if (tileValue > 0) {
             let type = Math.floor(tileValue);
-            let textureIndex = Math.floor((tileValue - type) * 100);
+            let textureIndex = Math.ceil((tileValue * 100)) - (type * 100);
             let name = getTileName(type);
             let texture = textureList[name][textureIndex - 1];
- 
+        
             let wallX = 0;
-            if (ray.wasHitVertical) wallX = ray.wallHitY / TILE_SIZE;
-            else wallX = ray.wallHitX / TILE_SIZE;
+            if (ray.wasHitVertical) wallX = ray.wallHitY;
+            else wallX = ray.wallHitX;
+            if (type === GRID_DOOR) wallX -= grid.doorOffsets[tileIndex];
+            wallX /= TILE_SIZE
             wallX -= Math.floor(wallX);
             wallX = 1 - wallX;
 

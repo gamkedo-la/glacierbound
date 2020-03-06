@@ -33,7 +33,7 @@ function getPath(start, goal, searchGraph) {
 	return path;
 }
 
-function getNeighborsBF(index, grid, diagonal) {
+function getNeighborsBF(index, map, diagonal) {
     let neighbors = [];
 
     for (let i = -1; i < 2; i++) {
@@ -45,7 +45,7 @@ function getNeighborsBF(index, grid, diagonal) {
 
             let neighbor = index + e + (i * MAP_NUM_COLS);
             //Continue to next iteration if neighbor is outside of array
-            if (neighbor < 0 || neighbor > grid.length - 1 || grid[neighbor] > 0) {
+            if (neighbor < 0 || neighbor > map.length - 1 || (map[neighbor] > 0 && !(Math.floor(map[neighbor]) === 2 && grid.doorOffsets[neighbor] === 0))) {
                 continue;
             }
 

@@ -4,22 +4,30 @@ const MAP_NUM_COLS = 15;
 
 const GRID_FLOOR = 0;
 const GRID_WALL = 1;
+const GRID_DOOR = 2;
 
 class Map {
     constructor() {
         this.grid = [
             1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
             1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01, 0.00, 1.01,
-            1.01, 0.00, 0.00, 0.00, 0.00, 1.02, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01, 0.00, 1.01,
+            1.01, 0.00, 0.00, 0.00, 0.00, 1.02, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.01, 0.00, 1.01,
             1.01, 1.01, 1.01, 1.02, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.02, 0.00, 1.01, 0.00, 1.01,
             1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01, 0.00, 1.01, 0.00, 1.01,
-            1.01, 0.00, 1.01, 0.00, 1.02, 0.00, 0.00, 0.00, 1.02, 1.01, 1.01, 1.01, 1.01, 0.00, 1.01,
+            1.01, 0.00, 1.01, 0.00, 1.02, 0.00, 0.00, 0.00, 1.02, 2.01, 1.01, 1.01, 1.01, 0.00, 1.01,
             1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
             1.01, 0.00, 0.00, 1.01, 0.00, 0.00, 1.02, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
             1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 0.00, 0.00, 0.00, 1.02, 1.01, 1.01, 1.02, 0.00, 1.01,
             1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
             1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
         ];
+
+        this.doorStates = [];
+        this.doorStates.length = this.grid.length;
+        this.doorStates.fill(0);
+
+        this.doorOffsets = this.doorStates.slice();
+        this.doorOffsets.fill(64);
     }
 
     draw() {
@@ -30,6 +38,32 @@ class Map {
                     colorRect(MINIMAP_SCALE_FACTOR * eachCol * TILE_SIZE, MINIMAP_SCALE_FACTOR * eachRow * TILE_SIZE, MINIMAP_SCALE_FACTOR * TILE_SIZE, MINIMAP_SCALE_FACTOR * TILE_SIZE, 'black');
                 }
 
+            }
+        }
+    }
+
+    updateDoors() {
+        for (let d = 0; d < this.doorStates.length; d++) {
+            if (Math.floor(this.grid[d]) != 2) continue;
+            if (this.doorStates[d] != 0) {
+                this.doorOffsets[d] -= this.doorStates[d];
+            } 
+
+
+            if (this.doorOffsets[d] < 0 || this.doorOffsets[d] > 64) {
+                this.doorStates[d] = 0;
+                this.doorOffsets[d] = Math.min(this.doorOffsets[d], 64);
+                this.doorOffsets[d] = Math.max(this.doorOffsets[d], 0);
+            }
+        }
+    }
+
+    toggleDoors() {
+        //TO DO: Check for characters currently in open door tiles
+        for (let d = 0; d < this.doorStates.length; d++) {
+            if (Math.floor(this.grid[d]) === 2) {
+                if (this.doorOffsets[d] === 0) this.doorStates[d] = -1;
+                if (this.doorOffsets[d] === 64) this.doorStates[d] = 1;
             }
         }
     }
@@ -69,6 +103,8 @@ function getTileName(type) {
     switch(type) {
         case 1:
             return 'wall';
+        case 2:
+            return "door";
         default:
             return 'wall';
     }

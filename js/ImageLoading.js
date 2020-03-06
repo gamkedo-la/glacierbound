@@ -1,6 +1,8 @@
 var imagesToLoad = 0;
 
-var textureList = {"wall": []};
+var textureList = 	{"wall": [],
+					"door": [],
+};
 
 var spriteList = {};
 
@@ -9,7 +11,7 @@ function loadImages() {
 	var imageList = [
 		{tileType: 'wall', fileName: 'wall_blue_3.png'},
 		{tileType: 'wall', fileName: 'wall_blue_2.png'},
-		{tileType: 'wall', fileName: 'wall_blue.png'},
+		{tileType: 'door', fileName: 'wall_blue.png'},
 		{spriteName: 'leftHand', fileName: 'leftHand.png'},
 		{spriteName: 'rightHand', fileName: 'rightHand.png'}
 	]
