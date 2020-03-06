@@ -77,8 +77,8 @@ class Player {
     drawHands() {
         let xOffset = Math.sin(this.moveSway/2) * 40,
             yOffset = Math.cos(this.moveSway) * 30;
-        canvasContext.drawImage(leftHandPic, 0, 0, 330, 200, xOffset, canvas.height-160 + yOffset, 330, 200);
-        canvasContext.drawImage(rightHandPic, 0, 0, 330, 200,canvas.width-330 + xOffset, canvas.height-160 + yOffset, 330, 200);
+        canvasContext.drawImage(spriteList['leftHand'], 0, 0, 330, 200, xOffset, canvas.height-160 + yOffset, 330, 200);
+        canvasContext.drawImage(spriteList['rightHand'], 0, 0, 330, 200,canvas.width-330 + xOffset, canvas.height-160 + yOffset, 330, 200);
     }
 
     setupControls(forwardKey, backKey, leftKey, rightKey, strafeKey, fireKey) {

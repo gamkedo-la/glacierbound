@@ -1,28 +1,29 @@
-var leftHandPic = document.createElement('img');
-var rightHandPic = document.createElement('img');
-
 var imagesToLoad = 0;
 
 var textureList = {"wall": []};
 
+var spriteList = {};
+
 function loadImages() {
 	
 	var imageList = [
-		{tileType: 'wall', fileName: 'wall_blue.png'},
+		{tileType: 'wall', fileName: 'wall_blue_3.png'},
 		{tileType: 'wall', fileName: 'wall_blue_2.png'},
-		{varName: leftHandPic, fileName: 'leftHand.png'},
-		{varName: rightHandPic, fileName: 'rightHand.png'}
+		{tileType: 'wall', fileName: 'wall_blue.png'},
+		{spriteName: 'leftHand', fileName: 'leftHand.png'},
+		{spriteName: 'rightHand', fileName: 'rightHand.png'}
 	]
 	
 	imagesToLoad = imageList.length;
 	
 	for (var i=0; i<imageList.length; i++) {
-		if(imageList[i].varName != undefined) {
-			beginLoadingImage(imageList[i].varName, imageList[i].fileName)
+		let newImage = document.createElement('img');
+		beginLoadingImage(newImage, imageList[i].fileName);
+		
+		if(imageList[i].spriteName != undefined) {
+			spriteList[imageList[i].spriteName] = newImage;
 		} else if (imageList[i].tileType != undefined) {
-			let newTexture = document.createElement('img');
-			beginLoadingImage(newTexture, imageList[i].fileName);
-			textureList[imageList[i].tileType].push(newTexture)
+			textureList[imageList[i].tileType].push(newImage)
 		}
 	}
 }
