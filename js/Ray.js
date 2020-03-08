@@ -1,4 +1,3 @@
-//test git commit, will remove - Joshua
 class Ray {
     constructor(origin, rayAngle) {
         this.origin = origin;
