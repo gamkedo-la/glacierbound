@@ -11,7 +11,7 @@ class GameObject {
         this.distance = 0; //distance to player
         this.renderedThisFrame = false;
 
-        this.fwdMove = true; //for test movement code
+        //this.fwdMove = true; //for test movement code
     }
 
     update() {
@@ -19,17 +19,17 @@ class GameObject {
         this.renderedThisFrame = false;
 
         //test code to simulate movement
-        if (this.x < 100) {
-            this.fwdMove = true;
-        } else if (this.x > 700) {
-            this.fwdMove = false;
-        }
-        this.fwdMove?this.x += 2:this.x -= 2;
+        //if (this.x < 100) {
+        //    this.fwdMove = true;
+        //} else if (this.x > 700) {
+        //    this.fwdMove = false;
+        //}
+        //this.fwdMove?this.x += 2:this.x -= 2;
 
-        //let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.direction, this.moveSpeed);
+        let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.direction, this.moveSpeed);
 
-        //this.x = movePos[0];
-        //this.y = movePos[1];
+        this.x = movePos[0];
+        this.y = movePos[1];
 
     }
 
