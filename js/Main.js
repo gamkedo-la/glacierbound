@@ -34,6 +34,9 @@ window.onload = function () {
 
 function initRenderLoop() {
     var framesPerSecond = 60;
+
+    pickup1 = new Item(300, 275, 0, textureList['wall'][0], -0.5, 0.2, 0); //probably needs moved elsewhere
+
     setInterval(function () {
 
         moveEverything();
@@ -66,7 +69,8 @@ function drawEverything() {
     player.draw();
     testObject.draw2D();
     player.drawHands();
-    
+    pickup1.draw2D();
+
     for (var i = 0; i < projectiles.length; i++) {
             projectiles[i].draw2D();
     }
@@ -123,6 +127,7 @@ function render3DProjection() {
     for (var i = 0; i < projectiles.length; i++) {
         projectiles[i].draw();
     }
+    pickup1.draw();
 
 
 }
