@@ -56,10 +56,7 @@ class Player {
     fireProjectile(){
         var newProj = new Projectile(this.x, this.y, 10, textureList['wall'][0], -0.5, 0.2, this.rotationAngle);
         console.log(newProj.direction);
-        projectiles.push(newProj);
-        if (projectiles.length > 10){
-            projectiles.shift;
-        }
+        objects.push(newProj);
     }
 
     updateMouse() {

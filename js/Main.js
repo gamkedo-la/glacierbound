@@ -13,8 +13,7 @@ var canvasContext;
 
 var player;
 var grid;
-var testObject;
-var projectiles = [];
+var objects = [];
 
 window.onload = function () {
 
@@ -25,17 +24,19 @@ window.onload = function () {
 
     grid = new Map();
     player = new Player();
-    testObject = new Character(300, 275, 5, null, -0.25, 0.5, 0);
+    let testObject = new Character(300, 275, 5, null, -0.25, 0.5, 0);
     testObject.target = player;
     testObject.createSprite('orangered');
+    objects.push(testObject);
+    pickup1 = new Item(300, 275, 0, null, -0.5, 0.2, 0);
+    pickup1.createSprite('green');
+    objects.push(pickup1)
 
     loadImages();
 }
 
 function initRenderLoop() {
     var framesPerSecond = 60;
-
-    pickup1 = new Item(300, 275, 0, textureList['wall'][0], -0.5, 0.2, 0); //probably needs moved elsewhere
 
     setInterval(function () {
 
@@ -48,14 +49,12 @@ function initRenderLoop() {
 
 function moveEverything() {
     player.update();
-    testObject.update();
     grid.updateDoors()
 
-    if (projectiles.length > 0) {
-        for (var j = 0; j < projectiles.length; j++) {
-            projectiles[j].update();
-        }
+    for (let o of objects) {
+        o.update();
     }
+    objects.sort((a, b) => (a.distance < b.distance) ? 1 : -1);
 }
 
 function drawEverything() {
@@ -67,19 +66,25 @@ function drawEverything() {
     render3DProjection();
     grid.draw();
     player.draw();
-    testObject.draw2D();
     player.drawHands();
     pickup1.draw2D();
 
-    for (var i = 0; i < projectiles.length; i++) {
-            projectiles[i].draw2D();
+    for (let o of objects) {
+        o.draw2D();
     }
 }
 
 function render3DProjection() {
+    let o = 0;
     for (var i = 0; i < NUM_OF_RAYS; i++) {
         var ray = player.rays[i];
 
+        for (o; o < objects.length; o++) {
+            if (objects[o].distance > ray.distance) {
+                objects[o].draw();
+            } else break;
+        }
+        
         //Account for fish-eye effect when storing the distance to the wall
         var correctedWallDistance = ray.distance * Math.cos(ray.angle - player.rotationAngle);
 
@@ -111,23 +116,9 @@ function render3DProjection() {
     
         //colorRect(ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight, rgb(100, 100, (255 - Math.min(0.5 * correctedWallDistance, 255))));
         
-        if (testObject.distance >= ray.distance) {
-            testObject.draw();
-        }
-
-        //if (projectiles.length > 0) {
-        //    for (var i = 0; i < projectiles.length; i++) {
-        //        if (projectiles[i].distance >= ray.distance) {
-        //            projectiles[i].draw();
-        //        }
-        //    }
-        //}
     }
-    testObject.draw();
-    for (var i = 0; i < projectiles.length; i++) {
-        projectiles[i].draw();
+
+    for (o; o < objects.length; o++) {
+        objects[o].draw();
     }
-    pickup1.draw();
-
-
 }

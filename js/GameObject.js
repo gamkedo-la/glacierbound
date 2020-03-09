@@ -14,6 +14,18 @@ class GameObject {
         //this.fwdMove = true; //for test movement code
     }
 
+    createSprite(color) {
+		this.pic = document.createElement('canvas');
+		this.pic.width = 256;
+		this.pic.height = 256;
+		this.pic.ctx = this.pic.getContext('2d');
+
+		this.pic.ctx.fillStyle = color;
+		this.pic.ctx.beginPath();
+		this.pic.ctx.arc(128, 128, 128, 0, Math.PI * 2, true);
+		this.pic.ctx.fill();
+	}
+
     update() {
         this.distance = DistanceBetweenTwoPixelCoords(this.x, this.y, player.x, player.y);
         this.renderedThisFrame = false;
