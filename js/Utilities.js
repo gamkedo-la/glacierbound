@@ -26,7 +26,7 @@ function rowAtYCoord(pixelY) {
 
 function isWallTileAtLevelTileCoord(levelTileCol, levelTileRow) {
     var index = levelTileIndexAtColRowCoord(levelTileCol, levelTileRow);
-    return (grid.grid[index] > 0 && !(Math.floor(grid.grid[index]) === 2 && grid.doorOffsets[index] === 0));
+    return (grid.currentLevel[index] > 0 && !(Math.floor(grid.currentLevel[index]) === 2 && grid.doorOffsets[index] === 0));
 }
 
 function levelTileIndexAtColRowCoord(tileCol, tileRow) {

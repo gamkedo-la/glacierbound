@@ -8,7 +8,7 @@ const GRID_DOOR = 2;
 
 class Map {
     constructor() {
-        this.grid = [
+        this.level1 = [
             1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
             1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01, 0.00, 1.01,
             1.01, 0.00, 0.00, 0.00, 0.00, 1.02, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.01, 0.00, 1.01,
@@ -22,8 +22,24 @@ class Map {
             1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
         ];
 
+        this.level2 = [
+            1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 2.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
+            1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
+            1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
+            1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
+            1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
+            1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
+            1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
+            1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
+            1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
+            1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
+            1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
+        ]
+
+        this.currentLevel = this.level1;
+
         this.doorStates = [];
-        this.doorStates.length = this.grid.length;
+        this.doorStates.length = this.currentLevel.length;
         this.doorStates.fill(0);
 
         this.doorOffsets = this.doorStates.slice();
@@ -34,7 +50,7 @@ class Map {
         for (var eachRow = 0; eachRow < MAP_NUM_ROWS; eachRow++) {
             for (var eachCol = 0; eachCol < MAP_NUM_COLS; eachCol++) {
 
-                if (grid.grid[mapTileToIndex(eachCol, eachRow)]) {
+                if (grid.currentLevel[mapTileToIndex(eachCol, eachRow)]) {
                     colorRect(MINIMAP_SCALE_FACTOR * eachCol * TILE_SIZE, MINIMAP_SCALE_FACTOR * eachRow * TILE_SIZE, MINIMAP_SCALE_FACTOR * TILE_SIZE, MINIMAP_SCALE_FACTOR * TILE_SIZE, 'black');
                 }
 
@@ -44,7 +60,7 @@ class Map {
 
     updateDoors() {
         for (let d = 0; d < this.doorStates.length; d++) {
-            if (Math.floor(this.grid[d]) != 2) continue;
+            if (Math.floor(this.currentLevel[d]) != 2) continue;
             if (this.doorStates[d] != 0) {
                 this.doorOffsets[d] -= this.doorStates[d];
             } 
@@ -61,7 +77,7 @@ class Map {
     toggleDoors() {
         //TO DO: Check for characters currently in open door tiles
         for (let d = 0; d < this.doorStates.length; d++) {
-            if (Math.floor(this.grid[d]) === 2) {
+            if (Math.floor(this.currentLevel[d]) === 2) {
                 if (this.doorOffsets[d] === 0) this.doorStates[d] = -1;
                 if (this.doorOffsets[d] === 64) this.doorStates[d] = 1;
             }
@@ -88,7 +104,7 @@ function getTileTypeAtPixelCoord(pixelX, pixelY) {
     }
 
     var gridIndex = mapTileToIndex(tileCol, tileRow);
-    return grid.grid[gridIndex];
+    return grid.currentLevel[gridIndex];
 }
 
 function getTileCoordinates(index) {

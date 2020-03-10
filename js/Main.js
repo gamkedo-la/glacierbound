@@ -15,6 +15,9 @@ var player;
 var grid;
 var objects = [];
 
+var interior = true;
+var visibilityDist = 300;
+
 window.onload = function () {
 
     canvas = document.getElementById('gameCanvas');
@@ -59,9 +62,15 @@ function moveEverything() {
 
 function drawEverything() {
 
+    if (interior == true){
+        colorRect(0, 0, canvas.width, canvas.height, 'SlateGrey'); //Ceiling/Sky Color
+        colorRect(0, canvas.height / 2, canvas.width, canvas.height, 'DarkGrey'); //Floor Color
+    } else {
+        colorRect(0, 0, canvas.width, canvas.height, 'Azure'); //Ceiling/Sky Color
+    }
+
     // clear the game view by filling it with white
-    colorRect(0, 0, canvas.width, canvas.height, 'SlateGrey'); //Ceiling/Sky Color
-    colorRect(0, canvas.height / 2, canvas.width, canvas.height, 'DarkGrey'); //Floor Color
+
 
     render3DProjection();
     grid.draw();
@@ -75,6 +84,7 @@ function drawEverything() {
 }
 
 function render3DProjection() {
+
     let o = 0;
     for (var i = 0; i < NUM_OF_RAYS; i++) {
         var ray = player.rays[i];
@@ -84,7 +94,7 @@ function render3DProjection() {
                 objects[o].draw();
             } else break;
         }
-        
+
         //Account for fish-eye effect when storing the distance to the wall
         var correctedWallDistance = ray.distance * Math.cos(ray.angle - player.rotationAngle);
 
@@ -95,13 +105,13 @@ function render3DProjection() {
         var wallStripHeight = (TILE_SIZE / correctedWallDistance) * distanceProjectionPlane;
 
         let tileIndex = mapTileToIndex(Math.floor(ray.wallHitX / TILE_SIZE), Math.floor(ray.wallHitY / TILE_SIZE))
-        let tileValue = grid.grid[tileIndex];
+        let tileValue = grid.currentLevel[tileIndex];
         if (tileValue > 0) {
             let type = Math.floor(tileValue);
             let textureIndex = Math.ceil((tileValue * 100)) - (type * 100);
             let name = getTileName(type);
             let texture = textureList[name][textureIndex - 1];
-        
+
             let wallX = 0;
             if (ray.wasHitVertical) wallX = ray.wallHitY;
             else wallX = ray.wallHitX;
@@ -111,14 +121,35 @@ function render3DProjection() {
             wallX = 1 - wallX;
 
             let textureX = Math.floor(texture.width * wallX);
+
+            if (interior === false) {
+                let alpha = 1 - (ray.distance / visibilityDist);
+                if (alpha < 0) {
+                    alpha = 0;
+                }
+                canvasContext.globalAlpha = alpha;
+            }
+
             canvasContext.drawImage(texture, textureX, 0, 1, texture.height, ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight);
-        } 
-    
+        }
+
         //colorRect(ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight, rgb(100, 100, (255 - Math.min(0.5 * correctedWallDistance, 255))));
-        
+
     }
 
     for (o; o < objects.length; o++) {
+
+        if (interior === false) {
+            let alpha = 1 - (objects[o].distance / visibilityDist);
+            if (alpha < 0) {
+                alpha = 0;
+            }
+            canvasContext.globalAlpha = alpha;
+        }
+
         objects[o].draw();
+
     }
+
+    canvasContext.globalAlpha = 1.0;
 }

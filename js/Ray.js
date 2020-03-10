@@ -62,14 +62,14 @@ class Ray {
         while (nextHorTouchX >= 0 && nextHorTouchX < (TILE_SIZE * MAP_NUM_COLS) && nextHorTouchY >= 0 && nextHorTouchY < TILE_SIZE * MAP_NUM_ROWS) {
             if (isWallTileAtPixelCoord(nextHorTouchX, nextHorTouchY)) {
                 let index = mapTileToIndex(Math.floor(nextHorTouchX / TILE_SIZE), Math.floor(nextHorTouchY / TILE_SIZE));
-                if (Math.floor(grid.grid[index]) === GRID_DOOR && (nextHorTouchX + xStep/2) % TILE_SIZE > grid.doorOffsets[index]) {
+                if (Math.floor(grid.currentLevel[index]) === GRID_DOOR && (nextHorTouchX + xStep/2) % TILE_SIZE > grid.doorOffsets[index]) {
                     nextHorTouchX += xStep;
                     nextHorTouchY += yStep;
                 } else {
                     foundHorWallHit = true;
                     this.wallHitHorX = nextHorTouchX;
                     this.wallHitHorY = nextHorTouchY;
-                    if (Math.floor(grid.grid[index]) === 2) {
+                    if (Math.floor(grid.currentLevel[index]) === 2) {
                         this.wallHitHorX += xStep/2;
                         this.wallHitHorY += yStep/2;
                     }
@@ -120,14 +120,14 @@ class Ray {
         while (nextVertTouchX >= 0 && nextVertTouchX < (TILE_SIZE * MAP_NUM_COLS) && nextVertTouchY >= 0 && nextVertTouchY < (TILE_SIZE * MAP_NUM_ROWS)) {
             if (isWallTileAtPixelCoord(nextVertTouchX, nextVertTouchY)) {
                 let index = mapTileToIndex(Math.floor(nextVertTouchX / TILE_SIZE), Math.floor(nextVertTouchY / TILE_SIZE));
-                if (Math.floor(grid.grid[index]) === GRID_DOOR && (nextVertTouchY + yStep/2) % TILE_SIZE > grid.doorOffsets[index]) {
+                if (Math.floor(grid.currentLevel[index]) === GRID_DOOR && (nextVertTouchY + yStep/2) % TILE_SIZE > grid.doorOffsets[index]) {
                     nextVertTouchX += xStep;
                     nextVertTouchY += yStep;
                 } else {
                     foundVertWallHit = true;
                     this.wallHitVertX = nextVertTouchX;
                     this.wallHitVertY = nextVertTouchY;
-                    if (Math.floor(grid.grid[index]) === 2) {
+                    if (Math.floor(grid.currentLevel[index]) === 2) {
                         this.wallHitVertX += xStep/2;
                         this.wallHitVertY += yStep/2;
                     }

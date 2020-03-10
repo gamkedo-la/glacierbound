@@ -29,7 +29,7 @@ class Character extends GameObject {
 				} else {
 					let targetIndex = mapTileToIndex(Math.floor(this.lastKnownPosition.x / TILE_SIZE), Math.floor(this.lastKnownPosition.y / TILE_SIZE));
 					let startIndex = mapTileToIndex(Math.floor(this.x / TILE_SIZE), Math.floor(this.y / TILE_SIZE));
-					this.path = breadthFirstSearch(startIndex, targetIndex, grid.grid);
+					this.path = breadthFirstSearch(startIndex, targetIndex, grid.currentLevel);
 				}
 			}
 
