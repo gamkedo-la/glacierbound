@@ -6,9 +6,10 @@ class Character extends GameObject {
 		this.target = null;
 		this.lastKnownPosition = null;
 		this.xv = 0;
-		this.yv = 0
+		this.yv = 0;
 		this.fov = Math.PI/3;
 		this.lineOfSight = null;
+		this.health = 100;
 	}
 
 	aim() {

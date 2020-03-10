@@ -14,6 +14,7 @@ var canvasContext;
 var player;
 var grid;
 var objects = [];
+var character;
 
 var interior = true;
 var visibilityDist = 300;
@@ -27,13 +28,14 @@ window.onload = function () {
 
     grid = new Map();
     player = new Player();
+    character = new Character();
     let testObject = new Character(300, 275, 5, null, -0.25, 0.5, 0);
     testObject.target = player;
     testObject.createSprite('orangered');
     objects.push(testObject);
     pickup1 = new Item(300, 275, 0, null, -0.5, 0.2, 0);
     pickup1.createSprite('green');
-    objects.push(pickup1)
+    objects.push(pickup1);
 
     loadImages();
 }
@@ -71,7 +73,6 @@ function drawEverything() {
 
     // clear the game view by filling it with white
 
-
     render3DProjection();
     grid.draw();
     player.draw();
@@ -81,6 +82,13 @@ function drawEverything() {
     for (let o of objects) {
         o.draw2D();
     }
+
+    canvasContext.fillText("Player Health:", canvas.width-100, 50);
+    canvasContext.fillText(player.health, canvas.width-100, 60);
+
+    canvasContext.fillText("Enemy Health:", canvas.width-100, 80);
+    canvasContext.fillText(character.health, canvas.width-100, 90);
+
 }
 
 function render3DProjection() {

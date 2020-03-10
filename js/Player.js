@@ -14,6 +14,7 @@ class Player {
         this.rotationSpeed = 3 * (Math.PI / 180);
         this.rays = [];
         this.moveSway = 0;
+	this.health = 100;
     }
 
     update() {
