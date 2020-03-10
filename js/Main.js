@@ -59,6 +59,7 @@ function moveEverything() {
     for (let o of objects) {
         o.update();
     }
+    removeDead();
     objects.sort((a, b) => (a.distance < b.distance) ? 1 : -1);
 }
 
@@ -83,6 +84,7 @@ function drawEverything() {
         o.draw2D();
     }
 
+    canvasContext.fillStyle = 'white';
     canvasContext.fillText("Player Health:", canvas.width-100, 50);
     canvasContext.fillText(player.health, canvas.width-100, 60);
 
@@ -92,15 +94,13 @@ function drawEverything() {
 }
 
 function render3DProjection() {
-
     let o = 0;
     for (var i = 0; i < NUM_OF_RAYS; i++) {
         var ray = player.rays[i];
 
         for (o; o < objects.length; o++) {
-            if (objects[o].distance > ray.distance) {
-                objects[o].draw();
-            } else break;
+            if (objects[o].distance > ray.distance) objects[o].draw();
+            else break;
         }
 
         //Account for fish-eye effect when storing the distance to the wall
@@ -160,4 +160,10 @@ function render3DProjection() {
     }
 
     canvasContext.globalAlpha = 1.0;
+}
+
+function removeDead() {
+    for (let d = objects.length - 1; d >= 0; d--) {
+        if (objects[d].isDead) objects.splice(d, 1);
+    }
 }

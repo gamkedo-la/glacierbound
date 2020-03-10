@@ -10,8 +10,7 @@ class GameObject {
         this.scale = scale ? scale : 1; //multiple of draw height/width
         this.distance = 0; //distance to player
         this.renderedThisFrame = false;
-
-        //this.fwdMove = true; //for test movement code
+        this.isDead = false;
     }
 
     createSprite(color) {
@@ -30,19 +29,10 @@ class GameObject {
         this.distance = DistanceBetweenTwoPixelCoords(this.x, this.y, player.x, player.y);
         this.renderedThisFrame = false;
 
-        //test code to simulate movement
-        //if (this.x < 100) {
-        //    this.fwdMove = true;
-        //} else if (this.x > 700) {
-        //    this.fwdMove = false;
-        //}
-        //this.fwdMove?this.x += 2:this.x -= 2;
-
         let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.direction, this.moveSpeed);
 
         this.x = movePos[0];
         this.y = movePos[1];
-
     }
 
     draw() {
@@ -69,5 +59,9 @@ class GameObject {
     draw2D() {
         colorCircle(this.x * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.radius * MINIMAP_SCALE_FACTOR, "yellow");
         colorLineAtAngle(this.x  * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.direction, 10, 'yellow');
+    }
+
+    die() {
+        this.isDead = true;
     }
 }

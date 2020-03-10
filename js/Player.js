@@ -14,16 +14,15 @@ class Player {
         this.rotationSpeed = 3 * (Math.PI / 180);
         this.rays = [];
         this.moveSway = 0;
-	this.health = 100;
+        this.health = 100;
+        this.timeToShoot = 0;
     }
 
     update() {
         this.updatePosition();
         this.castAllRays();
-
-        if (this.keyHeld_Fire){
-            this.fireProjectile();
-        }
+        if (this.timeToShoot > 0) this.timeToShoot--;
+        if (this.keyHeld_Fire) this.fireWeapon();
     }
 
     updatePosition() {
@@ -54,14 +53,17 @@ class Player {
 
     }
 
-    fireProjectile(){
-        var newProj = new Projectile(this.x, this.y, 10, textureList['wall'][0], -0.5, 0.2, this.rotationAngle);
-        console.log(newProj.direction);
+    fireWeapon() {
+        if (this.timeToShoot > 0) return;
+
+        var newProj = new Projectile(this.x, this.y, 10, null, -0.5, 0.2, this.rotationAngle);
+        newProj.createSprite('lightblue');
         objects.push(newProj);
+        this.timeToShoot = 15;
     }
 
     updateMouse() {
-        player.rotationAngle += mouseDelta.x * (Math.PI/180) * MOUSE_SENS;
+        this.rotationAngle += mouseDelta.x * (Math.PI/180) * MOUSE_SENS;
 
         mouseDelta.x = 0;
         mouseDelta.y = 0;
