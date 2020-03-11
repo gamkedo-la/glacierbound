@@ -50,6 +50,12 @@ class GameObject {
             let drawX = canvas.width / 2 + Math.tan(drawAngle) * distanceProjectionPlane;
             let drawY = (canvas.height / 2) - (drawHeight / 2) - (drawHeight * this.altitude);
 
+            //Draw shadow
+            canvasContext.beginPath();
+            canvasContext.fillStyle = 'black';
+            canvasContext.ellipse(drawX, canvas.height/2 + drawHeight/2, drawWidth/2 * this.scale, drawWidth/6 * this.scale, 0, 0, Math.PI * 2, false);
+            canvasContext.fill();
+
             canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
 
             this.renderedThisFrame = true;
