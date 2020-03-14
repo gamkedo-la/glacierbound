@@ -1,7 +1,7 @@
 class Player {
     constructor() {
-        this.x = canvas.width / 2;
-        this.y = canvas.height / 2;
+        this.x = currentLevel.start.x;
+        this.y = currentLevel.start.y;
         this.radius = 5;
         this.keyHeld_Forward = false;
         this.keyHeld_Backward = false;
@@ -9,7 +9,7 @@ class Player {
         this.keyHeld_TurnRight = false;
         this.keyHeld_Strafe = false;
         this.keyHeld_Fire = false;
-        this.rotationAngle = Math.PI / 2;
+        this.rotationAngle = currentLevel.start.direction;
         this.moveSpeed = 4.0;
         this.rotationSpeed = 3 * (Math.PI / 180);
         this.rays = [];
@@ -23,6 +23,7 @@ class Player {
         this.castAllRays();
         if (this.timeToShoot > 0) this.timeToShoot--;
         if (this.keyHeld_Fire) this.fireWeapon();
+        this.rotationAngle = normalizeAngle(this.rotationAngle);
     }
 
     updatePosition() {

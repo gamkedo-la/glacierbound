@@ -26,10 +26,10 @@ window.onload = function () {
     canvasContext.canvas.width = PROJECTION_PLANE_WIDTH;
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
 
-    level1 = new Level(MAP_GRIDS[0], true, 10000);
-    level2 = new Level(MAP_GRIDS[1], false,  300);
-    loadLevel(level1)
-
+    level1 = new Level(MAP_GRIDS[0], true, 10000, 100, 610, 0, 870, 610);
+    level2 = new Level(MAP_GRIDS[1], false,  300, 100, 610, 0, 870, 610);
+    currentLevel = level1;
+    
     player = new Player();
     character = new Character();
     let testObject = new Character(300, 275, 5, null, -0.25, 0.5, 0);
@@ -40,6 +40,7 @@ window.onload = function () {
     pickup1.createSprite('green');
     objects.push(pickup1);
 
+    loadLevel(level1)
     loadImages();
 }
 
@@ -64,6 +65,8 @@ function moveEverything() {
     }
     removeDead();
     objects.sort((a, b) => (a.distance < b.distance) ? 1 : -1);
+
+    checkLevelCompletion();
 }
 
 function drawEverything() {
@@ -93,6 +96,12 @@ function drawEverything() {
 
     canvasContext.fillText("Enemy Health:", canvas.width-100, 80);
     canvasContext.fillText(character.health, canvas.width-100, 90);
+
+    canvasContext.fillText("Player Pixel Coords:", canvas.width-100, 110);
+    canvasContext.fillText(Math.floor(player.x) + ", " + Math.floor(player.y), canvas.width-100, 120);
+
+    canvasContext.fillText("Player Angle:", canvas.width-100, 140);
+    canvasContext.fillText(player.rotationAngle, canvas.width-100, 150);
 
 }
 
@@ -168,5 +177,12 @@ function render3DProjection() {
 function removeDead() {
     for (let d = objects.length - 1; d >= 0; d--) {
         if (objects[d].isDead) objects.splice(d, 1);
+    }
+}
+
+function checkLevelCompletion(){
+    let distToExit = DistanceBetweenTwoGameObjects(player, currentLevel.exit);
+    if (distToExit < 50){
+        loadLevel(level2);
     }
 }

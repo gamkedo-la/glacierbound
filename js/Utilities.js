@@ -45,3 +45,8 @@ function DistanceBetweenTwoPixelCoords(x1, y1, x2, y2) {
     distance = Math.floor(Math.hypot(Math.floor(x1) - Math.floor(x2), Math.floor(y1) - Math.floor(y2)))
     return distance;
 }
+
+function DistanceBetweenTwoGameObjects(gameObject1, gameObject2) {
+    distance = Math.floor(Math.hypot(Math.floor(gameObject1.x) - Math.floor(gameObject2.x), Math.floor(gameObject1.y) - Math.floor(gameObject2.y)))
+    return distance;
+}

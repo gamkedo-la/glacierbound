@@ -17,9 +17,9 @@ MAP_GRIDS[0] = [
     1.01, 0.00, 1.01, 0.00, 1.02, 0.00, 0.00, 0.00, 1.02, 2.01, 1.01, 1.01, 1.01, 0.00, 1.01,
     1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
     1.01, 0.00, 0.00, 1.01, 0.00, 0.00, 1.02, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
-    1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 0.00, 0.00, 0.00, 1.02, 1.01, 1.01, 1.02, 0.00, 1.01,
-    1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
-    1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
+    1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 0.00, 0.00, 0.00, 1.02, 1.01, 1.01, 1.01, 1.02, 1.01,
+    1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.01, 0.00, 1.02,
+    1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.02, 1.01,
 ];
 
 MAP_GRIDS[1] = [
@@ -37,11 +37,14 @@ MAP_GRIDS[1] = [
 ]
 
 class Level {
-    constructor(map_grid, is_Interior, visibility) {
+    constructor(map_grid, is_Interior, visibility, startX, startY, startAng, exitX, exitY) {
 
         this.mapGrid = map_grid;
         this.isInterior = is_Interior;
         this.visibilityDist = visibility;
+
+        this.start = new GameObject(startX, startY, 0, null, -0.5, 1, startAng);
+        this.exit = new GameObject(exitX, exitY, 0, null, -0.5, 1, 0)
 
         this.doorStates = [];
         this.doorStates.length = this.mapGrid.length;
@@ -136,4 +139,7 @@ function getTileName(type) {
 
 function loadLevel(level) {
     currentLevel = level;
+    player.x = currentLevel.start.x;
+    player.y = currentLevel.start.y;
+    player.rotationAngle = currentLevel.start.direction;
 }
