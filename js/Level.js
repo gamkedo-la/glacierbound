@@ -37,9 +37,11 @@ MAP_GRIDS[1] = [
 ]
 
 class Level {
-    constructor(map_grid) {
+    constructor(map_grid, is_Interior, visibility) {
 
         this.mapGrid = map_grid;
+        this.isInterior = is_Interior;
+        this.visibilityDist = visibility;
 
         this.doorStates = [];
         this.doorStates.length = this.mapGrid.length;
@@ -133,5 +135,5 @@ function getTileName(type) {
 }
 
 function loadLevel(level) {
-
+    currentLevel = level;
 }

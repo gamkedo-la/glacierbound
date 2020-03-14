@@ -19,9 +19,6 @@ var level2;
 var objects = [];
 var character;
 
-var interior = true;
-var visibilityDist = 300;
-
 window.onload = function () {
 
     canvas = document.getElementById('gameCanvas');
@@ -29,9 +26,9 @@ window.onload = function () {
     canvasContext.canvas.width = PROJECTION_PLANE_WIDTH;
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
 
-    level1 = new Level(MAP_GRIDS[0]);
-    level2 = new Level(MAP_GRIDS[1]);
-    currentLevel = level1;
+    level1 = new Level(MAP_GRIDS[0], true, 10000);
+    level2 = new Level(MAP_GRIDS[1], false,  300);
+    loadLevel(level1)
 
     player = new Player();
     character = new Character();
@@ -71,7 +68,7 @@ function moveEverything() {
 
 function drawEverything() {
 
-    if (interior == true){
+    if (currentLevel.isInterior == true){
         colorRect(0, 0, canvas.width, canvas.height, 'SlateGrey'); //Ceiling/Sky Color
         colorRect(0, canvas.height / 2, canvas.width, canvas.height, 'DarkGrey'); //Floor Color
     } else {
@@ -136,8 +133,8 @@ function render3DProjection() {
 
             let textureX = Math.floor(texture.width * wallX);
 
-            if (interior === false) {
-                let alpha = 1 - (ray.distance / visibilityDist);
+            if (currentLevel.isInterior === false) {
+                let alpha = 1 - (ray.distance / currentLevel.visibilityDist);
                 if (alpha < 0) {
                     alpha = 0;
                 }
@@ -153,8 +150,8 @@ function render3DProjection() {
 
     for (o; o < objects.length; o++) {
 
-        if (interior === false) {
-            let alpha = 1 - (objects[o].distance / visibilityDist);
+        if (currentLevel.isInterior === false) {
+            let alpha = 1 - (objects[o].distance / currentLevel.visibilityDist);
             if (alpha < 0) {
                 alpha = 0;
             }
