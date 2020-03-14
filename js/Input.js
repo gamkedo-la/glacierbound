@@ -40,7 +40,7 @@ function setKeyHoldState(thisKey, setTo) {
     player.keyHeld_Fire = setTo;
   }
 
-  if (thisKey === KEY_SPACE) grid.toggleDoors();
+  if (thisKey === KEY_SPACE) currentLevel.toggleDoors();
 }
 
 function keyPressed(evt) {

@@ -13,6 +13,9 @@ var canvasContext;
 
 var player;
 var grid;
+var currentLevel;
+var level1;
+var level2;
 var objects = [];
 var character;
 
@@ -26,7 +29,10 @@ window.onload = function () {
     canvasContext.canvas.width = PROJECTION_PLANE_WIDTH;
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
 
-    grid = new Map();
+    level1 = new Level(MAP_GRIDS[0]);
+    level2 = new Level(MAP_GRIDS[1]);
+    currentLevel = level1;
+
     player = new Player();
     character = new Character();
     let testObject = new Character(300, 275, 5, null, -0.25, 0.5, 0);
@@ -54,7 +60,7 @@ function initRenderLoop() {
 
 function moveEverything() {
     player.update();
-    grid.updateDoors()
+    currentLevel.updateDoors()
 
     for (let o of objects) {
         o.update();
@@ -75,7 +81,7 @@ function drawEverything() {
     // clear the game view by filling it with white
 
     render3DProjection();
-    grid.draw();
+    currentLevel.draw();
     player.draw();
     player.drawHands();
     pickup1.draw2D();
@@ -113,7 +119,7 @@ function render3DProjection() {
         var wallStripHeight = (TILE_SIZE / correctedWallDistance) * distanceProjectionPlane;
 
         let tileIndex = mapTileToIndex(Math.floor(ray.wallHitX / TILE_SIZE), Math.floor(ray.wallHitY / TILE_SIZE))
-        let tileValue = grid.currentLevel[tileIndex];
+        let tileValue = currentLevel.mapGrid[tileIndex];
         if (tileValue > 0) {
             let type = Math.floor(tileValue);
             let textureIndex = Math.ceil((tileValue * 100)) - (type * 100);
@@ -123,7 +129,7 @@ function render3DProjection() {
             let wallX = 0;
             if (ray.wasHitVertical) wallX = ray.wallHitY;
             else wallX = ray.wallHitX;
-            if (type === GRID_DOOR) wallX -= grid.doorOffsets[tileIndex];
+            if (type === GRID_DOOR) wallX -= currentLevel.doorOffsets[tileIndex];
             wallX /= TILE_SIZE
             wallX -= Math.floor(wallX);
             wallX = 1 - wallX;
