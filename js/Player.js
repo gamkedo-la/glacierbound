@@ -57,7 +57,7 @@ class Player {
     fireWeapon() {
         if (this.timeToShoot > 0) return;
 
-        var newProj = new Projectile(this.x, this.y, 10, null, -0.5, 0.2, this.rotationAngle);
+        var newProj = new Projectile(this.x, this.y, 10, null, -0.5, 0.2, this.rotationAngle, false);
         newProj.createSprite('lightblue');
         objects.push(newProj);
         this.timeToShoot = 15;

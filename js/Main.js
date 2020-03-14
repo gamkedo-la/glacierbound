@@ -27,9 +27,9 @@ window.onload = function () {
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
 
     level1 = new Level(MAP_GRIDS[0], true, 10000, 100, 610, 0, 870, 610);
-    level2 = new Level(MAP_GRIDS[1], false,  300, 100, 610, 0, 870, 610);
+    level2 = new Level(MAP_GRIDS[1], false, 400, 400, 610, 0, 870, 610);
     currentLevel = level1;
-    
+
     player = new Player();
     character = new Character();
     let testObject = new Character(300, 275, 5, null, -0.25, 0.5, 0);
@@ -71,11 +71,11 @@ function moveEverything() {
 
 function drawEverything() {
 
-    if (currentLevel.isInterior == true){
+    if (currentLevel.isInterior == true) {
         colorRect(0, 0, canvas.width, canvas.height, 'SlateGrey'); //Ceiling/Sky Color
         colorRect(0, canvas.height / 2, canvas.width, canvas.height, 'DarkGrey'); //Floor Color
     } else {
-        colorRect(0, 0, canvas.width, canvas.height, 'Azure'); //Ceiling/Sky Color
+        colorRect(0, 0, canvas.width, canvas.height, 'White'); //Ceiling/Sky Color
     }
 
     // clear the game view by filling it with white
@@ -86,22 +86,26 @@ function drawEverything() {
     player.drawHands();
     pickup1.draw2D();
 
+    if (currentLevel.isInterior === false) {
+        drawSnow();
+    }
+
     for (let o of objects) {
         o.draw2D();
     }
 
     canvasContext.fillStyle = 'white';
-    canvasContext.fillText("Player Health:", canvas.width-100, 50);
-    canvasContext.fillText(player.health, canvas.width-100, 60);
+    canvasContext.fillText("Player Health:", canvas.width - 100, 50);
+    canvasContext.fillText(player.health, canvas.width - 100, 60);
 
-    canvasContext.fillText("Enemy Health:", canvas.width-100, 80);
-    canvasContext.fillText(character.health, canvas.width-100, 90);
+    canvasContext.fillText("Enemy Health:", canvas.width - 100, 80);
+    canvasContext.fillText(character.health, canvas.width - 100, 90);
 
-    canvasContext.fillText("Player Pixel Coords:", canvas.width-100, 110);
-    canvasContext.fillText(Math.floor(player.x) + ", " + Math.floor(player.y), canvas.width-100, 120);
+    canvasContext.fillText("Player Pixel Coords:", canvas.width - 100, 110);
+    canvasContext.fillText(Math.floor(player.x) + ", " + Math.floor(player.y), canvas.width - 100, 120);
 
-    canvasContext.fillText("Player Angle:", canvas.width-100, 140);
-    canvasContext.fillText(player.rotationAngle, canvas.width-100, 150);
+    canvasContext.fillText("Player Angle:", canvas.width - 100, 140);
+    canvasContext.fillText(player.rotationAngle, canvas.width - 100, 150);
 
 }
 
@@ -143,7 +147,7 @@ function render3DProjection() {
             let textureX = Math.floor(texture.width * wallX);
 
             if (currentLevel.isInterior === false) {
-                let alpha = 1 - (ray.distance / currentLevel.visibilityDist);
+                let alpha = 1 - ((ray.distance / 2) / currentLevel.visibilityDist);
                 if (alpha < 0) {
                     alpha = 0;
                 }
@@ -160,7 +164,7 @@ function render3DProjection() {
     for (o; o < objects.length; o++) {
 
         if (currentLevel.isInterior === false) {
-            let alpha = 1 - (objects[o].distance / currentLevel.visibilityDist);
+            let alpha = 1 - ((objects[o].distance / 2) / currentLevel.visibilityDist);
             if (alpha < 0) {
                 alpha = 0;
             }
@@ -180,9 +184,25 @@ function removeDead() {
     }
 }
 
-function checkLevelCompletion(){
+function checkLevelCompletion() {
     let distToExit = DistanceBetweenTwoGameObjects(player, currentLevel.exit);
-    if (distToExit < 50){
+    if (distToExit < 50) {
         loadLevel(level2);
     }
+}
+
+function drawSnow() {
+
+    for (var i = 0; i < 4; i++) {
+        var part = new Projectile((player.x + (Math.random() * 400)) - 200, //x
+            (player.y + (Math.random() * 400)) - 200, //y
+            20, //speed
+            spriteList['snow'], //sprite 
+            Math.floor(Math.random() * (0.5 + 1)), //height
+            Math.random(), //scale
+            .5, //angle
+            true); //variable Height
+        objects.push(part);
+    }
+
 }

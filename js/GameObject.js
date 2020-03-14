@@ -11,19 +11,20 @@ class GameObject {
         this.distance = 0; //distance to player
         this.renderedThisFrame = false;
         this.isDead = false;
+        this.hasShadow = true;
     }
 
     createSprite(color) {
-		this.pic = document.createElement('canvas');
-		this.pic.width = 256;
-		this.pic.height = 256;
-		this.pic.ctx = this.pic.getContext('2d');
+        this.pic = document.createElement('canvas');
+        this.pic.width = 256;
+        this.pic.height = 256;
+        this.pic.ctx = this.pic.getContext('2d');
 
-		this.pic.ctx.fillStyle = color;
-		this.pic.ctx.beginPath();
-		this.pic.ctx.arc(128, 128, 128, 0, Math.PI * 2, true);
-		this.pic.ctx.fill();
-	}
+        this.pic.ctx.fillStyle = color;
+        this.pic.ctx.beginPath();
+        this.pic.ctx.arc(128, 128, 128, 0, Math.PI * 2, true);
+        this.pic.ctx.fill();
+    }
 
     update() {
         this.distance = DistanceBetweenTwoPixelCoords(this.x, this.y, player.x, player.y);
@@ -51,11 +52,13 @@ class GameObject {
             let drawY = (canvas.height / 2) - (drawHeight / 2) - (drawHeight * this.altitude);
 
             //Draw shadow
-            canvasContext.beginPath();
-            canvasContext.fillStyle = 'black';
-            canvasContext.ellipse(drawX, canvas.height/2 + drawHeight/2, drawWidth/2 * this.scale, drawWidth/6 * this.scale, 0, 0, Math.PI * 2, false);
-            canvasContext.fill();
+            if (this.hasShadow) {
+                canvasContext.beginPath();
+                canvasContext.fillStyle = 'black';
+                canvasContext.ellipse(drawX, canvas.height / 2 + drawHeight / 2, drawWidth / 2 * this.scale, drawWidth / 6 * this.scale, 0, 0, Math.PI * 2, false);
+                canvasContext.fill();
 
+            }
             canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
 
             this.renderedThisFrame = true;
@@ -64,7 +67,7 @@ class GameObject {
 
     draw2D() {
         colorCircle(this.x * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.radius * MINIMAP_SCALE_FACTOR, "yellow");
-        colorLineAtAngle(this.x  * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.direction, 10, 'yellow');
+        colorLineAtAngle(this.x * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.direction, 10, 'yellow');
     }
 
     die() {

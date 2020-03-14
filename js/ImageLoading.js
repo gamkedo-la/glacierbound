@@ -11,9 +11,11 @@ function loadImages() {
 	var imageList = [
 		{tileType: 'wall', fileName: 'wall_blue_3.png'},
 		{tileType: 'wall', fileName: 'wall_blue_2.png'},
+		{tileType: 'wall', fileName: 'wall_snow.png'},
 		{tileType: 'door', fileName: 'wall_blue.png'},
 		{spriteName: 'leftHand', fileName: 'leftHand.png'},
-		{spriteName: 'rightHand', fileName: 'rightHand.png'}
+		{spriteName: 'rightHand', fileName: 'rightHand.png'},
+		{spriteName: 'snow', fileName: 'snow.png'}
 	]
 	
 	imagesToLoad = imageList.length;
