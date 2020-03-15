@@ -193,16 +193,18 @@ function checkLevelCompletion() {
 
 function drawSnow() {
 
-    for (var i = 0; i < 4; i++) {
-        var part = new Projectile((player.x + (Math.random() * 400)) - 200, //x
-            (player.y + (Math.random() * 400)) - 200, //y
+    for (var i = 0; i < 2; i++) {
+        var offsetAng = player.rotationAngle + (Math.random() * Math.PI/2) - (Math.PI/4);
+        var part = new Projectile(player.x + Math.cos(offsetAng) * (64 + Math.random() * 64), //x
+            player.y + Math.sin(offsetAng) * (64 + Math.random() * 64), //y
             20, //speed
             spriteList['snow'], //sprite 
-            Math.floor(Math.random() * (0.5 + 1)), //height
+            Math.floor(Math.random() * 1.5), //height
             Math.random(), //scale
-            .5, //angle
+            0.5, //angle
             true); //variable Height
+        
+        part.lifeTime = 8;
         objects.push(part);
     }
-
 }
