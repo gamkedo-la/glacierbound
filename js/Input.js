@@ -15,30 +15,21 @@ function initInput() {
   document.addEventListener("keydown", keyPressed);
   document.addEventListener("keyup", keyReleased);
 
-  player.setupControls(KEY_LETTER_W,KEY_LETTER_S,KEY_LETTER_A,KEY_LETTER_D, KEY_ALT, KEY_LETTER_E);
+  player.setupControls(KEY_LETTER_W, KEY_LETTER_S, KEY_LETTER_A, KEY_LETTER_D, KEY_LETTER_E);
 
   initMouse();
 }
 
 function setKeyHoldState(thisKey, setTo) {
-  if(thisKey == player.controlKeyForTurnLeft) {
-    player.keyHeld_TurnLeft = setTo;
-  }
-  if(thisKey == player.controlKeyForTurnRight) {
-    player.keyHeld_TurnRight = setTo;
-  }
-  if(thisKey == player.controlKeyForForward) {
-    player.keyHeld_Forward = setTo;
-  }
-  if(thisKey == player.controlKeyForBackward) {
-    player.keyHeld_Backward = setTo;
-  }
-  if(thisKey == player.controlKeyForStrafe) {
-    player.keyHeld_Strafe = setTo;
-  }
-  if(thisKey == player.controlKeyForFire) {
-    player.keyHeld_Fire = setTo;
-  }
+  if (thisKey == player.controlKeyForStrafeLeft) player.keyHeld_Left = setTo;
+
+  if (thisKey == player.controlKeyForStrafeRight) player.keyHeld_Right = setTo;
+
+  if (thisKey == player.controlKeyForForward) player.keyHeld_Forward = setTo;
+
+  if (thisKey == player.controlKeyForBackward) player.keyHeld_Backward = setTo;
+
+  if (thisKey == player.controlKeyForFire) player.keyHeld_Fire = setTo;
 
   if (thisKey === KEY_SPACE) currentLevel.toggleDoors();
 }

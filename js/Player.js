@@ -5,9 +5,8 @@ class Player {
         this.radius = 5;
         this.keyHeld_Forward = false;
         this.keyHeld_Backward = false;
-        this.keyHeld_TurnLeft = false;
-        this.keyHeld_TurnRight = false;
-        this.keyHeld_Strafe = false;
+        this.keyHeld_Left = false;
+        this.keyHeld_Right = false;
         this.keyHeld_Fire = false;
         this.rotationAngle = currentLevel.start.direction;
         this.moveSpeed = 4.0;
@@ -28,23 +27,17 @@ class Player {
 
     updatePosition() {
         if (mouseEnabled) this.updateMouse();
-        let newX = 0, 
+        let newX = 0,
             newY = 0;
-        if (this.keyHeld_TurnLeft) {
-            if (this.keyHeld_Strafe) newY -= 1;
-            else this.rotationAngle -= this.rotationSpeed;
-        }
-        if (this.keyHeld_TurnRight) {
-            if (this.keyHeld_Strafe) newY += 1;
-            else this.rotationAngle += this.rotationSpeed;
-        }
+        if (this.keyHeld_Left) newY -= 1;
+        if (this.keyHeld_Right) newY += 1;
         if (this.keyHeld_Forward) newX += 1;
         if (this.keyHeld_Backward) newX -= 1;
 
         if (newX === 0 && newY === 0) return;
         this.moveSway += Math.PI/15;
         this.moveSway %= Math.PI * 4;
-        
+
         let moveAng = this.rotationAngle + Math.atan2(newY, newX);
         let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, moveAng, this.moveSpeed);
         if (!isWallTileAtPixelCoord(movePos[0], movePos[1])) {
@@ -82,12 +75,11 @@ class Player {
         canvasContext.drawImage(spriteList['rightHand'], 0, 0, 330, 200,canvas.width-330 + xOffset, canvas.height-160 + yOffset, 330, 200);
     }
 
-    setupControls(forwardKey, backKey, leftKey, rightKey, strafeKey, fireKey) {
+    setupControls(forwardKey, backKey, leftKey, rightKey, fireKey) {
         this.controlKeyForForward = forwardKey;
         this.controlKeyForBackward = backKey;
-        this.controlKeyForTurnLeft = leftKey;
-        this.controlKeyForTurnRight = rightKey;
-        this.controlKeyForStrafe = strafeKey;
+        this.controlKeyForStrafeLeft = leftKey;
+        this.controlKeyForStrafeRight = rightKey;
         this.controlKeyForFire = fireKey;
     }
 
