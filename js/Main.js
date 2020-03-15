@@ -27,7 +27,7 @@ window.onload = function () {
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
 
     level1 = new Level(MAP_GRIDS[0], true, 10000, 100, 610, 0, 870, 610);
-    level2 = new Level(MAP_GRIDS[1], false, 400, 400, 610, 0, 870, 610);
+    level2 = new Level(MAP_GRIDS[1], false, 800, 400, 610, 0, 870, 610);
     currentLevel = level1;
 
     player = new Player();
@@ -130,6 +130,7 @@ function render3DProjection() {
 
         let tileIndex = mapTileToIndex(Math.floor(ray.wallHitX / TILE_SIZE), Math.floor(ray.wallHitY / TILE_SIZE))
         let tileValue = currentLevel.mapGrid[tileIndex];
+        let alpha = 0;
         if (tileValue > 0) {
             let type = Math.floor(tileValue);
             let textureIndex = Math.ceil((tileValue * 100)) - (type * 100);
@@ -147,32 +148,21 @@ function render3DProjection() {
             let textureX = Math.floor(texture.width * wallX);
 
             if (currentLevel.isInterior === false) {
-                let alpha = 1 - ((ray.distance / 2) / currentLevel.visibilityDist);
-                if (alpha < 0) {
-                    alpha = 0;
-                }
-                canvasContext.globalAlpha = alpha;
+                alpha = ray.distance / currentLevel.visibilityDist;
             }
 
-            canvasContext.drawImage(texture, textureX, 0, 1, texture.height, ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight);
+            if (alpha < 1) canvasContext.drawImage(texture, textureX, 0, 1, texture.height, ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight);
         }
 
-        //colorRect(ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight, rgb(100, 100, (255 - Math.min(0.5 * correctedWallDistance, 255))));
-
+        if (alpha > 0 && alpha < 1) {
+            canvasContext.globalAlpha = alpha;
+            colorRect(ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight, 'white');
+            canvasContext.globalAlpha = 1;
+        }
     }
 
     for (o; o < objects.length; o++) {
-
-        if (currentLevel.isInterior === false) {
-            let alpha = 1 - ((objects[o].distance / 2) / currentLevel.visibilityDist);
-            if (alpha < 0) {
-                alpha = 0;
-            }
-            canvasContext.globalAlpha = alpha;
-        }
-
         objects[o].draw();
-
     }
 
     canvasContext.globalAlpha = 1.0;

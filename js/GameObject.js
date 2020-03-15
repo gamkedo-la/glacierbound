@@ -51,17 +51,27 @@ class GameObject {
             let drawX = canvas.width / 2 + Math.tan(drawAngle) * distanceProjectionPlane;
             let drawY = (canvas.height / 2) - (drawHeight / 2) - (drawHeight * this.altitude);
 
+            if (currentLevel.isInterior === false) {
+                let alpha = 1 - dist / currentLevel.visibilityDist;
+                if (alpha <= 0) {
+                    this.renderedThisFrame = true;
+                    return;
+                } else {
+                    canvasContext.globalAlpha = alpha;
+                }
+            }
+
             //Draw shadow
             if (this.hasShadow) {
                 canvasContext.beginPath();
                 canvasContext.fillStyle = 'black';
                 canvasContext.ellipse(drawX, canvas.height / 2 + drawHeight / 2, drawWidth / 2 * this.scale, drawWidth / 6 * this.scale, 0, 0, Math.PI * 2, false);
                 canvasContext.fill();
-
             }
             canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
 
             this.renderedThisFrame = true;
+            canvasContext.globalAlpha = 1;
         }
     }
 
