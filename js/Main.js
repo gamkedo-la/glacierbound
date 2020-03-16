@@ -84,7 +84,6 @@ function drawEverything() {
     currentLevel.draw();
     player.draw();
     player.drawHands();
-    pickup1.draw2D();
 
     if (currentLevel.isInterior === false) {
         drawSnow();
@@ -93,20 +92,34 @@ function drawEverything() {
     for (let o of objects) {
         o.draw2D();
     }
+    drawHUD();
+}
 
+function drawHUD() {
+    //Background
+    canvasContext.fillStyle = '#3F3F74';
+    canvasContext.fillRect(canvas.width - 110, 55, 110, 110);
+    canvasContext.fillRect(0, canvas.height - 60, 160, 60);
+    canvasContext.fillRect(canvas.width - 160, canvas.height - 60, 160, 60);
+
+    //Text
     canvasContext.fillStyle = 'white';
-    canvasContext.fillText("Player Health:", canvas.width - 100, 50);
-    canvasContext.fillText(player.health, canvas.width - 100, 60);
+    canvasContext.font = '10px Arial';
+    canvasContext.textAlign = 'left';
 
     canvasContext.fillText("Enemy Health:", canvas.width - 100, 80);
     canvasContext.fillText(character.health, canvas.width - 100, 90);
 
-    canvasContext.fillText("Player Pixel Coords:", canvas.width - 100, 110);
+    canvasContext.fillText("Player Position:", canvas.width - 100, 110);
     canvasContext.fillText(Math.floor(player.x) + ", " + Math.floor(player.y), canvas.width - 100, 120);
 
-    canvasContext.fillText("Player Angle:", canvas.width - 100, 140);
+    canvasContext.fillText("Player Direction:", canvas.width - 100, 140);
     canvasContext.fillText(player.rotationAngle, canvas.width - 100, 150);
 
+    canvasContext.font = '20px Arial';
+    canvasContext.textAlign = 'center';
+    canvasContext.fillText("Health: " + player.health, 75, canvas.height - 20);
+    canvasContext.fillText("Armor: " + player.armor, canvas.width - 75, canvas.height - 20);
 }
 
 function render3DProjection() {

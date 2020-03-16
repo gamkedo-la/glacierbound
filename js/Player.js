@@ -14,6 +14,7 @@ class Player {
         this.rays = [];
         this.moveSway = 0;
         this.health = 100;
+        this.armor = 0;
         this.timeToShoot = 0;
     }
 
@@ -34,7 +35,18 @@ class Player {
         if (this.keyHeld_Forward) newX += 1;
         if (this.keyHeld_Backward) newX -= 1;
 
-        if (newX === 0 && newY === 0) return;
+        if (newX === 0 && newY === 0) {
+            //Reset move sway to 0 when the player stops
+            let sway = this.moveSway % (Math.PI * 2);
+            let diff = 0;
+            if (sway - Math.PI <= 0) diff = -Math.PI/30;
+            else diff = Math.PI/30;
+
+            if (sway + diff < 0 || sway + diff > Math.PI * 2) this.moveSway = 0;
+            else this.moveSway += diff;
+            return;
+        }
+
         this.moveSway += Math.PI/15;
         this.moveSway %= Math.PI * 4;
 
