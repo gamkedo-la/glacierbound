@@ -32,7 +32,7 @@ window.onload = function () {
 
     player = new Player();
     character = new Character();
-    let testObject = new Character(300, 275, 5, null, -0.25, 0.5, 0);
+    let testObject = new Character(300, 275, 5, 'enemy1', -0.25, 0.5, 0);
     testObject.target = player;
     testObject.createSprite('orangered');
     objects.push(testObject);

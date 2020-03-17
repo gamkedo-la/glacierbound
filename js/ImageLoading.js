@@ -15,7 +15,8 @@ function loadImages() {
 		{tileType: 'door', fileName: 'wall_blue.png'},
 		{spriteName: 'leftHand', fileName: 'leftHand.png'},
 		{spriteName: 'rightHand', fileName: 'rightHand.png'},
-		{spriteName: 'snow', fileName: 'snow.png'}
+		{spriteName: 'snow', fileName: 'snow.png'},
+		{spriteName: 'enemy1', fileName: 'enemy1.png'}
 	]
 	
 	imagesToLoad = imageList.length;
