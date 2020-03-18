@@ -17,7 +17,7 @@ var currentLevel;
 var level1;
 var level2;
 var objects = [];
-var character;
+var testObject;
 
 window.onload = function () {
 
@@ -31,14 +31,6 @@ window.onload = function () {
     currentLevel = level1;
 
     player = new Player();
-    character = new Character();
-    let testObject = new Character(300, 275, 5, 'enemy1', -0.25, 0.5, 0);
-    testObject.target = player;
-    testObject.createSprite('orangered');
-    objects.push(testObject);
-    pickup1 = new Item(300, 275, 0, null, -0.5, 0.2, 0);
-    pickup1.createSprite('green');
-    objects.push(pickup1);
 
     loadLevel(level1)
     loadImages();
@@ -46,6 +38,20 @@ window.onload = function () {
 
 function initRenderLoop() {
     var framesPerSecond = 60;
+
+    testObject = new Character(300, 275, 5, spriteList['enemy1'], 0, 1, 0);
+    testObject.target = player;
+    objects.push(testObject);
+
+    let healthPickup = new Item(300, 275, 0, null, -0.5, 0.2, 0);
+    healthPickup.setType('health');
+    healthPickup.createSprite('green');
+    objects.push(healthPickup);
+
+    let armorPickup = new Item(400, 300, 0, null, -0.5, 0.2, 0);
+    armorPickup.setType('armor');
+    armorPickup.createSprite('skyblue');
+    objects.push(armorPickup);
 
     setInterval(function () {
 
@@ -60,8 +66,17 @@ function moveEverything() {
     player.update();
     currentLevel.updateDoors()
 
-    for (let o of objects) {
-        o.update();
+    for (let o = 0; o < objects.length; o++) {
+        let object = objects[o];
+        object.update();
+        for (let c = o + 1; c < objects.length; c++) {
+            let collision = objects[c];
+            let dist = Math.hypot(object.x - collision.x, object.y - collision.y);
+            if (dist < object.radius + collision.radius) {
+                object.updateCollision(collision);
+                collision.updateCollision(object);
+            }
+        } 
     }
     removeDead();
     objects.sort((a, b) => (a.distance < b.distance) ? 1 : -1);
@@ -86,7 +101,7 @@ function drawEverything() {
     player.drawHands();
 
     if (currentLevel.isInterior === false) {
-        drawSnow();
+        spawnSnow();
     }
 
     for (let o of objects) {
@@ -108,7 +123,7 @@ function drawHUD() {
     canvasContext.textAlign = 'left';
 
     canvasContext.fillText("Enemy Health:", canvas.width - 100, 80);
-    canvasContext.fillText(character.health, canvas.width - 100, 90);
+    canvasContext.fillText(testObject.health, canvas.width - 100, 90);
 
     canvasContext.fillText("Player Position:", canvas.width - 100, 110);
     canvasContext.fillText(Math.floor(player.x) + ", " + Math.floor(player.y), canvas.width - 100, 120);
@@ -194,8 +209,7 @@ function checkLevelCompletion() {
     }
 }
 
-function drawSnow() {
-
+function spawnSnow() {
     for (var i = 0; i < 2; i++) {
         var offsetAng = player.rotationAngle + (Math.random() * Math.PI/2) - (Math.PI/4);
         var part = new Projectile(player.x + Math.cos(offsetAng) * (64 + Math.random() * 64), //x
@@ -207,6 +221,7 @@ function drawSnow() {
             0.5, //angle
             true); //variable Height
         
+        part.radius = 0;
         part.lifeTime = 8;
         objects.push(part);
     }

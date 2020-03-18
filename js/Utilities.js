@@ -42,11 +42,17 @@ function normalizeAngle(angle){
 }
 
 function DistanceBetweenTwoPixelCoords(x1, y1, x2, y2) {
-    distance = Math.floor(Math.hypot(Math.floor(x1) - Math.floor(x2), Math.floor(y1) - Math.floor(y2)))
-    return distance;
+    return Math.hypot(x1 -x2, y1 - y2);
 }
 
 function DistanceBetweenTwoGameObjects(gameObject1, gameObject2) {
-    distance = Math.floor(Math.hypot(Math.floor(gameObject1.x) - Math.floor(gameObject2.x), Math.floor(gameObject1.y) - Math.floor(gameObject2.y)))
-    return distance;
+    return Math.hypot(gameObject1.x - gameObject2.x, gameObject1.y - gameObject2.y);;
+}
+
+function circlesOverlap(x1, y1, r1, x2, y2, r2) {
+    let deltaX = x1 - x2;
+    let deltaY = y1 - y2;
+    let dist = Math.hypot(deltaX, deltaY);
+
+    return dist > r1 + r2;
 }

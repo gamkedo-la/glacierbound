@@ -2,7 +2,7 @@ class Player {
     constructor() {
         this.x = currentLevel.start.x;
         this.y = currentLevel.start.y;
-        this.radius = 5;
+        this.radius = TILE_SIZE/4;
         this.keyHeld_Forward = false;
         this.keyHeld_Backward = false;
         this.keyHeld_Left = false;
@@ -20,6 +20,7 @@ class Player {
 
     update() {
         this.updatePosition();
+        this.updateCollisions();
         this.castAllRays();
         if (this.timeToShoot > 0) this.timeToShoot--;
         if (this.keyHeld_Fire) this.fireWeapon();
@@ -52,20 +53,41 @@ class Player {
 
         let moveAng = this.rotationAngle + Math.atan2(newY, newX);
         let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, moveAng, this.moveSpeed);
-        if (!isWallTileAtPixelCoord(movePos[0], movePos[1])) {
+        let checkX = movePos[0] + this.radius * Math.cos(moveAng);
+        let checkY = movePos[1] + this.radius * Math.sin(moveAng);
+
+        if (!isWallTileAtPixelCoord(checkX, checkY)) {
             this.x = movePos[0];
             this.y = movePos[1];
         }
 
     }
 
+    updateCollisions() {
+        for (let o of objects) {
+            if (o.distance < o.radius + this.radius) {
+                if (o.playerCollision != undefined) o.playerCollision();
+                else if (o.owner != this && o.radius > 0) {
+                    let dX = this.x - o.x;
+                    let dY = this.y - o.y;
+                    let ang = Math.atan2(dY, dX);
+                    let overlap = o.radius + this.radius - o.distance;
+
+                    this.x += Math.cos(ang) * overlap;
+                    this.y += Math.sin(ang) * overlap;
+                }
+            }
+        }
+    }
+
     fireWeapon() {
         if (this.timeToShoot > 0) return;
 
         var newProj = new Projectile(this.x, this.y, 10, null, -0.5, 0.2, this.rotationAngle, false);
+        newProj.shootFrom(this);
         newProj.createSprite('lightblue');
         objects.push(newProj);
-        this.timeToShoot = 15;
+        this.timeToShoot = 12;
     }
 
     updateMouse() {

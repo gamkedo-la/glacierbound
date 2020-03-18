@@ -11,27 +11,27 @@ class Character extends GameObject {
 		this.xv = 0;
 		this.yv = 0;
 		this.fov = Math.PI / 3;
+		this.attackRange = TILE_SIZE * 3;
 		this.lineOfSight = null;
 		this.health = 100;
 	}
 
 	aim() {
 		if (this.target) {
-			let targetPos = {
-				x: this.target.x,
-				y: this.target.y
-			}
+			let targetPos = {x: this.target.x,y: this.target.y}
+			let targetDist = Infinity;
+			
 			if (this.lastKnownPosition != targetPos && !isWallTileAtPixelCoord(targetPos.x, targetPos.y)) {
 				this.lastKnownPosition = targetPos;
 				let deltaX = this.target.x - this.x;
 				let deltaY = this.target.y - this.y;
-				let dist = Math.hypot(deltaX, deltaY);
+				targetDist = Math.hypot(deltaX, deltaY);
 
 				let deltaAng = Math.atan2(deltaY, deltaX);
 				this.lineOfSight = new Ray(this, deltaAng);
 				this.lineOfSight.cast();
 
-				if (this.lineOfSight.distance > dist) {
+				if (this.lineOfSight.distance > targetDist) {
 					this.path.length = 0;
 				} else {
 					let targetIndex = mapTileToIndex(Math.floor(this.lastKnownPosition.x / TILE_SIZE), Math.floor(this.lastKnownPosition.y / TILE_SIZE));
@@ -57,8 +57,19 @@ class Character extends GameObject {
 			let dotProduct = deltaX * Math.cos(dir) + deltaY * Math.sin(dir);
 			if (dotProduct > 0) this.direction -= Math.PI / 45;
 			else if (dotProduct < 0) this.direction += Math.PI / 45;
-			this.moveSpeed = Math.abs(dotProduct) <= this.fov / 2 && dist > TILE_SIZE / 2 ? 2 : 0;
+			this.moveSpeed = 0;
+			if (Math.abs(dotProduct) <= this.fov / 2 && dist > TILE_SIZE / 2  && targetDist > this.attackRange)
+				this.moveSpeed = 2;
 		}
+	}
+
+	projectileCollision(projectile) {
+		if (projectile.owner == this) return;
+		this.x += projectile.moveSpeed * Math.cos(projectile.direction) * 2;
+		this.y += projectile.moveSpeed * Math.sin(projectile.direction) * 2;
+		this.health -= 20;
+		this.target = projectile.owner;
+		projectile.die();
 	}
 
 	move() {
@@ -89,6 +100,7 @@ class Character extends GameObject {
 		this.renderedThisFrame = false;
 		this.aim();
 		this.move();
+		if (this.health <= 0) this.die();
 	}
 
 	draw2D() {

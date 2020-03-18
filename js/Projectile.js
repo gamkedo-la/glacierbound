@@ -18,4 +18,14 @@ class Projectile extends GameObject {
             this.altitude += ((Math.random() - .5 ) / 5);
         }
     }
+
+    updateCollision(other) {
+        if (other.projectileCollision != undefined) {
+            other.projectileCollision(this);
+        }  
+    }
+
+    shootFrom(owner) {
+        this.owner = owner;
+    }
 }

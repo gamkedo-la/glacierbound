@@ -3,12 +3,12 @@ class GameObject {
         this.x = x;
         this.y = y;
         this.direction = angle;
-        this.radius = 5;
         this.moveSpeed = speed;
         this.altitude = altitude ? altitude : 0; //screen y offset
         this.pic = pic;
         this.scale = scale ? scale : 1; //multiple of draw height/width
-        this.distance = 0; //distance to player
+        this.radius = this.scale * TILE_SIZE / 2;
+        this.distance = Infinity; //distance to player
         this.renderedThisFrame = false;
         this.isDead = false;
         this.hasShadow = true;
@@ -34,6 +34,10 @@ class GameObject {
 
         this.x = movePos[0];
         this.y = movePos[1];
+    }
+
+    updateCollision(other) {
+        return;
     }
 
     draw() {
