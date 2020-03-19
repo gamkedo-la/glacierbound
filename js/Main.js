@@ -221,6 +221,7 @@ function spawnSnow() {
             0.5, //angle
             true); //variable Height
         
+        part.draw2D = function() {return};
         part.radius = 0;
         part.lifeTime = 8;
         objects.push(part);

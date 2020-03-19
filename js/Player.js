@@ -43,7 +43,7 @@ class Player {
             if (sway - Math.PI <= 0) diff = -Math.PI/30;
             else diff = Math.PI/30;
 
-            if (sway + diff < 0 || sway + diff > Math.PI * 2) this.moveSway = 0;
+            if (sway + diff < 0 || sway + diff > Math.PI * 2) this.moveSway -= sway;
             else this.moveSway += diff;
             return;
         }
