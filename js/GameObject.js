@@ -7,7 +7,7 @@ class GameObject {
         this.altitude = altitude ? altitude : 0; //screen y offset
         this.pic = pic;
         this.scale = scale ? scale : 1; //multiple of draw height/width
-        this.radius = this.scale * TILE_SIZE / 2;
+        this.radius = (this.scale * TILE_SIZE / 2) - 2;
         this.distance = Infinity; //distance to player
         this.renderedThisFrame = false;
         this.isDead = false;

@@ -60,6 +60,7 @@ class Character extends GameObject {
 			this.moveSpeed = 0;
 			if (Math.abs(dotProduct) <= this.fov / 2 && dist > TILE_SIZE / 2  && targetDist > this.attackRange)
 				this.moveSpeed = 2;
+			else if (this.attackRange - targetDist > 2 && this.lineOfSight.distance > targetDist) this.moveSpeed = -1;
 		}
 	}
 
@@ -68,7 +69,7 @@ class Character extends GameObject {
 		this.x += projectile.moveSpeed * Math.cos(projectile.direction) * 2;
 		this.y += projectile.moveSpeed * Math.sin(projectile.direction) * 2;
 		this.health -= 20;
-		this.target = projectile.owner;
+		//this.target = projectile.owner;
 		projectile.die();
 	}
 
@@ -76,23 +77,14 @@ class Character extends GameObject {
 		this.xv = Math.cos(this.direction) * this.moveSpeed;
 		this.yv = Math.sin(this.direction) * this.moveSpeed;
 
-		if (isWallTileAtPixelCoord(this.x, this.y)) {
-			let tileX = this.x - (this.x % TILE_SIZE) + TILE_SIZE / 2,
-				tileY = this.y - (this.y % TILE_SIZE) + TILE_SIZE / 2,
-				deltaAng = Math.atan2(this.y - tileY, this.x - tileX);
-
-			this.xv = (this.xv + Math.cos(deltaAng) * this.moveSpeed) / 2;
-			this.yv = (this.xv + Math.sin(deltaAng) * this.moveSpeed) / 2;
-		}
-
 		let deltaX = this.destination.x - this.x;
 		let deltaY = this.destination.y - this.y;
 
 		if (Math.abs(this.xv) > Math.abs(this.deltaX)) this.xv = deltaX;
 		if (Math.abs(this.yv) > Math.abs(this.deltaY)) this.yv = deltaY;
 
-		this.x += this.xv;
-		this.y += this.yv;
+		if (!objectMapCollision(this.x + this.xv, this.y, this.radius)) this.x += this.xv;
+		if (!objectMapCollision(this.x, this.y + this.yv, this.radius)) this.y += this.yv;
 	}
 
 	update() {

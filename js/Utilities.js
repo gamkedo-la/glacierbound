@@ -26,6 +26,10 @@ function rowAtYCoord(pixelY) {
 
 function isWallTileAtLevelTileCoord(levelTileCol, levelTileRow) {
     var index = levelTileIndexAtColRowCoord(levelTileCol, levelTileRow);
+    return isSolidTile(index);
+}
+
+function isSolidTile(index) {
     return (currentLevel.mapGrid[index] > 0 && !(Math.floor(currentLevel.mapGrid[index]) === 2 && currentLevel.doorOffsets[index] === 0));
 }
 
@@ -55,4 +59,41 @@ function circlesOverlap(x1, y1, r1, x2, y2, r2) {
     let dist = Math.hypot(deltaX, deltaY);
 
     return dist > r1 + r2;
+}
+
+function circleRectOverlap(cx, cy, radius, rx, ry, rw, rh) {
+//Assuming rect origin at upper left
+    let testX = cx,
+        testY = cy;
+    
+    if (cx < rx) testX = rx;
+    else if (cx > rx + rw) testX = rx + rw;
+
+    if (cy < ry) testY = ry;
+    else if (cy > ry + rh) testY = ry + rh;
+
+    let distX = cx - testX,
+        distY = cy - testY,
+        distance = Math.hypot(distX, distY);
+
+    if (distance < radius) return true;
+    return false;
+}
+
+function objectMapCollision(x, y, radius) {
+    let objectTileX = Math.floor(x / TILE_SIZE);
+    let objectTileY = Math.floor(y / TILE_SIZE);
+    let index = levelTileIndexAtColRowCoord(objectTileX, objectTileY);
+
+    for (let row = -1; row <= 1; row++) {
+        for (let col = -1; col <= 1; col++) {
+            let checkIndex = index + (MAP_NUM_COLS * row) + col;
+            if (!isSolidTile(checkIndex)) continue;
+            let checkX = (objectTileX + col) * TILE_SIZE,
+                checkY = (objectTileY + row) * TILE_SIZE;
+            if (circleRectOverlap(x, y, radius, checkX, checkY, TILE_SIZE, TILE_SIZE)) return true;
+        }
+    }
+
+    return false;
 }

@@ -53,14 +53,9 @@ class Player {
 
         let moveAng = this.rotationAngle + Math.atan2(newY, newX);
         let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, moveAng, this.moveSpeed);
-        let checkX = movePos[0] + this.radius * Math.cos(moveAng);
-        let checkY = movePos[1] + this.radius * Math.sin(moveAng);
 
-        if (!isWallTileAtPixelCoord(checkX, checkY)) {
-            this.x = movePos[0];
-            this.y = movePos[1];
-        }
-
+        if (!objectMapCollision(movePos[0], this.y, this.radius)) this.x = movePos[0];
+        if (!objectMapCollision(this.x, movePos[1], this.radius)) this.y = movePos[1];
     }
 
     updateCollisions() {

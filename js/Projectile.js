@@ -8,7 +8,7 @@ class Projectile extends GameObject {
 
     update() {
         super.update();
-        if (isWallTileAtPixelCoord(this.x, this.y)) this.die();
+        if (objectMapCollision(this.x, this.y, this.radius)) this.die();
         else {
             this.lifeTime--;
             if (this.lifeTime < 0) this.die();
