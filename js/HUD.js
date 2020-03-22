@@ -34,4 +34,7 @@ function drawHUD() {
 
     canvasContext.fillText("Scaled Mouse Pos:", canvas.width - 100, 220);
     canvasContext.fillText(mousePos.x / MINIMAP_SCALE_FACTOR + ", " + mousePos.y / MINIMAP_SCALE_FACTOR, canvas.width - 100, 230);
+
+    canvasContext.fillText("Wall Tile Type:", canvas.width - 100, 240);
+    canvasContext.fillText(getTileTypeAtPixelCoord(mousePos.x / MINIMAP_SCALE_FACTOR, mousePos.y / MINIMAP_SCALE_FACTOR), canvas.width - 100, 250);
 }

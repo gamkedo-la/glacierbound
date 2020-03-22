@@ -15,10 +15,14 @@ function displayLevelData() {
     
         }
     }
-
+    
     levelData.innerHTML = outPutString;
 }
 
 function toggleLevelEditMode() {
     isInLevelEditMode = !isInLevelEditMode;
+}
+
+function setTileToWall(index){
+    currentLevel.mapGrid[index] = 1.01;
 }
