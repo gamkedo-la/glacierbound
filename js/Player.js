@@ -28,6 +28,7 @@ class Player {
     }
 
     updatePosition() {
+
         if (mouseEnabled) this.updateMouse();
         let newX = 0,
             newY = 0;

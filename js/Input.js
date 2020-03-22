@@ -8,6 +8,7 @@ const KEY_LETTER_A = 65;
 const KEY_LETTER_S = 83;
 const KEY_LETTER_D = 68;
 const KEY_LETTER_E = 69;
+const KEY_LETTER_L = 76;
 const KEY_ALT = 18;
 const KEY_SPACE = 32;
 
@@ -32,6 +33,8 @@ function setKeyHoldState(thisKey, setTo) {
   if (thisKey == player.controlKeyForFire) player.keyHeld_Fire = setTo;
 
   if (thisKey === KEY_SPACE) currentLevel.toggleDoors();
+  
+  if (thisKey === KEY_LETTER_L && setTo === true) toggleLevelEditMode();
 }
 
 function keyPressed(evt) {
