@@ -40,7 +40,7 @@ function initRenderLoop() {
     var framesPerSecond = 60;
 
     testObject = new Character(300, 275, 5, spriteList['enemy1'], 0, 1, 0);
-    testObject.target = player;
+    //testObject.target = player;
     objects.push(testObject);
 
     let healthPickup = new Item(300, 275, 0, null, -0.5, 0.2, 0);

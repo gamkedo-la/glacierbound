@@ -10,6 +10,8 @@ function breadthFirstSearch(start, goal, graph) {
 		let current = frontier[0],
 			currentNeighbors = getNeighborsBF(current, graph, false);
 
+		if (current == goal) break;
+
 		for (let i = 0; i < currentNeighbors.length; i++) {
 			if (cameFrom[currentNeighbors[i]] === undefined) {
 				frontier.push(currentNeighbors[i]);
@@ -23,7 +25,7 @@ function breadthFirstSearch(start, goal, graph) {
 
 function getPath(start, goal, searchGraph) {
 	let current = goal;
-	path = [];
+	let path = [];
 
 	while (current != start) {
 		path.push(current);
