@@ -16,7 +16,8 @@ function loadImages() {
 		{spriteName: 'leftHand', fileName: 'leftHand.png'},
 		{spriteName: 'rightHand', fileName: 'rightHand.png'},
 		{spriteName: 'snow', fileName: 'snow.png'},
-		{spriteName: 'enemy1', fileName: 'enemy1.png'}
+		{spriteName: 'enemy1', fileName: 'enemy1.png'},
+		{spriteName: 'enemy2', fileName: 'enemy2.png'}
 	]
 	
 	imagesToLoad = imageList.length;

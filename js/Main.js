@@ -19,6 +19,7 @@ var level1;
 var level2;
 var objects = [];
 var testObject;
+var testObject2;
 
 window.onload = function () {
 
@@ -45,6 +46,10 @@ function initRenderLoop() {
     testObject = new Character(300, 275, 5, spriteList['enemy1'], 0, 1, 0);
     //testObject.target = player;
     objects.push(testObject);
+	
+	testObject2 = new Character(500, 100, 5, spriteList['enemy2'], 0, 1, 0);
+    //testObject.target = player;
+    objects.push(testObject2);
 
     let healthPickup = new Item(300, 275, 0, null, -0.5, 0.2, 0);
     healthPickup.setType('health');
