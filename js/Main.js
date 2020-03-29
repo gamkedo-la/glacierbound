@@ -12,6 +12,8 @@ var canvas;
 var canvasContext;
 var levelData;
 
+var gameStarted = false;
+
 var player;
 var grid;
 var currentLevel;
@@ -63,8 +65,12 @@ function initRenderLoop() {
 
     setInterval(function () {
 
-        moveEverything();
-        drawEverything();
+        if (!gameStarted){
+            drawTitleScreen();
+        } else {
+            moveEverything();
+            drawEverything();
+        }
                                                   
     }, 1000 / framesPerSecond);
     initInput();

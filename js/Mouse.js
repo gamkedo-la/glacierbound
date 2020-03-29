@@ -4,7 +4,7 @@ let mouseDelta = {
     x: 0,
     y: 0
 };
-let mouseEnabled = false;
+let mouseEnabled = true;
 
 var mousePos = {
     x: 0,
@@ -30,8 +30,9 @@ function lockChange() {
     } else {
         mouseEnabled = false;
         document.removeEventListener("mousemove", moveMouse, false);
-        document.removeEventListener("mousedown", mouseDown, false);
-        document.removeEventListener("mouseup", mouseUp, false);
+        //Note: Had to comment these out to get mouse clicks on the Title Screen working.
+        //document.removeEventListener("mousedown", mouseDown, false);
+        //document.removeEventListener("mouseup", mouseUp, false);
     }
 }
 
@@ -50,11 +51,14 @@ function mouseUp(evt) {
 
 function clickMouse(state) {
     player.keyHeld_Fire = state;
+    if (!gameStarted && startHighlighted){
+        gameStarted = true;
+    }
 }
 
 function calculateMousePos(evt) {
 
-    if (isInLevelEditMode){
+    if (isInLevelEditMode || !gameStarted){
         document.exitPointerLock();
     }
 
