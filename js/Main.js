@@ -22,7 +22,7 @@ var level2;
 var objects = [];
 var testObject;
 var testObject2;
-
+ 
 window.onload = function () {
 
     canvas = document.getElementById('gameCanvas');
