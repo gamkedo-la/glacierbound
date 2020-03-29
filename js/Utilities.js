@@ -1,3 +1,9 @@
+function clamp(num, min, max) {
+    let value = num < min ? min : num > max ? max : num;
+
+    return value;
+}
+
 function getPixelCoordFromAngleAndSpeed(startingX, startingY, angle, speed) {
     var newX = startingX + Math.cos(angle) * speed;
     var newY = startingY + Math.sin(angle) * speed;
@@ -96,4 +102,8 @@ function objectMapCollision(x, y, radius) {
     }
 
     return false;
+}
+
+function pointInRect(px, py, rx, ry, rw, rh) {
+    return (px > rx && px < rx + rw && py > ry && py < ry + rh )
 }

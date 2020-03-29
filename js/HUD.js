@@ -30,11 +30,13 @@ function drawHUD() {
     canvasContext.fillText(isInLevelEditMode, canvas.width - 100, 180);
 
     canvasContext.fillText("Mouse Position:", canvas.width - 100, 200);
-    canvasContext.fillText(mousePos.x + ", " + mousePos.y, canvas.width - 100, 210);
-
     canvasContext.fillText("Scaled Mouse Pos:", canvas.width - 100, 220);
-    canvasContext.fillText(mousePos.x / MINIMAP_SCALE_FACTOR + ", " + mousePos.y / MINIMAP_SCALE_FACTOR, canvas.width - 100, 230);
-
     canvasContext.fillText("Wall Tile Type:", canvas.width - 100, 240);
-    canvasContext.fillText(getTileTypeAtPixelCoord(mousePos.x / MINIMAP_SCALE_FACTOR, mousePos.y / MINIMAP_SCALE_FACTOR), canvas.width - 100, 250);
+    if (mousePos != null) {
+        canvasContext.fillText(mousePos.x + ", " + mousePos.y, canvas.width - 100, 210);
+        canvasContext.fillText(mousePos.x / MINIMAP_SCALE_FACTOR + ", " + mousePos.y / MINIMAP_SCALE_FACTOR, canvas.width - 100, 230);
+        canvasContext.fillText(getTileTypeAtPixelCoord(mousePos.x / MINIMAP_SCALE_FACTOR, mousePos.y / MINIMAP_SCALE_FACTOR), canvas.width - 100, 250);
+    }
+
+    if (isInLevelEditMode) drawCursor();
 }

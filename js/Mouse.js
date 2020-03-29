@@ -6,10 +6,7 @@ let mouseDelta = {
 };
 let mouseEnabled = true;
 
-var mousePos = {
-    x: 0,
-    y: 0
-};
+var mousePos = null;
 
 function initMouse() {
     canvas.onclick = function () {
@@ -24,21 +21,32 @@ function lockChange() {
         document.addEventListener("mousemove", moveMouse, false);
         document.addEventListener("mousedown", mouseDown, false);
         document.addEventListener("mouseup", mouseUp, false);
-        canvas.addEventListener('mousemove', function (evt) {
-            mousePos = calculateMousePos(evt);
-        });
     } else {
         mouseEnabled = false;
+        mousePos = null;
         document.removeEventListener("mousemove", moveMouse, false);
-        //Note: Had to comment these out to get mouse clicks on the Title Screen working.
-        //document.removeEventListener("mousedown", mouseDown, false);
-        //document.removeEventListener("mouseup", mouseUp, false);
+        document.removeEventListener("mousedown", mouseDown, false);
+        document.removeEventListener("mouseup", mouseUp, false);
     }
 }
 
 function moveMouse(evt) {
     mouseDelta.x += evt.movementX;
     mouseDelta.y += evt.movementY;
+
+    if (mousePos != null) moveCursor(evt.movementX, evt.movementY);
+    else mousePos = calculateMousePos(evt);
+}
+
+function moveCursor(x, y) {
+    mousePos.x += x;
+    mousePos.x = clamp(mousePos.x, 0, canvas.width);
+    mousePos.y += y;
+    mousePos.y = clamp(mousePos.y, 0, canvas.height);
+}
+
+function drawCursor() {
+    if (mouseEnabled && mousePos != null) canvasContext.drawImage(spriteList['cursor'], mousePos.x, mousePos.y);
 }
 
 function mouseDown(evt) {
@@ -52,16 +60,12 @@ function mouseUp(evt) {
 function clickMouse(state) {
     player.keyHeld_Fire = state;
     if (!gameStarted && startHighlighted){
+        mouseDelta = {x: 0, y: 0};
         gameStarted = true;
     }
 }
 
 function calculateMousePos(evt) {
-
-    if (isInLevelEditMode || !gameStarted){
-        document.exitPointerLock();
-    }
-
     var rect = canvas.getBoundingClientRect(),
         root = document.documentElement;
     //	account	for	the	margins,	canvas	position	on	page,	scroll	amount,	etc.

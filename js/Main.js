@@ -62,10 +62,11 @@ function initRenderLoop() {
     armorPickup.setType('armor');
     armorPickup.createSprite('skyblue');
     objects.push(armorPickup);
-
+    initInput();
     setInterval(function () {
 
         if (!gameStarted){
+            controlTitleScreen();
             drawTitleScreen();
         } else {
             moveEverything();
@@ -73,7 +74,6 @@ function initRenderLoop() {
         }
                                                   
     }, 1000 / framesPerSecond);
-    initInput();
 }
 
 function moveEverything() {
