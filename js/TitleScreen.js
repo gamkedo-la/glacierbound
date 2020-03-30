@@ -20,7 +20,7 @@ function controlTitleScreen() {
 }
 
 function drawTitleScreen() {
-    colorRect(0, 0, canvas.width, canvas.height, 'Black');
+    colorRect(0, 0, canvas.width, canvas.height, '#3F3F74');
 
     canvasContext.fillStyle = '#5FCDE4';
     canvasContext.font = '80px Arial';

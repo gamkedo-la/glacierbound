@@ -23,7 +23,7 @@ function lockChange() {
         document.addEventListener("mouseup", mouseUp, false);
     } else {
         mouseEnabled = false;
-        mousePos = null;
+        resetMouse();
         document.removeEventListener("mousemove", moveMouse, false);
         document.removeEventListener("mousedown", mouseDown, false);
         document.removeEventListener("mouseup", mouseUp, false);
@@ -58,10 +58,11 @@ function mouseUp(evt) {
 }
 
 function clickMouse(state) {
-    player.keyHeld_Fire = state;
     if (!gameStarted && startHighlighted){
-        mouseDelta = {x: 0, y: 0};
         gameStarted = true;
+        resetMouse();
+    } else {
+        player.keyHeld_Fire = state;
     }
 }
 
@@ -76,4 +77,9 @@ function calculateMousePos(evt) {
         x: mouseX,
         y: mouseY
     };
+}
+
+function resetMouse() {
+    mouseDelta = {x: 0, y: 0};
+    mousePos = null;
 }
