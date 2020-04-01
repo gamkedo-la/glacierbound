@@ -8,6 +8,7 @@ function controlTitleScreen() {
 
     if (pointInRect(mousePos.x, mousePos.y, startButton.x, startButton.y, startButton.w, startButton.h)){
         startHighlighted = true;
+		hauntedHoedownSound.loopSong("hauntedHoedown");
     } else {
         startHighlighted = false
     }
