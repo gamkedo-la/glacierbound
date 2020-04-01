@@ -33,7 +33,7 @@ function setKeyHoldState(thisKey, setTo) {
 
   if (thisKey == player.controlKeyForFire) player.keyHeld_Fire = setTo;
 
-  if (thisKey === KEY_SPACE) currentLevel.toggleDoors();
+  if (thisKey === KEY_SPACE && setTo === true) player.frob();
 
   if (thisKey === KEY_LETTER_L && setTo === true) toggleLevelEditMode();
 

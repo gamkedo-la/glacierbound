@@ -43,6 +43,13 @@ function levelTileIndexAtColRowCoord(tileCol, tileRow) {
     return (tileCol + MAP_NUM_COLS * tileRow);
 }
 
+function mapIndexCoords(index) {
+    let tileCol = index % MAP_NUM_COLS;
+    let tileRow = (index - tileCol) / MAP_NUM_COLS;
+
+    return {x: tileCol * TILE_SIZE, y: tileRow * TILE_SIZE};
+}
+
 function normalizeAngle(angle){
     angle = angle % (2 * Math.PI);
     if (angle < 0){

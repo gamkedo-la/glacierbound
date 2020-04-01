@@ -73,7 +73,6 @@ class Level {
                 this.doorOffsets[d] -= this.doorStates[d];
             }
 
-
             if (this.doorOffsets[d] < 0 || this.doorOffsets[d] > 64) {
                 this.doorStates[d] = 0;
                 this.doorOffsets[d] = Math.min(this.doorOffsets[d], 64);
@@ -82,12 +81,25 @@ class Level {
         }
     }
 
+    toggleDoor(index) {
+        let doorPosition = mapIndexCoords(index);
+        if (circleRectOverlap(player.x, player.y, player.radius, doorPosition.x, doorPosition.y, TILE_SIZE, TILE_SIZE)) return;
+        for (let o of objects) {
+            if (circleRectOverlap(o.x, o.y, o.radius, doorPosition.x, doorPosition.y, TILE_SIZE, TILE_SIZE)) return;
+        }
+
+        if (this.doorStates[index] === 0) {
+            if (this.doorOffsets[index] === 0) this.doorStates[index] = -1;
+            else if (this.doorOffsets[index] === 64) this.doorStates[index] = 1;
+        } else {
+            this.doorStates[index] *= -1;
+        }
+    }
+
     toggleDoors() {
-        //TO DO: Check for characters currently in open door tiles
         for (let d = 0; d < this.doorStates.length; d++) {
             if (Math.floor(this.mapGrid[d]) === 2) {
-                if (this.doorOffsets[d] === 0) this.doorStates[d] = -1;
-                if (this.doorOffsets[d] === 64) this.doorStates[d] = 1;
+                this.toggleDoor(d);
             }
         }
     }

@@ -86,6 +86,15 @@ class Player {
         this.timeToShoot = 12;
     }
 
+    frob() {
+        let frobRange = TILE_SIZE;
+        let fX = this.x + Math.cos(this.rotationAngle) * frobRange;
+        let fY = this.y + Math.sin(this.rotationAngle) * frobRange;
+        let fIndex = levelTileIndexAtColRowCoord(colAtXCoord(fX), rowAtYCoord(fY));
+
+        if (Math.floor(currentLevel.mapGrid[fIndex]) === GRID_DOOR) currentLevel.toggleDoor(fIndex);
+    }
+
     updateMouse() {
         this.rotationAngle += mouseDelta.x * (Math.PI/180) * MOUSE_SENS;
 
@@ -102,7 +111,7 @@ class Player {
         let xOffset = Math.sin(this.moveSway/2) * 40,
             yOffset = Math.cos(this.moveSway) * 30;
         canvasContext.drawImage(spriteList['leftHand'], 0, 0, 330, 200, xOffset, canvas.height-160 + yOffset, 330, 200);
-        canvasContext.drawImage(spriteList['rightHand'], 0, 0, 330, 200,canvas.width-330 + xOffset, canvas.height-160 + yOffset, 330, 200);
+        canvasContext.drawImage(spriteList['rightHand'], 0, 0, 330, 200, canvas.width-330 + xOffset, canvas.height-160 + yOffset, 330, 200);
     }
 
     setupControls(forwardKey, backKey, leftKey, rightKey, fireKey) {
@@ -114,7 +123,6 @@ class Player {
     }
 
     castAllRays() {
-
         var rayAngle = this.rotationAngle - (FOV_RADS / 2);
         this.rays = [];
 
@@ -129,6 +137,5 @@ class Player {
 
         //re-sorts list of rays from furthest to closest to the player
         this.rays.sort((a, b) => (a.distance < b.distance) ? 1 : -1);
-
     }
 }

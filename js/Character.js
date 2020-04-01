@@ -46,7 +46,6 @@ class Character extends GameObject {
 		if (this.targetVisible && diff > 0) {
 			this.moveSpeed = diff < 1 ? -diff : -1;
 		} else if (Math.abs(dotProduct) <= this.fov / 4 && DistanceBetweenTwoGameObjects(this, this.destination) > this.radius/2) {
-			console.log(this.attackRange - this.distToTarget())
 			this.moveSpeed = 2;
 		}	
 	}
