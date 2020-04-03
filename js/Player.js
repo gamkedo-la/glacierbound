@@ -84,6 +84,7 @@ class Player {
         newProj.createSprite('lightblue');
         objects.push(newProj);
         this.timeToShoot = 12;
+		laserShot.play();
     }
 
     frob() {

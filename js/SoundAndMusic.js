@@ -1,9 +1,12 @@
 var audioFormat;
 var isMuted = false;
-var soundSetforMeetings = false; //make false to hear at normal level
+var soundSetforMeetings = true; //make false to hear at normal level
 
 //sounds
-var hauntedHoedownSound = new BackgroundMusicClass("HauntedHoedown");
+//background music
+var hauntedHoedownSound = new BackgroundMusicClass("HauntedHoedown"); //borrowed from Ghost Rustlers
+var laserShot = new SoundOverlapsClass("laser");
+var fireBallShot = new SoundOverlapsClass("fireBallShot");
 
 function setFormat() {
     var audio = new Audio();
@@ -14,7 +17,7 @@ function setFormat() {
     }
 }
 
-function SoundOverlapsClass() {
+function SoundOverlapsClass(filenameWithPath) {
     setFormat();
     var altSoundTurn = false;
     var mainSound = new Audio("audio/" + filenameWithPath + audioFormat);
