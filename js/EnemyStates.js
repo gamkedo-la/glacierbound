@@ -17,6 +17,7 @@ class EnemyStateMachine extends FiniteStateMachine {
 	}
 
 	changeState(from, to) {
+		console.log('Changing state from ' + from + ' to ' + to);
 		if (from === to) return;
 		this.currentState.onExit(this.body, to);
 		this.currentState = this.states[to];
@@ -36,12 +37,17 @@ class EnemyIdleState extends State {
 
 	run(character) {
 		character.moveSpeed = 0;
+		character.targetVisible = character.objectInView(player);
 		return;
 	}
 
 	checkConditions(character) {
-		if (character.objectInView(player)) {
+		if (character.targetVisible) {
 			return 'Attacking';
+		}
+
+		if (character.damagedBy) {
+			return 'Searching'
 		}
 
 		else if (character.patrolPath != undefined && character.patrolPath != null) {
@@ -55,6 +61,10 @@ class EnemyIdleState extends State {
 		if (to === 'Attacking') {
 			character.target = player;
 		}
+		else if (to === 'Searching') {
+			character.target = character.damagedBy;
+			character.lastKnownPosition = {x: character.target.x, y: character.target.y};
+		}
 	}
 }
 
@@ -66,10 +76,7 @@ class EnemyWanderState extends State {
 	}
 
 	onEnter(character, from) {
-		character.path.length = 0;
 		character.moveSpeed = 1;
-		this.changeDir = true;
-		return;
 	}
 
 	run(character) {
@@ -84,19 +91,27 @@ class EnemyWanderState extends State {
 		}
 
 		character.targetVisible = character.objectInView(player);
-		return;
 	}
 
 	checkConditions(character) {
 		if (character.targetVisible) {
 			return 'Attacking';
 		}
+		if (character.damagedBy) {
+			return 'Searching'
+		}
 
 		else return false;
 	}
 
 	onExit(character, to) {
-		return;
+		if (to === 'Attacking') {
+			character.target = player;
+		}
+		else if (to === 'Searching') {
+			character.target = character.damagedBy;
+			character.lastKnownPosition = {x: character.target.x, y: character.target.y};
+		}
 	}
 }
 
@@ -135,7 +150,7 @@ class EnemyAttackState extends State {
 	}
 
 	onEnter(character, from) {
-		return;
+		character.damagedBy = false;
 	}
 
 	run(character) {
@@ -164,18 +179,26 @@ class EnemyAttackState extends State {
 	}
 
 	checkConditions(character) {
+		if (character.target.isDead) {
+			return 'Wandering';
+		}
 		if (!character.targetVisible) {
+			return 'Searching';
+		}
+		else if (character.damagedBy && character.damagedBy != player) {
 			return 'Searching';
 		}
 		else return false;
 	}
 
 	onExit(character, to) {
+		if (to === 'Wandering') {
+			character.target = null;
+		}
 		if (to === 'Searching') {
+			if (character.damagedBy && character.damagedBy != player) character.target = character.damagedBy;
 			character.lastKnownPosition = { x: character.target.x, y: character.target.y };
 		}
-
-		return;
 	}
 }
 
@@ -212,10 +235,7 @@ class EnemySearchState extends State {
 
 		if (dist > TILE_SIZE / 4) {
 			character.moveSpeed = 1;
-			return;
-		} else character.moveSpeed = 0;
-
-		if (character.path.length > 1) {
+		} else if (character.path.length > 1) {
 			character.destination = getTileCoordinates(character.path[character.path.length - 1]);
 			character.destination.x += TILE_SIZE / 2;
 			character.destination.y += TILE_SIZE / 2;
@@ -223,11 +243,21 @@ class EnemySearchState extends State {
 		} else {
 			character.destination = character.lastKnownPosition;
 		}
+
+		if (character.damagedBy) {
+			character.lastKnownPosition = {x: character.damagedBy.x, y: character.damagedBy.y};
+			character.target = character.damagedBy;
+			character.damagedBy = false;
+		}
+
+		character.targetVisible = character.objectInView(character.target);
 	}
 
 	checkConditions(character) {
-		if (character.objectInView(player)) {
-			character.path = null;
+		if (character.target.isDead) {
+			return 'Wandering';
+		}
+		else if (character.targetVisible) {
 			return 'Attacking';
 		}
 		else if (character.path.length <= 1 &&
@@ -239,6 +269,7 @@ class EnemySearchState extends State {
 	}
 
 	onExit(character, to) {
-		return;
+		character.path = [];
+		if (character.target.isDead) character.target = null;
 	}
 }

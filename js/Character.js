@@ -1,6 +1,7 @@
 class Character extends GameObject {
 	constructor(x, y, speed, pic, altitude, scale, angle) {
 		super(x, y, speed, pic, altitude, scale, angle);
+		this.brain = new EnemyStateMachine(this);
 		this.path = [];
 		this.destination = {x: this.x, y: this.y}; //Next path coordinate
 		this.target = null; //Target object
@@ -12,7 +13,7 @@ class Character extends GameObject {
 		this.attackRange = TILE_SIZE * 3;
 		this.lineOfSight = null;
 		this.health = 100;
-		this.brain = new EnemyStateMachine(this);
+		this.damagedBy = false;
 		this.timeToShoot = 12;
 	}
 
@@ -27,6 +28,8 @@ class Character extends GameObject {
     }
 
 	objectInView(what) {
+		if (what === null | what.isDead) return false; 
+
 		let deltaX = what.x - this.x;
 		let deltaY = what.y - this.y;
 		let dist = Math.hypot(deltaX, deltaY);
@@ -60,12 +63,9 @@ class Character extends GameObject {
 		this.path = breadthFirstSearch(startIndex, targetIndex, currentLevel.mapGrid);
 	}
 
-	projectileCollision(projectile) {
-		if (projectile.owner == this) return;
-		this.health -= 20;
-		this.target = projectile.owner;
-		this.lastKnownPosition = {x: this.target.x, y: this.target.y};
-		projectile.die();
+	takeDamage(howMuch, from) {
+		this.health -= howMuch;
+		this.damagedBy = from;
 	}
 
 	move() {
