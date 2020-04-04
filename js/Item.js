@@ -18,8 +18,8 @@ class Item extends GameObject {
         this.die();
     }
 
-    playerCollision() {
-        this.activate();
+    updateCollision(other) {
+        if (other === player) this.activate();
     }
 
     setType(type) {

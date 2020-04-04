@@ -20,9 +20,11 @@ class Projectile extends GameObject {
     }
 
     updateCollision(other) {
-        if (other.projectileCollision != undefined) {
-            other.projectileCollision(this);
-        }  
+        if (this.owner === other) return;
+        if (other.takeDamage != undefined) {
+            other.takeDamage(20, this.owner);
+            this.die();
+        }
     }
 
     shootFrom(owner) {

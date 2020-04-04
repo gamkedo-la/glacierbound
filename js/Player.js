@@ -62,7 +62,7 @@ class Player {
     updateCollisions() {
         for (let o of objects) {
             if (o.distance < o.radius + this.radius) {
-                if (o.playerCollision != undefined) o.playerCollision();
+                if (o.updateCollision != undefined) o.updateCollision(this);
                 else if (o.owner != this && o.radius > 0) {
                     let dX = this.x - o.x;
                     let dY = this.y - o.y;
@@ -121,6 +121,21 @@ class Player {
         this.controlKeyForStrafeLeft = leftKey;
         this.controlKeyForStrafeRight = rightKey;
         this.controlKeyForFire = fireKey;
+    }
+
+    takeDamage(howMuch, from) {
+        let damageRemaining = howMuch;
+		if (this.armor > 0) {
+			let mitigated = Math.floor(howMuch/3);
+			this.armor -= mitigated;
+
+			if (this.armor < 0) {
+				mitigated += this.armor
+				this.armor = 0;
+			}
+			damageRemaining -= mitigated;
+		}
+		this.health -= damageRemaining;
     }
 
     castAllRays() {
