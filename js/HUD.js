@@ -17,8 +17,8 @@ function drawHUD() {
     canvasContext.font = '10px Arial';
     canvasContext.textAlign = 'left';
 
-    canvasContext.fillText("Enemy Health:", canvas.width - 100, 80);
-    canvasContext.fillText(testObject.health, canvas.width - 100, 90);
+    canvasContext.fillText("Enemy State:", canvas.width - 100, 80);
+    canvasContext.fillText(testObject.brain.currentState.name, canvas.width - 100, 90);
 
     canvasContext.fillText("Player Position:", canvas.width - 100, 110);
     canvasContext.fillText(Math.floor(player.x) + ", " + Math.floor(player.y), canvas.width - 100, 120);

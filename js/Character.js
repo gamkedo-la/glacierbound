@@ -12,54 +12,19 @@ class Character extends GameObject {
 		this.attackRange = TILE_SIZE * 3;
 		this.lineOfSight = null;
 		this.health = 100;
+		this.brain = new EnemyStateMachine(this);
+		this.timeToShoot = 12;
 	}
 
-	search() {
-		this.targetVisible = this.objectInView(player);
-		if (this.targetVisible) {
-			this.target = player;
-			this.lastKnownPosition = {x: this.target.x, y: this.target.y};
-		}
-
-		if (this.lastKnownPosition && !isWallTileAtPixelCoord(this.lastKnownPosition.x, this.lastKnownPosition.y)) {
-			this.pathToTarget();
-		}
-
-		if (this.path.length > 1) {
-			this.destination = getTileCoordinates(this.path[this.path.length - 1]);
-			this.destination.x += TILE_SIZE / 2;
-			this.destination.y += TILE_SIZE / 2;
-			this.path.pop();
-		} else this.destination = this.lastKnownPosition;
-	}
-
-	aim() {
-		let dotProduct;
-		if (!this.targetVisible) dotProduct = this.dotProduct(this.destination);
-		else dotProduct = this.targetVisible;
-		
-		if (dotProduct > 0) this.direction -= Math.PI / 45;
-		else if (dotProduct < 0) this.direction += Math.PI / 45;
-
-		this.moveSpeed = 0;
-		let diff = this.attackRange - this.distToTarget();
-		if (this.targetVisible && diff > 0) {
-			this.moveSpeed = diff < 1 ? -diff : -1;
-		} else if (Math.abs(dotProduct) <= this.fov / 4 && DistanceBetweenTwoGameObjects(this, this.destination) > this.radius/2) {
-			this.moveSpeed = 2;
-		}	
-	}
-
-	dotProduct(what) {
-		let deltaX = what.x - this.x;
-		let deltaY = what.y - this.y;
-		let dist = Math.hypot(deltaX, deltaY);
-		deltaX /= dist;
-		deltaY /= dist;
-		let dir = this.direction - Math.PI / 2;
-		let dotProduct = deltaX * Math.cos(dir) + deltaY * Math.sin(dir);
-		return dotProduct;
-	}
+	attack() {
+        if (this.timeToShoot > 0) return;
+        let newProj = new Projectile(this.x, this.y, 5, null, -0.5, 0.2, this.direction, false);
+        newProj.shootFrom(this);
+        newProj.createSprite('orange');
+        objects.push(newProj);
+        this.timeToShoot = 96;
+		fireBallShot.play();
+    }
 
 	objectInView(what) {
 		let deltaX = what.x - this.x;
@@ -73,11 +38,14 @@ class Character extends GameObject {
 
 		deltaX /= dist;
 		deltaY /= dist;
-		let dir = this.direction - Math.PI / 2;
-		let dotProduct = deltaX * Math.cos(dir) + deltaY * Math.sin(dir);
+		let dotProduct = deltaX * Math.cos(this.direction) + deltaY * Math.sin(this.direction);
 
-		if (Math.abs(dotProduct) <= this.fov / 2) return dotProduct;
-		return false;
+		if (dotProduct > 0)  {
+			if (dotProduct > Math.cos(this.fov/2)) {
+				return true;
+			} else return false;
+		}
+		else return false;
 	}
 
 	distToTarget() {
@@ -87,19 +55,13 @@ class Character extends GameObject {
 	}
 
 	pathToTarget() {
-		if (this.targetVisible) {
-			this.path.length = 0;
-		} else {
-			let targetIndex = mapTileToIndex(Math.floor(this.lastKnownPosition.x / TILE_SIZE), Math.floor(this.lastKnownPosition.y / TILE_SIZE));
-			let startIndex = mapTileToIndex(Math.floor(this.x / TILE_SIZE), Math.floor(this.y / TILE_SIZE));
-			this.path = breadthFirstSearch(startIndex, targetIndex, currentLevel.mapGrid);
-		}
+		let targetIndex = mapTileToIndex(Math.floor(this.lastKnownPosition.x / TILE_SIZE), Math.floor(this.lastKnownPosition.y / TILE_SIZE));
+		let startIndex = mapTileToIndex(Math.floor(this.x / TILE_SIZE), Math.floor(this.y / TILE_SIZE));
+		this.path = breadthFirstSearch(startIndex, targetIndex, currentLevel.mapGrid);
 	}
 
 	projectileCollision(projectile) {
 		if (projectile.owner == this) return;
-		//this.x += projectile.moveSpeed * Math.cos(projectile.direction) * 2;
-		//this.y += projectile.moveSpeed * Math.sin(projectile.direction) * 2;
 		this.health -= 20;
 		this.target = projectile.owner;
 		this.lastKnownPosition = {x: this.target.x, y: this.target.y};
@@ -114,28 +76,30 @@ class Character extends GameObject {
 		let deltaY = this.destination.y - this.y;
 
 		if (Math.abs(this.xv) > Math.abs(this.deltaX)) this.xv = deltaX;
-		if (Math.abs(this.yv) > Math.abs(this.deltaY)) this.yv = deltaY;
+		else if (!objectMapCollision(this.x + this.xv, this.y, this.radius)) this.x += this.xv;
 
-		if (!objectMapCollision(this.x + this.xv, this.y, this.radius)) this.x += this.xv;
-		if (!objectMapCollision(this.x, this.y + this.yv, this.radius)) this.y += this.yv;
+		if (Math.abs(this.yv) > Math.abs(this.deltaY)) this.yv = deltaY;
+		else if (!objectMapCollision(this.x, this.y + this.yv, this.radius)) this.y += this.yv;
 	}
 
 	update() {
 		this.distance = DistanceBetweenTwoPixelCoords(this.x, this.y, player.x, player.y);
 		this.renderedThisFrame = false;
-		this.search();
-		this.aim();
-		this.move();
 		if (this.health <= 0) this.die();
+		if (this.timeToShoot > 0) this.timeToShoot--;
+		this.brain.update();
+		this.move();
 	}
 
 	draw2D() {
 		super.draw2D();
-		for (let p of this.path) {
-			let x = (p % MAP_NUM_COLS);
-			let y = ((p - x) / MAP_NUM_COLS) * TILE_SIZE;
-			x *= TILE_SIZE;
-			colorRect(x * MINIMAP_SCALE_FACTOR, y * MINIMAP_SCALE_FACTOR, TILE_SIZE * MINIMAP_SCALE_FACTOR, TILE_SIZE * MINIMAP_SCALE_FACTOR, 'orange');
+		if (this.path) {
+			for (let p of this.path) {
+				let x = (p % MAP_NUM_COLS);
+				let y = ((p - x) / MAP_NUM_COLS) * TILE_SIZE;
+				x *= TILE_SIZE;
+				colorRect(x * MINIMAP_SCALE_FACTOR, y * MINIMAP_SCALE_FACTOR, TILE_SIZE * MINIMAP_SCALE_FACTOR, TILE_SIZE * MINIMAP_SCALE_FACTOR, 'orange');
+			}
 		}
 		if (this.lineOfSight) this.lineOfSight.draw();
 	}

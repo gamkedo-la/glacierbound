@@ -45,24 +45,8 @@ window.onload = function () {
 function initRenderLoop() {
     var framesPerSecond = 60;
 
-    testObject = new Character(300, 275, 5, spriteList['enemy1'], 0, 1, 0);
-    //testObject.target = player;
-    objects.push(testObject);
-	
-	testObject2 = new Character(500, 100, 5, spriteList['enemy2'], 0, 1, 0);
-    //testObject.target = player;
-    objects.push(testObject2);
-
-    let healthPickup = new Item(300, 275, 0, null, -0.5, 0.2, 0);
-    healthPickup.setType('health');
-    healthPickup.createSprite('green');
-    objects.push(healthPickup);
-
-    let armorPickup = new Item(400, 300, 0, null, -0.5, 0.2, 0);
-    armorPickup.setType('armor');
-    armorPickup.createSprite('skyblue');
-    objects.push(armorPickup);
     initInput();
+    initTestObjects();
     setInterval(function () {
 
         if (!gameStarted){
@@ -74,6 +58,24 @@ function initRenderLoop() {
         }
                                                   
     }, 1000 / framesPerSecond);
+}
+
+function initTestObjects() {
+    testObject = new Character(300, 275, 5, spriteList['enemy1'], 0, 1, 0);
+    objects.push(testObject);
+	
+	testObject2 = new Character(500, 100, 5, spriteList['enemy2'], 0, 1, 0);
+    objects.push(testObject2);
+
+    let healthPickup = new Item(300, 275, 0, null, -0.5, 0.2, 0);
+    healthPickup.setType('health');
+    healthPickup.createSprite('green');
+    objects.push(healthPickup);
+
+    let armorPickup = new Item(400, 300, 0, null, -0.5, 0.2, 0);
+    armorPickup.setType('armor');
+    armorPickup.createSprite('skyblue');
+    objects.push(armorPickup);
 }
 
 function moveEverything() {

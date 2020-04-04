@@ -4,6 +4,16 @@ function clamp(num, min, max) {
     return value;
 }
 
+function dotProduct(x1, y1, x2, y2) {
+    return x1 * x2 + y1 * y2;
+}
+
+function normalizeVector(vx, vy) {
+    let magnitude = Math.hypot(vx, vy);
+    if (magnitude != 1) return {x: vx / magnitude, y: vy / magnitude};
+    else return {x: vx, y: vx};
+}
+
 function getPixelCoordFromAngleAndSpeed(startingX, startingY, angle, speed) {
     var newX = startingX + Math.cos(angle) * speed;
     var newY = startingY + Math.sin(angle) * speed;
@@ -63,7 +73,7 @@ function DistanceBetweenTwoPixelCoords(x1, y1, x2, y2) {
 }
 
 function DistanceBetweenTwoGameObjects(gameObject1, gameObject2) {
-    return Math.hypot(gameObject1.x - gameObject2.x, gameObject1.y - gameObject2.y);;
+    return Math.hypot(gameObject1.x - gameObject2.x, gameObject1.y - gameObject2.y);
 }
 
 function circlesOverlap(x1, y1, r1, x2, y2, r2) {
