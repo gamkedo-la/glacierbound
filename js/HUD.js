@@ -38,5 +38,8 @@ function drawHUD() {
         canvasContext.fillText(getTileTypeAtPixelCoord(mousePos.x / MINIMAP_SCALE_FACTOR, mousePos.y / MINIMAP_SCALE_FACTOR), canvas.width - 100, 250);
     }
 
-    if (isInLevelEditMode) drawCursor();
+    if (isInLevelEditMode) {
+        drawTileSelector();
+        drawCursor();
+    }
 }

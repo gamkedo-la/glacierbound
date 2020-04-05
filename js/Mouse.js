@@ -54,11 +54,17 @@ function mouseDown(evt) {
 }
 
 function mouseUp(evt) {
+
+    if (gameStarted && isInLevelEditMode) {
+        var index = mapTileToIndex(colAtXCoord(mousePos.x / MINIMAP_SCALE_FACTOR), rowAtYCoord(mousePos.y / MINIMAP_SCALE_FACTOR));
+        setTileToWall(index, GRID_WALL, WALL_TEX_BLUE);
+    }
+
     clickMouse(false);
 }
 
 function clickMouse(state) {
-    if (!gameStarted && startHighlighted){
+    if (!gameStarted && startHighlighted) {
         gameStarted = true;
         resetMouse();
     } else {
@@ -80,6 +86,9 @@ function calculateMousePos(evt) {
 }
 
 function resetMouse() {
-    mouseDelta = {x: 0, y: 0};
+    mouseDelta = {
+        x: 0,
+        y: 0
+    };
     mousePos = null;
 }

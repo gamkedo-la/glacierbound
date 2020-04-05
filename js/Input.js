@@ -42,7 +42,7 @@ function setKeyHoldState(thisKey, setTo) {
 
       var index = mapTileToIndex(colAtXCoord(mousePos.x / MINIMAP_SCALE_FACTOR), rowAtYCoord(mousePos.y / MINIMAP_SCALE_FACTOR));
 
-      setTileToWall(index);
+      setTileToWall(index, GRID_WALL, WALL_TEX_BLUE);
     }
   }
 }
