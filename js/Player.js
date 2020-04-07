@@ -137,7 +137,11 @@ class Player {
 			}
 			damageRemaining -= mitigated;
 		}
-		this.health -= damageRemaining;
+        if (this.health - damageRemaining > 0){
+		  this.health -= damageRemaining;
+        } else {
+          this.health = 0;
+        }
     }
 
     castAllRays() {
