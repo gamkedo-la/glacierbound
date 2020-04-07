@@ -15,6 +15,8 @@ class Player {
         this.moveSway = 0;
         this.health = 100;
         this.armor = 0;
+        this.maxHealth = 100;
+        this.maxArmor = 15;
         this.timeToShoot = 10;
     }
 

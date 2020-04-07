@@ -8,9 +8,15 @@ class Item extends GameObject {
         switch(this.type) {
             case 'health':
                 player['health'] += 15;
+                if (player.health > player.maxHealth){
+                    player.health = player.maxHealth;
+                }
                 break;
             case 'armor':
                 player['armor'] += 15;
+                if (player.armor > player.maxArmor){
+                    player.armor = player.maxArmor;
+                }
                 break;
             default:
                 break;
