@@ -2,16 +2,36 @@ function drawHUD() {
     //Background
     canvasContext.fillStyle = '#3F3F74';
     canvasContext.fillRect(canvas.width - 110, 55, 110, 200);
-    canvasContext.fillRect(0, canvas.height - 60, 160, 60);
-    canvasContext.fillRect(canvas.width - 160, canvas.height - 60, 160, 60);
 
+    //Health
+    canvasContext.drawImage(spriteList['healthbar'], 10,canvas.height - 100);
+    var healthPercent = player.health/player.maxHealth * 100;
+    var healthState = 'green';
+    if (healthPercent == 100) {
+        healthState = 'green';
+    } else if (healthPercent <= 60 && healthPercent > 30) {
+        healthState = 'orange';
+    } else if (healthPercent <= 30) {
+        healthState = 'red';
+    }
+    colorRect(10+45,canvas.height - 100+15, healthPercent*1.45,20,healthState);
+    
+    //Armor
+    canvasContext.drawImage(spriteList['armorbar'], 10,canvas.height - 55);
+    var armorPercent = player.armor/player.maxArmor * 100;
+    colorRect(10+45,canvas.height - 55+15, armorPercent*1.45,20,'deepskyblue');
+    
     //Text
     canvasContext.fillStyle = 'white';
-    canvasContext.font = '20px Arial';
+    canvasContext.font = '15px Arial';
     canvasContext.textAlign = 'center';
 
-    canvasContext.fillText("Health: " + player.health, 75, canvas.height - 20);
-    canvasContext.fillText("Armor: " + player.armor, canvas.width - 75, canvas.height - 20);
+    canvasContext.fillText(player.health+"/"+player.maxHealth, 130, canvas.height - 70);
+    if (player.armor == 0){
+        canvasContext.fillText(0, 130, canvas.height - 25);
+    } else {
+        canvasContext.fillText(player.armor+"/"+player.maxArmor, 130, canvas.height - 25);
+    }
 
     //Debug Info
     canvasContext.font = '10px Arial';
