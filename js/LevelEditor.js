@@ -26,6 +26,13 @@ function drawTileSelector(){
 
 function toggleLevelEditMode() {
     isInLevelEditMode = !isInLevelEditMode;
+
+    if (isInLevelEditMode){
+        debugModeEnabled = true;
+    } else {
+        debugModeEnabled = false;
+    }
+
     resetMouse();
     mousePos = {x: canvas.width/2, y: canvas.height/2}
 }
