@@ -37,14 +37,7 @@ function setKeyHoldState(thisKey, setTo) {
 
   if (thisKey === KEY_LETTER_L && setTo === true) toggleLevelEditMode();
 
-  if (thisKey === KEY_LETTER_M) {
-    if (isInLevelEditMode) {
-
-      var index = mapTileToIndex(colAtXCoord(mousePos.x / MINIMAP_SCALE_FACTOR), rowAtYCoord(mousePos.y / MINIMAP_SCALE_FACTOR));
-
-      setTileToWall(index, GRID_WALL, WALL_TEX_BLUE);
-    }
-  }
+  if (thisKey === KEY_LETTER_M && setTo === true) toggleDebugMode();
 }
 
 function keyPressed(evt) {

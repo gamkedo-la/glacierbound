@@ -38,6 +38,7 @@ class GameObject {
     }
 
     draw() {
+
         let distanceProjectionPlane = (canvas.width / 2) / Math.tan(FOV_RADS / 2); //This only changes if canvas width or FOV changes
         let dist = this.distance;
         let drawAngle = Math.atan2(this.y - player.y, this.x - player.x) - player.rotationAngle;
@@ -74,6 +75,9 @@ class GameObject {
     }
 
     draw2D() {
+
+        if (debugModeEnabled === false) return;
+
         colorCircle(this.x * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.radius * MINIMAP_SCALE_FACTOR, "yellow");
         colorLineAtAngle(this.x * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.direction, 10, 'yellow');
     }

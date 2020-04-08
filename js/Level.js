@@ -91,6 +91,9 @@ class Level {
     }
 
     draw() {
+
+        if (debugModeEnabled === false) return;
+
         for (var eachRow = 0; eachRow < MAP_NUM_ROWS; eachRow++) {
             for (var eachCol = 0; eachCol < MAP_NUM_COLS; eachCol++) {
 

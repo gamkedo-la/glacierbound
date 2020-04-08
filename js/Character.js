@@ -100,6 +100,9 @@ class Character extends GameObject {
     }
 
 	draw2D() {
+
+		if (debugModeEnabled === false) return;
+
 		super.draw2D();
 		if (this.path) {
 			for (let p of this.path) {

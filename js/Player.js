@@ -106,6 +106,9 @@ class Player {
     }
 
     draw() {
+
+        if (debugModeEnabled === false) return;
+
         this.rays.forEach(element => element.draw());
         colorCircle(this.x * MINIMAP_SCALE_FACTOR, this.y * MINIMAP_SCALE_FACTOR, this.radius * MINIMAP_SCALE_FACTOR, 'red');
     }
