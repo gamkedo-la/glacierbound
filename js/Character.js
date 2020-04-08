@@ -91,6 +91,14 @@ class Character extends GameObject {
 		this.move();
 	}
 
+	drawLabels(screenX, screenY, height) {
+        let drawHeight = height / 4;
+        canvasContext.font =  drawHeight + 'px Arial';
+		canvasContext.textAlign = 'center';
+		canvasContext.fillStyle = 'yellow';
+        canvasContext.fillText(this.brain.currentState.name, screenX, screenY - drawHeight); 
+    }
+
 	draw2D() {
 		super.draw2D();
 		if (this.path) {

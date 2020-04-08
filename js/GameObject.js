@@ -9,7 +9,6 @@ class GameObject {
         this.scale = scale ? scale : 1; //multiple of draw height/width
         this.radius = (this.scale * TILE_SIZE / 2) - 6;
         this.distance = Infinity; //distance to player
-        this.renderedThisFrame = false;
         this.isDead = false;
         this.hasShadow = true;
     }
@@ -28,10 +27,8 @@ class GameObject {
 
     update() {
         this.distance = DistanceBetweenTwoPixelCoords(this.x, this.y, player.x, player.y);
-        this.renderedThisFrame = false;
 
         let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.direction, this.moveSpeed);
-
         this.x = movePos[0];
         this.y = movePos[1];
     }
@@ -41,42 +38,39 @@ class GameObject {
     }
 
     draw() {
-        if (!this.renderedThisFrame) {
+        let distanceProjectionPlane = (canvas.width / 2) / Math.tan(FOV_RADS / 2); //This only changes if canvas width or FOV changes
+        let dist = this.distance;
+        let drawAngle = Math.atan2(this.y - player.y, this.x - player.x) - player.rotationAngle;
 
-            let distanceProjectionPlane = (canvas.width / 2) / Math.tan(FOV_RADS / 2); //This only changes if canvas width or FOV changes
-            let dist = this.distance;
-            let drawAngle = Math.atan2(this.y - player.y, this.x - player.x) - player.rotationAngle;
+        let size = Math.cos(drawAngle);
+        if (size <= Math.cos(FOV_RADS)) return;
 
-            let size = Math.cos(drawAngle);
-            if (size <= Math.cos(FOV_RADS)) return;
+        let drawHeight = (TILE_SIZE / dist) * distanceProjectionPlane;
+        let drawWidth = (this.pic.width / this.pic.height) * drawHeight;
+        let drawX = canvas.width / 2 + Math.tan(drawAngle) * distanceProjectionPlane;
+        let drawY = (canvas.height / 2) - (drawHeight / 2) - (drawHeight * this.altitude);
 
-            let drawHeight = (TILE_SIZE / dist) * distanceProjectionPlane;
-            let drawWidth = (this.pic.width / this.pic.height) * drawHeight;
-            let drawX = canvas.width / 2 + Math.tan(drawAngle) * distanceProjectionPlane;
-            let drawY = (canvas.height / 2) - (drawHeight / 2) - (drawHeight * this.altitude);
-
-            if (currentLevel.isInterior === false) {
-                let alpha = 1 - dist / currentLevel.visibilityDist;
-                if (alpha <= 0) {
-                    this.renderedThisFrame = true;
-                    return;
-                } else {
-                    canvasContext.globalAlpha = alpha;
-                }
+        if (currentLevel.isInterior === false) {
+            let alpha = 1 - dist / currentLevel.visibilityDist;
+            if (alpha <= 0) {
+                return;
+            } else {
+                canvasContext.globalAlpha = alpha;
             }
-
-            //Draw shadow
-            if (this.hasShadow) {
-                canvasContext.beginPath();
-                canvasContext.fillStyle = 'black';
-                canvasContext.ellipse(drawX, canvas.height / 2 + drawHeight / 2, drawWidth / 2 * this.scale, drawWidth / 6 * this.scale, 0, 0, Math.PI * 2, false);
-                canvasContext.fill();
-            }
-            canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
-
-            this.renderedThisFrame = true;
-            canvasContext.globalAlpha = 1;
         }
+
+        //Draw shadow
+        if (this.hasShadow) {
+            canvasContext.beginPath();
+            canvasContext.fillStyle = 'black';
+            canvasContext.ellipse(drawX, canvas.height / 2 + drawHeight / 2, drawWidth / 2 * this.scale, drawWidth / 6 * this.scale, 0, 0, Math.PI * 2, false);
+            canvasContext.fill();
+        }
+
+        canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
+        if ('drawLabels' in this) this.drawLabels(drawX, drawY, drawHeight);
+        
+        canvasContext.globalAlpha = 1;
     }
 
     draw2D() {
