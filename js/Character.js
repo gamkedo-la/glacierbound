@@ -92,6 +92,9 @@ class Character extends GameObject {
 	}
 
 	drawLabels(screenX, screenY, height) {
+
+		if (debugModeEnabled === false) return;
+
         let drawHeight = height / 4;
         canvasContext.font =  drawHeight + 'px Arial';
 		canvasContext.textAlign = 'center';
