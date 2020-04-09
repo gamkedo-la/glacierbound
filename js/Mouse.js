@@ -57,7 +57,8 @@ function mouseUp(evt) {
 
     if (gameStarted && isInLevelEditMode) {
         var index = mapTileToIndex(colAtXCoord(mousePos.x / MINIMAP_SCALE_FACTOR), rowAtYCoord(mousePos.y / MINIMAP_SCALE_FACTOR));
-        setTileToWall(index, GRID_WALL, WALL_TEX_BLUE);
+        setTileToWall(index, GRID_WALL, selectedTileTexValue);
+        setSelectedTile();
     }
 
     clickMouse(false);
