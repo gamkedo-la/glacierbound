@@ -20,6 +20,12 @@ function drawHUD() {
     var armorPercent = player.armor / player.maxArmor * 100;
     colorRect(10 + 45, canvas.height - 55 + 15, armorPercent * 1.45, 20, 'deepskyblue');
 
+    //Keys
+    let keyAnchor = canvas.width - 192 - 16;
+    if (player.keys[0]) canvasContext.drawImage(spriteList['blueKey'], keyAnchor, canvas.height - 80);
+    if (player.keys[1]) canvasContext.drawImage(spriteList['redKey'], keyAnchor + 64, canvas.height - 80);
+    if (player.keys[2]) canvasContext.drawImage(spriteList['greenKey'], keyAnchor + 128, canvas.height - 80);
+
     //Text
     canvasContext.fillStyle = 'white';
     canvasContext.font = '15px Arial';

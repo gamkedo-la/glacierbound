@@ -12,7 +12,10 @@ function loadImages() {
 		{tileType: 'wall', fileName: 'wall_blue_3.png'},
 		{tileType: 'wall', fileName: 'wall_blue_2.png'},
 		{tileType: 'wall', fileName: 'wall_snow.png'},
-		{tileType: 'door', fileName: 'wall_blue.png'},
+		{tileType: 'door', fileName: 'door.png'},
+		{tileType: 'door', fileName: 'door_blue.png'},
+		{tileType: 'door', fileName: 'door_red.png'},
+		{tileType: 'door', fileName: 'door_green.png'},
 		{spriteName: 'cursor', fileName: 'cursor.png'},
 		{spriteName: 'leftHand', fileName: 'leftHand.png'},
 		{spriteName: 'rightHand', fileName: 'rightHand.png'},
@@ -21,6 +24,9 @@ function loadImages() {
 		{spriteName: 'enemy2', fileName: 'enemy2.png'},
 		{spriteName: 'healthbar', fileName: 'healthbar.png'},
 		{spriteName: 'armorbar', fileName: 'armorbar.png'},
+		{spriteName: 'blueKey', fileName: 'bluekey.png'},
+		{spriteName: 'greenKey', fileName: 'greenkey.png'},
+		{spriteName: 'redKey', fileName: 'redkey.png'},
 	]
 	
 	imagesToLoad = imageList.length;

@@ -21,6 +21,7 @@ class Player {
         this.moveSway = 0;
         this.health = 100;
         this.armor = 0;
+        this.keys = [];
         this.timeToShoot = 10;
     }
 
@@ -98,8 +99,17 @@ class Player {
         let fX = this.x + Math.cos(this.rotationAngle) * frobRange;
         let fY = this.y + Math.sin(this.rotationAngle) * frobRange;
         let fIndex = levelTileIndexAtColRowCoord(colAtXCoord(fX), rowAtYCoord(fY));
+        let tileType = Math.floor(currentLevel.mapGrid[fIndex])
 
-        if (Math.floor(currentLevel.mapGrid[fIndex]) === GRID_DOOR) currentLevel.toggleDoor(fIndex);
+        if (tileType === GRID_DOOR) {
+            let doorType = Math.ceil(currentLevel.mapGrid[fIndex] * 100) - (tileType * 100) - 1;
+            console.log(doorType);
+            if (doorType === 0 || this.keys[doorType - 1]) {
+                currentLevel.toggleDoor(fIndex);
+            } else {
+                console.log('No key for ' + textureList['door'][doorType].src + ' doors');
+            }
+        }
     }
 
     updateMouse() {

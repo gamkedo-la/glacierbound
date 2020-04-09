@@ -124,15 +124,14 @@ function initTestObjects() {
 	testObject2 = new Character(500, 100, 5, spriteList['enemy2'], 0, 1, 0);
     objects.push(testObject2);
 
-    let healthPickup = new Item(300, 275, 0, null, -0.5, 0.2, 0);
-    healthPickup.setType('health');
-    healthPickup.createSprite('green');
+    let healthPickup = new Item(300, 275, -0.5, 0.2, 0, 'health');
     objects.push(healthPickup);
 
-    let armorPickup = new Item(400, 300, 0, null, -0.5, 0.2, 0);
-    armorPickup.setType('armor');
-    armorPickup.createSprite('skyblue');
+    let armorPickup = new Item(400, 300, -0.5, 0.2, 0, 'armor');
     objects.push(armorPickup);
+
+    let greenkey = new Item(500, 500, -0.5, 0.2, 0, 'green key');
+    objects.push(greenkey)
 }
 
 function moveEverything() {
