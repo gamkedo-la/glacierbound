@@ -32,7 +32,7 @@ window.onload = function () {
 
     levelData = document.getElementById('EditorExport');
 
-    level1 = new Level(MAP_GRIDS[2], true, 10000, 100, 610, 0, 870, 610);
+    level1 = new Level(MAP_GRIDS[3], true, 10000, 100, 610, 0, 870, 610);
     level2 = new Level(MAP_GRIDS[2], false, 800, 400, 610, 0, 870, 610);
     currentLevel = level1; 
 
