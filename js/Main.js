@@ -11,7 +11,6 @@ const MINIMAP_SCALE_FACTOR = 0.25;
 var canvas;
 var canvasContext;
 var Game;
-var levelData;
 
 var player;
 var currentLevel;
@@ -27,8 +26,6 @@ window.onload = function () {
     canvasContext = canvas.getContext('2d');
     canvasContext.canvas.width = PROJECTION_PLANE_WIDTH;
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
-
-    levelData = document.getElementById('EditorExport');
 
     level1 = new Level(MAP_GRIDS[2], true, 10000, 100, 610, 0, 870, 610);
     level2 = new Level(MAP_GRIDS[2], false, 800, 400, 610, 0, 870, 610);

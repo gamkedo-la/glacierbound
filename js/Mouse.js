@@ -63,6 +63,7 @@ function mouseUp(evt) {
                 setTileToWall(index, GRID_WALL, selectedTileTexValue);
         }
         setSelectedTile();
+        displayLevelData();
     }
 
     clickMouse(false, evt.button);

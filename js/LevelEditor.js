@@ -6,8 +6,9 @@ class LevelEdit extends State {
         super();
         this.name = 'Level Edit';
     }
-    
+
 	onEnter() {
+        displayLevelData();
         debugModeEnabled = true;
         this.levelEdit = true;
     
@@ -19,7 +20,6 @@ class LevelEdit extends State {
     }
 
 	run() {
-        displayLevelData();
         drawEverything();
         drawTileSelector();
         drawCursor();
@@ -37,11 +37,12 @@ class LevelEdit extends State {
 }
 
 function displayLevelData() {
+    let levelData = document.getElementById('EditorExport');
     var outPutString = "";
     for (var eachRow = 0; eachRow < MAP_NUM_ROWS; eachRow++) {
             
         for (var eachCol = 0; eachCol < MAP_NUM_COLS; eachCol++) {
-            outPutString += currentLevel.mapGrid[mapTileToIndex(eachCol, eachRow)] + ", ";
+            outPutString += currentLevel.mapGrid[mapTileToIndex(eachCol, eachRow)].toPrecision(3) + ", ";
         }
 
         outPutString += "<br>";
