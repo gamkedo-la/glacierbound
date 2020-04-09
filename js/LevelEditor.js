@@ -1,21 +1,50 @@
-var isInLevelEditMode = false;
 var selectedTile = textureList['wall'][0];
 var selectedTileTexValue = 0.01;
 
-function displayLevelData() {
-
-    var outPutString = "";
-
-    if (isInLevelEditMode === true) {
-        for (var eachRow = 0; eachRow < MAP_NUM_ROWS; eachRow++) {
-            
-            for (var eachCol = 0; eachCol < MAP_NUM_COLS; eachCol++) {
-                outPutString += currentLevel.mapGrid[mapTileToIndex(eachCol, eachRow)] + ", ";
-            }
-
-            outPutString += "<br>";
-
+class LevelEdit extends State {
+    constructor() {
+        super();
+        this.name = 'Level Edit';
+    }
+    
+	onEnter() {
+        debugModeEnabled = true;
+        this.levelEdit = true;
+    
+        resetMouse();
+        mousePos = {
+            x: canvas.width / 2,
+            y: canvas.height / 2
         }
+    }
+
+	run() {
+        displayLevelData();
+        drawEverything();
+        drawTileSelector();
+        drawCursor();
+    }
+
+	checkConditions() {
+        if (!this.levelEdit) {
+            return 'Game Started';
+        }
+    }
+
+	onExit() {
+        debugModeEnabled = false;
+    }
+}
+
+function displayLevelData() {
+    var outPutString = "";
+    for (var eachRow = 0; eachRow < MAP_NUM_ROWS; eachRow++) {
+            
+        for (var eachCol = 0; eachCol < MAP_NUM_COLS; eachCol++) {
+            outPutString += currentLevel.mapGrid[mapTileToIndex(eachCol, eachRow)] + ", ";
+        }
+
+        outPutString += "<br>";
     }
 
     levelData.innerHTML = outPutString;
@@ -42,27 +71,17 @@ function setSelectedTile() {
 }
 
 function toggleLevelEditMode() {
-    isInLevelEditMode = !isInLevelEditMode;
-
-    if (isInLevelEditMode) {
-        debugModeEnabled = true;
+    if (Game.currentState.name === 'Game Started') {
+        Game.currentState.levelEdit = true;
     } else {
-        debugModeEnabled = false;
-    }
-
-    resetMouse();
-    mousePos = {
-        x: canvas.width / 2,
-        y: canvas.height / 2
+        Game.currentState.levelEdit = false;
     }
 }
 
 function setTileToWall(index, wall_type, wall_tex) {
-
     if (currentLevel.mapGrid[index] > 0) {
         currentLevel.mapGrid[index] = 0.00;
     } else {
         currentLevel.mapGrid[index] = wall_type + wall_tex;
     }
-
 }

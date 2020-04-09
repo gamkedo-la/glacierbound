@@ -1,22 +1,26 @@
 class Player {
     constructor() {
-        this.x = currentLevel.start.x;
-        this.y = currentLevel.start.y;
+        this.x = 0;
+        this.y = 0;
         this.radius = TILE_SIZE/4;
+        this.moveSpeed = 4.0;
+        this.rotationSpeed = 3 * (Math.PI / 180);
+        this.maxHealth = 100;
+        this.maxArmor = 15;
+        this.reset();
+    }
+
+    reset() {
         this.keyHeld_Forward = false;
         this.keyHeld_Backward = false;
         this.keyHeld_Left = false;
         this.keyHeld_Right = false;
         this.keyHeld_Fire = false;
-        this.rotationAngle = currentLevel.start.direction;
-        this.moveSpeed = 4.0;
-        this.rotationSpeed = 3 * (Math.PI / 180);
+        this.rotationAngle = 0;
         this.rays = [];
         this.moveSway = 0;
         this.health = 100;
         this.armor = 0;
-        this.maxHealth = 100;
-        this.maxArmor = 15;
         this.timeToShoot = 10;
     }
 

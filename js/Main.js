@@ -10,12 +10,10 @@ const MINIMAP_SCALE_FACTOR = 0.25;
 
 var canvas;
 var canvasContext;
+var Game;
 var levelData;
 
-var gameStarted = false;
-
 var player;
-var grid;
 var currentLevel;
 var level1;
 var level2;
@@ -32,31 +30,93 @@ window.onload = function () {
 
     levelData = document.getElementById('EditorExport');
 
-    level1 = new Level(MAP_GRIDS[3], true, 10000, 100, 610, 0, 870, 610);
+    level1 = new Level(MAP_GRIDS[2], true, 10000, 100, 610, 0, 870, 610);
     level2 = new Level(MAP_GRIDS[2], false, 800, 400, 610, 0, 870, 610);
-    currentLevel = level1; 
 
     player = new Player();
-    
-    loadLevel(level1)
+    Game = new FiniteStateMachine({'Title Screen': new TitleScreen(), 'Game Started': new GameStarted(), 'Level Edit': new LevelEdit(), 'Game Over': new GameOver()}, 'Title Screen');
     loadImages();
+}
+
+class GameStarted extends State {
+    constructor() {
+        super();
+        this.name = 'Game Started';
+    }
+
+    onEnter() {
+        return;
+    }
+
+    run() {
+        moveEverything();
+        drawEverything();
+    }
+
+    checkConditions() {
+        if (player.health <= 0) {
+            return 'Game Over';
+        }
+
+        if (this.levelEdit) {
+            return 'Level Edit'
+        }
+    }
+
+    onExit() {
+        this.levelEdit = false;
+    }
+}
+
+class GameOver extends State {
+    constructor() {
+        super();
+        this.name = 'Game Over';
+        this.timer = 0;
+    }
+
+    onEnter() {
+        this.timer = 0;
+    }
+
+    run() {
+        let alpha = 1;
+        if (this.timer < 100) {
+            drawEverything();
+            alpha = this.timer/100;
+            canvasContext.globalAlpha = alpha;
+            this.timer += 0.75;
+        }
+        canvasContext.fillStyle = 'rgb(255,'+ (255 * alpha) + ',' + (255 * alpha) + ')';
+        canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+        canvasContext.globalAlpha = 1;
+
+        let textColor = 'rgb(' + (255 - 192 * alpha) + ',' + 63 * alpha + ',' + (139 * alpha) + ')';
+        canvasContext.fillStyle = textColor;
+        canvasContext.font = '100px Arial';
+        canvasContext.testAlign = 'center';
+        canvasContext.fillText('YOU DIED', canvas.width/2, canvas.height/2);
+    }
+
+    checkConditions() {
+        if (mouseHeld[0]) {
+            return 'Title Screen';
+        }
+    }
+
+    onExit() {
+        resetMouse();
+        objects.length = 0;
+    }
 }
 
 function initRenderLoop() {
     var framesPerSecond = 60;
-
     initInput();
-    initTestObjects();
-    setInterval(function () {
 
-        if (!gameStarted){
-            controlTitleScreen();
-            drawTitleScreen();
-        } else {
-            moveEverything();
-            drawEverything();
-        }
-                                                  
+    Game.start()
+    setInterval(function () {
+        Game.update();                     
     }, 1000 / framesPerSecond);
 }
 
@@ -79,9 +139,6 @@ function initTestObjects() {
 }
 
 function moveEverything() {
-
-    if (isInLevelEditMode){return;}
-
     player.update();
     currentLevel.updateDoors()
 
@@ -98,6 +155,11 @@ function moveEverything() {
         }
     }
     removeDead();
+
+    if (currentLevel.isInterior === false) {
+        spawnSnow();
+    }
+
     objects.sort((a, b) => (a.distance < b.distance) ? 1 : -1);
 
     checkLevelCompletion();
@@ -112,24 +174,16 @@ function drawEverything() {
         colorRect(0, 0, canvas.width, canvas.height, 'White'); //Ceiling/Sky Color
     }
 
-    // clear the game view by filling it with white
-
     render3DProjection();
     player.draw();
     currentLevel.draw();
     player.drawHands();
-
-    if (currentLevel.isInterior === false) {
-        spawnSnow();
-    }
 
     for (let o of objects) {
         o.draw2D();
     }
 
     drawHUD();
-    displayLevelData();
-
 }
 
 function render3DProjection() {

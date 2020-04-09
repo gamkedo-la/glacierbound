@@ -53,7 +53,7 @@ function drawHUD() {
         canvasContext.fillText(player.rotationAngle, canvas.width - 100, 150);
 
         canvasContext.fillText("Level Editor Enabled:", canvas.width - 100, 170);
-        canvasContext.fillText(isInLevelEditMode, canvas.width - 100, 180);
+        canvasContext.fillText(Game.currentState.name === 'Level Edit', canvas.width - 100, 180);
 
         canvasContext.fillText("Mouse Position:", canvas.width - 100, 200);
         canvasContext.fillText("Scaled Mouse Pos:", canvas.width - 100, 220);
@@ -62,11 +62,6 @@ function drawHUD() {
             canvasContext.fillText(mousePos.x + ", " + mousePos.y, canvas.width - 100, 210);
             canvasContext.fillText(mousePos.x / MINIMAP_SCALE_FACTOR + ", " + mousePos.y / MINIMAP_SCALE_FACTOR, canvas.width - 100, 230);
             canvasContext.fillText(getTileTypeAtPixelCoord(mousePos.x / MINIMAP_SCALE_FACTOR, mousePos.y / MINIMAP_SCALE_FACTOR), canvas.width - 100, 250);
-        }
-
-        if (isInLevelEditMode) {
-            drawTileSelector();
-            drawCursor();
         }
     }
 

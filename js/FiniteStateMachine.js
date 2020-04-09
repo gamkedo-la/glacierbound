@@ -19,10 +19,10 @@ class FiniteStateMachine {
 	}
 
 	changeState(newState) {
-		if (from === to) return;
-		this.currentState.onExit(to);
+		if (this.currentState === newState) return;
+		this.currentState.onExit(newState);
 		this.currentState = this.states[newState];
-		this.currentState.onEnter(from);
+		this.currentState.onEnter(this.currentState);
 	}
 }
 

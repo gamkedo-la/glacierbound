@@ -1,10 +1,12 @@
 const MOUSE_SENS = 0.05;
 
+let mouseEnabled = false;
 let mouseDelta = {
     x: 0,
     y: 0
 };
-let mouseEnabled = true;
+
+let mouseHeld = [];
 
 var mousePos = null;
 
@@ -50,32 +52,25 @@ function drawCursor() {
 }
 
 function mouseDown(evt) {
-    clickMouse(true);
+    clickMouse(true, evt.button);
 }
 
 function mouseUp(evt) {
-
-    if (gameStarted && isInLevelEditMode) {
-
+    if (Game.currentState.name === 'Level Edit') {
         if (mousePos.x < MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR &&
             mousePos.y < MAP_NUM_ROWS * TILE_SIZE * MINIMAP_SCALE_FACTOR) {
                 var index = mapTileToIndex(colAtXCoord(mousePos.x / MINIMAP_SCALE_FACTOR), rowAtYCoord(mousePos.y / MINIMAP_SCALE_FACTOR));
                 setTileToWall(index, GRID_WALL, selectedTileTexValue);
         }
-
         setSelectedTile();
     }
 
-    clickMouse(false);
+    clickMouse(false, evt.button);
 }
 
-function clickMouse(state) {
-    if (!gameStarted && startHighlighted) {
-        gameStarted = true;
-        resetMouse();
-    } else {
-        player.keyHeld_Fire = state;
-    }
+function clickMouse(state, button) {
+    mouseHeld[button] = state;
+    player.keyHeld_Fire = state;
 }
 
 function calculateMousePos(evt) {
@@ -97,4 +92,5 @@ function resetMouse() {
         y: 0
     };
     mousePos = null;
+    mouseHeld.fill(false);
 }
