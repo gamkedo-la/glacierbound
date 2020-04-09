@@ -33,7 +33,8 @@ function drawTileSelector() {
 function setSelectedTile(){
     for (var i = 0; i < textureList['wall'].length; i++) {
         if (mousePos.x > MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR &&
-            mousePos.x < (MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR) + TILE_SIZE){
+            mousePos.x < (MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR) + TILE_SIZE &&
+            mousePos.y < (textureList['wall'].length * TILE_SIZE)){
                 selectedTile = textureList['wall'][Math.floor(mousePos.y / TILE_SIZE)];
                 selectedTileTexValue = (Math.floor(mousePos.y / TILE_SIZE) + 1) / 100;
         }
@@ -57,6 +58,7 @@ function toggleLevelEditMode() {
 }
 
 function setTileToWall(index, wall_type, wall_tex) {
+
     if (currentLevel.mapGrid[index] > 0) {
         currentLevel.mapGrid[index] = 0.00;
     } else {

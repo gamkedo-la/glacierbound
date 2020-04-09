@@ -56,8 +56,13 @@ function mouseDown(evt) {
 function mouseUp(evt) {
 
     if (gameStarted && isInLevelEditMode) {
-        var index = mapTileToIndex(colAtXCoord(mousePos.x / MINIMAP_SCALE_FACTOR), rowAtYCoord(mousePos.y / MINIMAP_SCALE_FACTOR));
-        setTileToWall(index, GRID_WALL, selectedTileTexValue);
+
+        if (mousePos.x < MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR &&
+            mousePos.y < MAP_NUM_ROWS * TILE_SIZE * MINIMAP_SCALE_FACTOR) {
+                var index = mapTileToIndex(colAtXCoord(mousePos.x / MINIMAP_SCALE_FACTOR), rowAtYCoord(mousePos.y / MINIMAP_SCALE_FACTOR));
+                setTileToWall(index, GRID_WALL, selectedTileTexValue);
+        }
+
         setSelectedTile();
     }
 
