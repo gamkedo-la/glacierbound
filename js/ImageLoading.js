@@ -24,9 +24,9 @@ function loadImages() {
 		{spriteName: 'enemy2', fileName: 'enemy2.png'},
 		{spriteName: 'healthbar', fileName: 'healthbar.png'},
 		{spriteName: 'armorbar', fileName: 'armorbar.png'},
-		{spriteName: 'blueKey', fileName: 'bluekey.png'},
+		{spriteName: 'blueKey', fileName: 'bluekey.png', rotationFrames: 8, frameWidth: 64, frameHeight: 64},
 		{spriteName: 'greenKey', fileName: 'greenkey.png', rotationFrames: 8, frameWidth: 64, frameHeight: 64},
-		{spriteName: 'redKey', fileName: 'redkey.png'},
+		{spriteName: 'redKey', fileName: 'redkey.png', rotationFrames: 8, frameWidth: 64, frameHeight: 64},
 	]
 	
 	imagesToLoad = imageList.length;
