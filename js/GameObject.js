@@ -11,6 +11,7 @@ class GameObject {
         this.distance = Infinity; //distance to player
         this.isDead = false;
         this.hasShadow = true;
+        this.animTimer = 0;
     }
 
     createSprite(color) {
@@ -31,6 +32,12 @@ class GameObject {
         let movePos = getPixelCoordFromAngleAndSpeed(this.x, this.y, this.direction, this.moveSpeed);
         this.x = movePos[0];
         this.y = movePos[1];
+        if (this.pic.animationFrames) {
+            this.animTimer += 0.1;
+            if (this.animTimer > this.pic.animationFrames) {
+                this.animTimer = 0;
+            }
+        }
     }
 
     updateCollision(other) {
@@ -38,17 +45,18 @@ class GameObject {
     }
 
     draw() {
-
-        let distanceProjectionPlane = (canvas.width / 2) / Math.tan(FOV_RADS / 2); //This only changes if canvas width or FOV changes
         let dist = this.distance;
-        let drawAngle = Math.atan2(this.y - player.y, this.x - player.x) - player.rotationAngle;
+        let deltaAng = Math.atan2(this.y - player.y, this.x - player.x)
+        let drawAngle = deltaAng - player.rotationAngle;
 
         let size = Math.cos(drawAngle);
         if (size <= Math.cos(FOV_RADS)) return;
 
-        let drawHeight = (TILE_SIZE / dist) * distanceProjectionPlane;
-        let drawWidth = (this.pic.width / this.pic.height) * drawHeight;
-        let drawX = canvas.width / 2 + Math.tan(drawAngle) * distanceProjectionPlane;
+        let drawHeight = (TILE_SIZE / dist) * PROJECTION_PLAIN_DISTANCE;
+        let drawWidth;
+        if (this.pic.animationFrames || this.pic.rotationFrames) drawWidth = (this.pic.frameWidth / this.pic.frameWidth) * drawHeight;
+        else drawWidth = (this.pic.width / this.pic.height) * drawHeight;
+        let drawX = canvas.width / 2 + Math.tan(drawAngle) * PROJECTION_PLAIN_DISTANCE;
         let drawY = (canvas.height / 2) - (drawHeight / 2) - (drawHeight * this.altitude);
 
         if (currentLevel.isInterior === false) {
@@ -68,7 +76,25 @@ class GameObject {
             canvasContext.fill();
         }
 
-        canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
+        if (this.pic.animationFrames || this.pic.rotationFrames) {
+            //Animation Frames
+            let frameX = 0; 
+            if (this.pic.animationFrames) frameX = Math.floor(this.animTimer) * this.pic.frameWidth;
+
+            //Rotation Frames
+            //Calculate the difference between the angle to the camera and the object's angle of rotation
+            //Subtract Math.PI to flip the deltaAng calculated earlier
+            let rotationAngle = (deltaAng - Math.PI) - this.direction;
+            //Add half of the division to center the range for each rotation frame
+            rotationAngle += (Math.PI / this.pic.rotationFrames);
+            //Convert to a range from 0 to the number of rotation frames
+            let frameY = normalizeAngle(rotationAngle) / (Math.PI*2) * this.pic.rotationFrames;
+            frameY = Math.floor(frameY) * this.pic.frameHeight;
+            canvasContext.drawImage(this.pic, frameX, frameY, this.pic.frameWidth, this.pic.frameHeight, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
+        } else {
+            canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
+        }
+
         if ('drawLabels' in this) this.drawLabels(drawX, drawY, drawHeight);
         
         canvasContext.globalAlpha = 1;

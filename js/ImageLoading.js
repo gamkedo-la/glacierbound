@@ -25,7 +25,7 @@ function loadImages() {
 		{spriteName: 'healthbar', fileName: 'healthbar.png'},
 		{spriteName: 'armorbar', fileName: 'armorbar.png'},
 		{spriteName: 'blueKey', fileName: 'bluekey.png'},
-		{spriteName: 'greenKey', fileName: 'greenkey.png'},
+		{spriteName: 'greenKey', fileName: 'greenkey.png', rotationFrames: 8, frameWidth: 64, frameHeight: 64},
 		{spriteName: 'redKey', fileName: 'redkey.png'},
 	]
 	
@@ -36,6 +36,12 @@ function loadImages() {
 		beginLoadingImage(newImage, imageList[i].fileName);
 		
 		if(imageList[i].spriteName != undefined) {
+			if (imageList[i].animationFrames || imageList[i].rotationFrames) {
+				newImage.rotationFrames = imageList[i].rotationFrames;
+				newImage.animationFrames = imageList[i].animationFrames;
+				newImage.frameWidth = imageList[i].frameWidth;
+				newImage.frameHeight = imageList[i].frameHeight;
+			}
 			spriteList[imageList[i].spriteName] = newImage;
 		} else if (imageList[i].tileType != undefined) {
 			textureList[imageList[i].tileType].push(newImage)

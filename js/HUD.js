@@ -4,27 +4,27 @@ function drawHUD() {
 
     //Health
     canvasContext.drawImage(spriteList['healthbar'], 10, canvas.height - 100);
-    var healthPercent = player.health / player.maxHealth * 100;
-    var healthState = 'green';
-    if (healthPercent == 100) {
-        healthState = 'green';
-    } else if (healthPercent <= 60 && healthPercent > 30) {
-        healthState = 'orange';
-    } else if (healthPercent <= 30) {
+    var healthPercent = player.health / player.maxHealth;
+    var healthState;
+    if (healthPercent < 0.3) {
         healthState = 'red';
+    } else if (healthPercent < 0.6) {
+        healthState = 'orange';
+    } else {
+        healthState = 'green';
     }
-    colorRect(10 + 45, canvas.height - 100 + 15, healthPercent * 1.45, 20, healthState);
+    colorRect(10 + 45, canvas.height - 100 + 15, healthPercent * 145, 20, healthState);
 
     //Armor
     canvasContext.drawImage(spriteList['armorbar'], 10, canvas.height - 55);
-    var armorPercent = player.armor / player.maxArmor * 100;
-    colorRect(10 + 45, canvas.height - 55 + 15, armorPercent * 1.45, 20, 'deepskyblue');
+    var armorPercent = player.armor / player.maxArmor;
+    colorRect(10 + 45, canvas.height - 55 + 15, armorPercent * 145, 20, 'deepskyblue');
 
     //Keys
-    let keyAnchor = canvas.width - 192 - 16;
-    if (player.keys[0]) canvasContext.drawImage(spriteList['blueKey'], keyAnchor, canvas.height - 80);
-    if (player.keys[1]) canvasContext.drawImage(spriteList['redKey'], keyAnchor + 64, canvas.height - 80);
-    if (player.keys[2]) canvasContext.drawImage(spriteList['greenKey'], keyAnchor + 128, canvas.height - 80);
+    let keyAnchorX = canvas.width - 192 - 16;
+    if (player.keys[0]) canvasContext.drawImage(spriteList['blueKey'], 0, 0, 64, 64, keyAnchorX, canvas.height-80, 64, 64);
+    if (player.keys[1]) canvasContext.drawImage(spriteList['redKey'], 0, 0, 64, 64, keyAnchorX + 64, canvas.height-80, 64, 64);
+    if (player.keys[2]) canvasContext.drawImage(spriteList['greenKey'], 0, 0, 64, 64, keyAnchorX + 128, canvas.height-80, 64, 64);
 
     //Text
     canvasContext.fillStyle = 'white';
