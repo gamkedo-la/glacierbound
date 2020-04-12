@@ -167,6 +167,7 @@ function drawEverything() {
     if (currentLevel.isInterior == true) {
         colorRect(0, 0, canvas.width, canvas.height, 'SlateGrey'); //Ceiling/Sky Color
         colorRect(0, canvas.height / 2, canvas.width, canvas.height, 'DarkGrey'); //Floor Color
+        drawSkybox(player.rotationAngle);
     } else {
         colorRect(0, 0, canvas.width, canvas.height, 'White'); //Ceiling/Sky Color
     }
@@ -181,6 +182,23 @@ function drawEverything() {
     }
 
     drawHUD();
+}
+
+function drawSkybox(angle) {
+    const twoPI = Math.PI * 2;
+    let boxScale = FOV_RADS / twoPI;
+
+    let skyBox = spriteList['skybox'];
+    let skyHeight = PROJECTION_PLANE_HEIGHT/2;
+    let boxWidth = skyBox.width * boxScale;
+    let xOffset = skyBox.width * (angle / twoPI);
+    canvasContext.drawImage(skyBox, xOffset, 0, boxWidth, skyBox.height, 0, 0, canvas.width, skyHeight);
+
+    let overDraw = twoPI - player.rotationAngle;
+    if (Math.abs(overDraw) <= FOV_RADS) {
+        xOffset = canvas.width * (overDraw / FOV_RADS);
+        canvasContext.drawImage(skyBox, 0, 0, boxWidth, skyBox.height, xOffset, 0, canvas.width, skyHeight);
+    }
 }
 
 function render3DProjection() {
@@ -269,6 +287,7 @@ function spawnSnow() {
         };
         part.radius = 0;
         part.lifeTime = 8;
+        part.owner = player;
         objects.push(part);
     }
 }

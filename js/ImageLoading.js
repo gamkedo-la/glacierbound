@@ -27,6 +27,7 @@ function loadImages() {
 		{spriteName: 'blueKey', fileName: 'bluekey.png', rotationFrames: 8, frameWidth: 64, frameHeight: 64},
 		{spriteName: 'greenKey', fileName: 'greenkey.png', rotationFrames: 8, frameWidth: 64, frameHeight: 64},
 		{spriteName: 'redKey', fileName: 'redkey.png', rotationFrames: 8, frameWidth: 64, frameHeight: 64},
+		{spriteName: 'skybox', fileName: 'skybox.png'},
 	]
 	
 	imagesToLoad = imageList.length;
