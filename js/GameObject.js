@@ -6,6 +6,9 @@ class GameObject {
         this.moveSpeed = speed;
         this.altitude = altitude ? altitude : 0; //screen y offset
         this.pic = pic;
+        this.tint = document.createElement('canvas');
+        this.tint.ctx = this.tint.getContext('2d');
+        if (this.pic) this.createTint('white');
         this.scale = scale ? scale : 1; //multiple of draw height/width
         this.radius = (this.scale * TILE_SIZE / 2) - 6;
         this.distance = Infinity; //distance to player
@@ -24,6 +27,21 @@ class GameObject {
         this.pic.ctx.beginPath();
         this.pic.ctx.arc(128, 128, 128, 0, Math.PI * 2, true);
         this.pic.ctx.fill();
+        this.createTint('white');
+    }
+
+    createTint(color) {
+        this.tint.width = this.pic.width;
+        this.tint.height = this.pic.height;
+        this.setTint(color);
+    }
+
+    setTint(color) {
+        this.tint.ctx.globalCompositeOperation = 'source-over';
+        this.tint.ctx.fillStyle = color;
+        this.tint.ctx.fillRect(0, 0, this.tint.width, this.tint.height);
+        this.tint.ctx.globalCompositeOperation = 'destination-atop';
+        this.tint.ctx.drawImage(this.pic, 0, 0);
     }
 
     update() {
@@ -59,19 +77,19 @@ class GameObject {
         let drawX = canvas.width / 2 + Math.tan(drawAngle) * PROJECTION_PLAIN_DISTANCE;
         let drawY = (canvas.height / 2) - (drawHeight / 2) - (drawHeight * this.altitude);
 
+        let alpha = 0;
         if (currentLevel.isInterior === false) {
-            let alpha = 1 - dist / currentLevel.visibilityDist;
-            if (alpha <= 0) {
+            alpha = dist / currentLevel.visibilityDist;
+            if (alpha >= 1) {
                 return;
-            } else {
-                canvasContext.globalAlpha = alpha;
             }
         }
 
         //Draw shadow
         if (this.hasShadow) {
             canvasContext.beginPath();
-            canvasContext.fillStyle = 'black';
+            let brightness = 255 * alpha;
+            canvasContext.fillStyle = 'rgb(' + brightness + ', ' + brightness + ', ' + brightness + ')'; 
             canvasContext.ellipse(drawX, canvas.height / 2 + drawHeight / 2, drawWidth / 2 * this.scale, drawWidth / 6 * this.scale, 0, 0, Math.PI * 2, false);
             canvasContext.fill();
         }
@@ -91,8 +109,18 @@ class GameObject {
             let frameY = normalizeAngle(rotationAngle) / (Math.PI*2) * this.pic.rotationFrames;
             frameY = Math.floor(frameY) * this.pic.frameHeight;
             canvasContext.drawImage(this.pic, frameX, frameY, this.pic.frameWidth, this.pic.frameHeight, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
+
+            if (alpha > 0) {
+                canvasContext.globalAlpha = alpha;
+                canvasContext.drawImage(this.tint, frameX, frameY, this.pic.frameWidth, this.pic.frameHeight, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
+            }
+
         } else {
             canvasContext.drawImage(this.pic, 0, 0, this.pic.width, this.pic.height, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
+            if (alpha > 0) {
+                canvasContext.globalAlpha = alpha;
+                canvasContext.drawImage(this.tint, 0, 0, this.pic.width, this.pic.height, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
+            }
         }
 
         if ('drawLabels' in this) this.drawLabels(drawX, drawY, drawHeight);

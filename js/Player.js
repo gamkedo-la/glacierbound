@@ -103,7 +103,6 @@ class Player {
 
         if (tileType === GRID_DOOR) {
             let doorType = Math.ceil(currentLevel.mapGrid[fIndex] * 100) - (tileType * 100) - 1;
-            console.log(doorType);
             if (doorType === 0 || this.keys[doorType - 1]) {
                 currentLevel.toggleDoor(fIndex);
             } else {

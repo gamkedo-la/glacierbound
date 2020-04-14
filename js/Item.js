@@ -3,6 +3,7 @@ class Item extends GameObject {
         super(x, y, 0, null, altitude, scale, angle);
         this.type = type;
         this.setSprite(type);
+        this.createTint('white');
     }
 
     activate() {
