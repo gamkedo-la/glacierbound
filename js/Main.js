@@ -28,9 +28,6 @@ window.onload = function () {
     canvasContext.canvas.width = PROJECTION_PLANE_WIDTH;
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
 
-    level1 = new Level(MAP_GRIDS[2], true, 10000, 100, 610, 0, 870, 610);
-    level2 = new Level(MAP_GRIDS[2], false, 800, 400, 610, 0, 870, 610);
-
     player = new Player();
     Game = new FiniteStateMachine({'Title Screen': new TitleScreen(), 'Game Started': new GameStarted(), 'Level Edit': new LevelEdit(), 'Game Over': new GameOver()}, 'Title Screen');
     loadImages();
@@ -152,26 +149,15 @@ function moveEverything() {
         }
     }
     removeDead();
-
-    if (currentLevel.isInterior === false) {
-        spawnSnow();
-    }
+    currentLevel.updateWeather();
 
     objects.sort((a, b) => (a.distance < b.distance) ? 1 : -1);
 
-    checkLevelCompletion();
+    currentLevel.checkLevelCompletion();
 }
 
 function drawEverything() {
-
-    if (currentLevel.isInterior == true) {
-        colorRect(0, 0, canvas.width, canvas.height, 'SlateGrey'); //Ceiling/Sky Color
-        colorRect(0, canvas.height / 2, canvas.width, canvas.height, 'DarkGrey'); //Floor Color
-        drawSkybox(player.rotationAngle);
-    } else {
-        colorRect(0, 0, canvas.width, canvas.height, 'White'); //Ceiling/Sky Color
-    }
-
+    currentLevel.drawBackground();
     render3DProjection();
     player.draw();
     currentLevel.draw();
@@ -182,23 +168,6 @@ function drawEverything() {
     }
 
     drawHUD();
-}
-
-function drawSkybox(angle) {
-    const twoPI = Math.PI * 2;
-    let boxScale = FOV_RADS / twoPI;
-
-    let skyBox = spriteList['skybox'];
-    let skyHeight = PROJECTION_PLANE_HEIGHT/2;
-    let boxWidth = skyBox.width * boxScale;
-    let xOffset = skyBox.width * (angle / twoPI);
-    canvasContext.drawImage(skyBox, xOffset, 0, boxWidth, skyBox.height, 0, 0, canvas.width, skyHeight);
-
-    let overDraw = twoPI - player.rotationAngle;
-    if (Math.abs(overDraw) <= FOV_RADS) {
-        xOffset = canvas.width * (overDraw / FOV_RADS);
-        canvasContext.drawImage(skyBox, 0, 0, boxWidth, skyBox.height, xOffset, 0, canvas.width, skyHeight);
-    }
 }
 
 function render3DProjection() {
@@ -219,7 +188,7 @@ function render3DProjection() {
 
         let tileIndex = mapTileToIndex(Math.floor(ray.wallHitX / TILE_SIZE), Math.floor(ray.wallHitY / TILE_SIZE))
         let tileValue = currentLevel.mapGrid[tileIndex];
-        let alpha = 0;
+        let alpha = 1;
         if (tileValue > 0) {
             let type = Math.floor(tileValue);
             let textureIndex = Math.ceil((tileValue * 100)) - (type * 100);
@@ -236,7 +205,7 @@ function render3DProjection() {
 
             let textureX = Math.floor(texture.width * wallX);
 
-            if (currentLevel.isInterior === false) {
+            if (currentLevel.visibilityDist >= ray.distance) {
                 alpha = ray.distance / currentLevel.visibilityDist;
             }
 
@@ -245,7 +214,7 @@ function render3DProjection() {
 
         if (alpha > 0 && alpha < 1) {
             canvasContext.globalAlpha = alpha;
-            colorRect(ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight, 'white');
+            colorRect(ray.columnID * RAY_INCREMENT_WIDTH, (canvas.height / 2) - (wallStripHeight / 2), RAY_INCREMENT_WIDTH, wallStripHeight, currentLevel.colors.sky);
             canvasContext.globalAlpha = 1;
         }
     }
@@ -260,34 +229,5 @@ function render3DProjection() {
 function removeDead() {
     for (let d = objects.length - 1; d >= 0; d--) {
         if (objects[d].isDead) objects.splice(d, 1);
-    }
-}
-
-function checkLevelCompletion() {
-    let distToExit = DistanceBetweenTwoGameObjects(player, currentLevel.exit);
-    if (distToExit < 50) {
-        loadLevel(level2);
-    }
-}
-
-function spawnSnow() {
-    for (var i = 0; i < 2; i++) {
-        var offsetAng = player.rotationAngle + (Math.random() * Math.PI / 2) - (Math.PI / 4);
-        var part = new Projectile(player.x + Math.cos(offsetAng) * (64 + Math.random() * 64), //x
-            player.y + Math.sin(offsetAng) * (64 + Math.random() * 64), //y
-            20, //speed
-            spriteList['snow'], //sprite 
-            Math.floor(Math.random() * 1.5), //height
-            Math.random(), //scale
-            0.5, //angle
-            true); //variable Height
-
-        part.draw2D = function () {
-            return
-        };
-        part.radius = 0;
-        part.lifeTime = 8;
-        part.owner = player;
-        objects.push(part);
     }
 }

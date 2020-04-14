@@ -1,6 +1,6 @@
 const TILE_SIZE = 64;
-const MAP_NUM_ROWS = 30;
-const MAP_NUM_COLS = 30;
+let MAP_NUM_ROWS = 30;
+let MAP_NUM_COLS = 30;
 
 const GRID_FLOOR = 0;
 const GRID_WALL = 1;
@@ -9,9 +9,8 @@ const GRID_DOOR = 2;
 const WALL_TEX_GREY = 0.01;
 const WALL_TEX_BLUE = 0.02;
 
-const MAP_GRIDS = [];
-
-MAP_GRIDS[0] = [
+const MAP_GRIDS = [
+    [
     1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
     1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01, 0.00, 1.01,
     1.01, 0.00, 0.00, 0.00, 0.00, 1.02, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.01, 0.00, 1.01,
@@ -23,9 +22,9 @@ MAP_GRIDS[0] = [
     1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 0.00, 0.00, 0.00, 1.02, 1.01, 1.01, 1.01, 1.02, 1.01,
     1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.01, 0.00, 1.02,
     1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.02, 1.01,
-];
+    ],
 
-MAP_GRIDS[1] = [
+    [
     1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03,
     1.03, 1.03, 0.00, 0.00, 0.00, 0.00, 1.03, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.03, 1.03,
     1.03, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.03, 0.00, 0.00, 0.00, 1.03,
@@ -37,9 +36,9 @@ MAP_GRIDS[1] = [
     1.03, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.03,
     1.03, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.03,
     1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03, 1.03,
-]
+    ],
 
-MAP_GRIDS[2] = [
+    [
     1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
     1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01, 0.00, 1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
     1.01, 0.00, 0.00, 0.00, 0.00, 1.02, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.01, 0.00, 1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
@@ -70,9 +69,9 @@ MAP_GRIDS[2] = [
     1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
     1.01, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.01,
     1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
-]
+    ],
 
-MAP_GRIDS[3] = [
+    [
     1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
     1.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.01, 0, 1.01, 0, 0, 0, 0, 0, 0, 0, 0, 1.01, 0, 0, 0, 0, 0, 1.01,
     1.01, 0, 0, 0, 0, 1.02, 0, 0, 0, 0, 0, 0, 2.01, 0, 1.01, 0, 0, 0, 0, 0, 0, 0, 0, 1.01, 0, 0, 0, 0, 0, 1.01,
@@ -104,16 +103,70 @@ MAP_GRIDS[3] = [
     1.01, 0, 0, 0, 0, 1.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.01,
     1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01,
     ]
+];
+
+const levelData = [
+    {
+        mapGrid: MAP_GRIDS[0],
+        width: 15,
+        height: 11,
+        drawDist: 400,
+        colors: {sky: 'rgb(0, 0, 0)', ground: 'rgb(0, 0, 0)'},
+        skybox: null,
+        start: {x: 100, y: 610, rotation: 0},
+        exit: {x: 870, y: 610},
+        weather: () => {return},
+    },
+
+    {
+        mapGrid: MAP_GRIDS[1],
+        width: 15,
+        height: 11,
+        drawDist: 600,
+        colors: {sky: 'rgb(255, 255, 255)', ground: 'rgb(255, 255, 255)'},
+        skybox: null,
+        start: {x: 100, y: 610, rotation: 0},
+        exit: {x: 870, y: 610},
+        weather: spawnSnow,
+    },
+
+    {
+        mapGrid: MAP_GRIDS[2],
+        width: 30,
+        height: 30,
+        drawDist: 10000,
+        colors: {sky: 'rgb(63,63,116)', ground: 'rgb(125, 125, 125)'},
+        skybox: 'skybox',
+        start: {x: 100, y: 610, rotation: 0},
+        exit: {x: 870, y: 610},
+        weather: () => {return},
+    },
+
+    {
+        mapGrid: MAP_GRIDS[3],
+        width: 30,
+        height: 30,
+        drawDist: 10000,
+        colors: {sky: 'rgb(63,63,116)', ground: 'rgb(125, 125, 125)'},
+        skybox: 'skybox',
+        start: {x: 200, y: 1700, rotation: 0},
+        exit: {x: 1000, y: 1000},
+        weather: () => {return},
+    },
+
+]
 
 class Level {
-    constructor(map_grid, is_Interior, visibility, startX, startY, startAng, exitX, exitY) {
+    constructor(levelObject) {
+        this.mapGrid = levelObject.mapGrid.slice(0);
+        this.height = levelObject.height;
+        this.width = levelObject.width;
+        this.visibilityDist = levelObject.drawDist;
+        this.colors = levelObject.colors;
+        this.skybox = levelObject.skybox;
+        this.updateWeather = levelObject.weather;
 
-        this.mapGrid = map_grid;
-        this.isInterior = is_Interior;
-        this.visibilityDist = visibility;
-
-        this.start = new GameObject(startX, startY, 0, null, -0.5, 1, startAng);
-        this.exit = new GameObject(exitX, exitY, 0, null, -0.5, 1, 0)
+        this.exit = levelObject.exit;
 
         this.doorStates = [];
         this.doorStates.length = this.mapGrid.length;
@@ -121,6 +174,14 @@ class Level {
 
         this.doorOffsets = this.doorStates.slice();
         this.doorOffsets.fill(64);
+    }
+
+    checkLevelCompletion() {
+        let distToExit = DistanceBetweenTwoGameObjects(player, this.exit);
+        if (distToExit < 50) {
+            if (this.index < levelData.length - 1) loadLevel(this.index + 1);
+            else loadLevel(0);
+        }
     }
 
     draw() {
@@ -145,6 +206,30 @@ class Level {
                 }
 
             }
+        }
+    }
+
+    drawBackground() {
+        colorRect(0, 0, canvas.width, canvas.height, this.colors.sky); //Ceiling/Sky Color
+        colorRect(0, canvas.height / 2, canvas.width, canvas.height, this.colors.ground); //Floor Color
+        this.drawSkybox(player.rotationAngle);
+    }
+
+    drawSkybox(angle) {
+        if (!this.skybox) return;
+        const twoPI = Math.PI * 2;
+        let boxScale = FOV_RADS / twoPI;
+    
+        let skyBox = spriteList[this.skybox];
+        let skyHeight = PROJECTION_PLANE_HEIGHT/2;
+        let boxWidth = skyBox.width * boxScale;
+        let xOffset = skyBox.width * (angle / twoPI);
+        canvasContext.drawImage(skyBox, xOffset, 0, boxWidth, skyBox.height, 0, 0, canvas.width, skyHeight);
+    
+        let overDraw = twoPI - player.rotationAngle;
+        if (Math.abs(overDraw) <= FOV_RADS) {
+            xOffset = canvas.width * (overDraw / FOV_RADS);
+            canvasContext.drawImage(skyBox, 0, 0, boxWidth, skyBox.height, xOffset, 0, canvas.width, skyHeight);
         }
     }
 
@@ -237,9 +322,39 @@ function getTileName(type) {
     }
 }
 
-function loadLevel(level) {
-    currentLevel = level;
-    player.x = currentLevel.start.x;
-    player.y = currentLevel.start.y;
-    player.rotationAngle = currentLevel.start.direction;
+function loadLevel(index) {
+    let data = levelData[index];
+    MAP_NUM_ROWS = data.height;
+    MAP_NUM_COLS = data.width;
+    currentLevel = new Level(data);
+    currentLevel.index = index;
+    
+    player.x = data.start.x;
+    player.y = data.start.y;
+    player.rotationAngle = data.start.rotation;
+
+    objects.length = 0;
+    initTestObjects();
+}
+
+function spawnSnow() {
+    for (var i = 0; i < 2; i++) {
+        var offsetAng = player.rotationAngle + (Math.random() * Math.PI / 2) - (Math.PI / 4);
+        var part = new Projectile(player.x + Math.cos(offsetAng) * (64 + Math.random() * 64), //x
+            player.y + Math.sin(offsetAng) * (64 + Math.random() * 64), //y
+            20, //speed
+            spriteList['snow'], //sprite 
+            Math.floor(Math.random() * 1.5), //height
+            Math.random(), //scale
+            0.5, //angle
+            true); //variable Height
+
+        part.draw2D = function () {
+            return
+        };
+        part.radius = 0;
+        part.lifeTime = 8;
+        part.owner = player;
+        objects.push(part);
+    }
 }

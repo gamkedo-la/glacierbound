@@ -124,3 +124,22 @@ function objectMapCollision(x, y, radius) {
 function pointInRect(px, py, rx, ry, rw, rh) {
     return (px > rx && px < rx + rw && py > ry && py < ry + rh )
 }
+
+function lerp(start, end, weight) {
+    return (1 - clamp(weight, 0, 1)) * start + clamp(weight, 0, 1) * end;
+}
+
+function lerpRGB(start, end, weight) {
+    let color1 = start.substring(4, start.length-1)
+        color1 = '[' + color1 + ']';
+        color1 = JSON.parse(color1);
+    let color2 = end.substring(4, end.length-1)
+        color2 = '[' + color2 + ']';
+        color2 = JSON.parse(color2);
+
+    let r = lerp (color1[0], color2[0], weight);
+    let g = lerp (color1[0], color2[0], weight);
+    let b = lerp (color1[0], color2[0], weight);
+
+    return 'rgb(' + r +', ' + g + ', ' + b + ')';
+}

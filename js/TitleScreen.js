@@ -61,8 +61,7 @@ class TitleScreen extends State {
 
     onExit() {
         resetMouse();
-        initTestObjects();
         player.reset();
-        loadLevel(level1)
+        loadLevel(0);
     }
 }

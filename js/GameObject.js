@@ -8,7 +8,7 @@ class GameObject {
         this.pic = pic;
         this.tint = document.createElement('canvas');
         this.tint.ctx = this.tint.getContext('2d');
-        if (this.pic) this.createTint('white');
+        if (this.pic) this.createTint(currentLevel.colors.sky);
         this.scale = scale ? scale : 1; //multiple of draw height/width
         this.radius = (this.scale * TILE_SIZE / 2) - 6;
         this.distance = Infinity; //distance to player
@@ -27,7 +27,7 @@ class GameObject {
         this.pic.ctx.beginPath();
         this.pic.ctx.arc(128, 128, 128, 0, Math.PI * 2, true);
         this.pic.ctx.fill();
-        this.createTint('white');
+        this.createTint(currentLevel.colors.sky);
     }
 
     createTint(color) {
@@ -78,18 +78,15 @@ class GameObject {
         let drawY = (canvas.height / 2) - (drawHeight / 2) - (drawHeight * this.altitude);
 
         let alpha = 0;
-        if (currentLevel.isInterior === false) {
+        if (currentLevel.visibilityDist >= dist) {
             alpha = dist / currentLevel.visibilityDist;
-            if (alpha >= 1) {
-                return;
-            }
-        }
+        } else return;
 
         //Draw shadow
         if (this.hasShadow) {
             canvasContext.beginPath();
-            let brightness = 255 * alpha;
-            canvasContext.fillStyle = 'rgb(' + brightness + ', ' + brightness + ', ' + brightness + ')'; 
+            let color = alpha > 0 ? lerpRGB('rgb(0, 0, 0)', currentLevel.colors.sky, alpha): 'black';
+            canvasContext.fillStyle = color;
             canvasContext.ellipse(drawX, canvas.height / 2 + drawHeight / 2, drawWidth / 2 * this.scale, drawWidth / 6 * this.scale, 0, 0, Math.PI * 2, false);
             canvasContext.fill();
         }
