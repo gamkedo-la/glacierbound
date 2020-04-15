@@ -87,7 +87,7 @@ class GameObject {
             canvasContext.beginPath();
             let color = alpha > 0 ? lerpRGB('rgb(0, 0, 0)', currentLevel.colors.sky, alpha): 'black';
             canvasContext.fillStyle = color;
-            canvasContext.ellipse(drawX, canvas.height / 2 + drawHeight / 2, drawWidth / 2 * this.scale, drawWidth / 6 * this.scale, 0, 0, Math.PI * 2, false);
+            canvasContext.ellipse(drawX, canvas.height / 2 + drawHeight / 2, drawWidth / 2 * this.scale, drawWidth / 10 * this.scale, 0, 0, Math.PI * 2, false);
             canvasContext.fill();
         }
 
