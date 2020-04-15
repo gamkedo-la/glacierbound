@@ -22,7 +22,6 @@ var testObject;
 var testObject2;
  
 window.onload = function () {
-
     canvas = document.getElementById('gameCanvas');
     canvasContext = canvas.getContext('2d');
     canvasContext.canvas.width = PROJECTION_PLANE_WIDTH;
@@ -82,12 +81,11 @@ class GameOver extends State {
             canvasContext.globalAlpha = alpha;
             this.timer += 0.75;
         }
-        canvasContext.fillStyle = 'rgb(255,'+ (255 * alpha) + ',' + (255 * alpha) + ')';
+        canvasContext.fillStyle = lerpRGB('rgb(255,0,0)', 'rgb(255, 255, 255)', alpha);
         canvasContext.fillRect(0, 0, canvas.width, canvas.height);
         canvasContext.globalAlpha = 1;
 
-        let textColor = 'rgb(' + (255 - 192 * alpha) + ',' + 63 * alpha + ',' + (139 * alpha) + ')';
-        canvasContext.fillStyle = textColor;
+        canvasContext.fillStyle = lerpRGB('rgb(255, 0, 0)', 'rgb(63,63,139)', alpha);;
         canvasContext.font = '100px Arial';
         canvasContext.testAlign = 'center';
         canvasContext.fillText('YOU DIED', canvas.width/2, canvas.height/2);
