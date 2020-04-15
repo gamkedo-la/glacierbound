@@ -111,7 +111,7 @@ const levelData = [
         width: 15,
         height: 11,
         drawDist: 400,
-        colors: {sky: 'rgb(0, 0, 0)', ground: 'rgb(0, 0, 0)'},
+        colors: {sky: 'rgb(0, 0, 0)', ground: 'rgb(125, 125, 125)'},
         skybox: null,
         start: {x: 100, y: 610, rotation: 0},
         exit: {x: 870, y: 610},
@@ -210,8 +210,15 @@ class Level {
     }
 
     drawBackground() {
-        colorRect(0, 0, canvas.width, canvas.height, this.colors.sky); //Ceiling/Sky Color
-        colorRect(0, canvas.height / 2, canvas.width, canvas.height, this.colors.ground); //Floor Color
+        colorRect(0, 0, canvas.width, canvas.height/2, this.colors.sky); //Ceiling/Sky Color
+        //colorRect(0, canvas.height / 2, canvas.width, canvas.height/2, this.colors.ground); //Floor Color
+        let viewRadius = (TILE_SIZE / this.visibilityDist) * PROJECTION_PLAIN_DISTANCE;
+        viewRadius = canvas.height/2 - viewRadius/2;
+        let drawOffsetY = canvas.height + canvas.width - viewRadius;
+        let gradient = canvasContext.createRadialGradient(canvas.width/2, drawOffsetY, canvas.width, canvas.width/2, drawOffsetY, canvas.width/2);
+        gradient.addColorStop(0, this.colors.sky);
+        gradient.addColorStop(1, this.colors.ground);
+        colorRect(0, canvas.height / 2, canvas.width, canvas.height/2, gradient); //Floor Color
         this.drawSkybox(player.rotationAngle);
     }
 
