@@ -1,4 +1,5 @@
 var selectedTile = textureList['wall'][0];
+var selectedTileType;
 var selectedTileTexValue = 0.01;
 
 class LevelEdit extends State {
@@ -55,7 +56,16 @@ function drawTileSelector() {
     for (var i = 0; i < textureList['wall'].length; i++) {
         canvasContext.drawImage(textureList['wall'][i], MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR, i * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         if (selectedTile === textureList['wall'][i]) {
+            selectedTileType = GRID_WALL;
             drawRect(MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR, i * TILE_SIZE, TILE_SIZE, TILE_SIZE, 'yellow');
+        }
+    }
+
+    for (var i = 0; i < textureList['door'].length; i++) {
+        canvasContext.drawImage(textureList['door'][i], (MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR) + TILE_SIZE, i * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        if (selectedTile === textureList['door'][i]) {
+            selectedTileType = GRID_DOOR;
+            drawRect((MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR) + TILE_SIZE, i * TILE_SIZE, TILE_SIZE, TILE_SIZE, 'yellow');
         }
     }
 }
@@ -66,6 +76,15 @@ function setSelectedTile() {
             mousePos.x < (MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR) + TILE_SIZE &&
             mousePos.y < (textureList['wall'].length * TILE_SIZE)) {
             selectedTile = textureList['wall'][Math.floor(mousePos.y / TILE_SIZE)];
+            selectedTileTexValue = (Math.floor(mousePos.y / TILE_SIZE) + 1) / 100;
+        }
+    }
+    
+    for (var i = 0; i < textureList['door'].length; i++) {
+        if (mousePos.x > (MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR) + TILE_SIZE &&
+            mousePos.x < (MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR) + (2 * TILE_SIZE) &&
+            mousePos.y < (textureList['door'].length * TILE_SIZE)) {
+            selectedTile = textureList['door'][Math.floor(mousePos.y / TILE_SIZE)];
             selectedTileTexValue = (Math.floor(mousePos.y / TILE_SIZE) + 1) / 100;
         }
     }

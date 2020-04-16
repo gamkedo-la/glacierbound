@@ -60,7 +60,7 @@ function mouseUp(evt) {
         if (mousePos.x < MAP_NUM_COLS * TILE_SIZE * MINIMAP_SCALE_FACTOR &&
             mousePos.y < MAP_NUM_ROWS * TILE_SIZE * MINIMAP_SCALE_FACTOR) {
                 var index = mapTileToIndex(colAtXCoord(mousePos.x / MINIMAP_SCALE_FACTOR), rowAtYCoord(mousePos.y / MINIMAP_SCALE_FACTOR));
-                setTileToWall(index, GRID_WALL, selectedTileTexValue);
+                setTileToWall(index, selectedTileType, selectedTileTexValue);
         }
         setSelectedTile();
         displayLevelData();
