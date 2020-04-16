@@ -113,8 +113,15 @@ const levelData = [
         drawDist: 400,
         colors: {sky: 'rgb(0, 0, 0)', ground: 'rgb(255, 255, 255)'},
         skybox: null,
-        start: {x: 100, y: 610, rotation: 0},
-        exit: {x: 870, y: 610},
+        start: {x: 128, y: 608, rotation: 0},
+        exit: {x: 870, y: 608},
+        objects: [
+            {type: 'enemy1', x: 300, y: 275, direction: 0},
+            {type: 'enemy2', x: 500, y: 100, direction: 0},
+            {type: 'health', x: 300, y: 275, direction: 0},
+            {type: 'armor', x: 300, y: 608, direction: 0},
+            {type: 'green key', x: 500, y: 608, direction: 0},
+        ],
         weather: () => {return},
     },
 
@@ -125,8 +132,8 @@ const levelData = [
         drawDist: 600,
         colors: {sky: 'rgb(255, 255, 255)', ground: 'rgb(255, 255, 255)'},
         skybox: null,
-        start: {x: 100, y: 610, rotation: 0},
-        exit: {x: 870, y: 610},
+        start: {x: 128, y: 608, rotation: 0},
+        exit: {x: 870, y: 608},
         weather: spawnSnow,
     },
 
@@ -137,8 +144,15 @@ const levelData = [
         drawDist: 10000,
         colors: {sky: 'rgb(63,63,116)', ground: 'rgb(125, 125, 125)'},
         skybox: 'skybox',
-        start: {x: 100, y: 610, rotation: 0},
-        exit: {x: 870, y: 610},
+        start: {x: 128, y: 608, rotation: 0},
+        exit: {x: 870, y: 608},
+        objects: [
+            {type: 'enemy1', x: 300, y: 275, direction: 0},
+            {type: 'enemy2', x: 500, y: 100, direction: 0},
+            {type: 'health', x: 300, y: 275, direction: 0},
+            {type: 'armor', x: 300, y: 608, direction: 0},
+            {type: 'green key', x: 500, y: 608, direction: 0},
+        ],
         weather: () => {return},
     },
 
@@ -345,9 +359,47 @@ function loadLevel(index) {
     player.x = data.start.x;
     player.y = data.start.y;
     player.rotationAngle = data.start.rotation;
+    player.keys = [];
 
+    if (data.objects) loadLevelObjects(data);
+    else initTestObjects();
+}
+
+function loadLevelObjects(levelData) {
     objects.length = 0;
-    initTestObjects();
+    for (let object of levelData.objects) {
+        let newObject;
+        let ox = object.x ? object.x : 0;
+        let oy = object.y ? object.y : 0;
+        let oAngle = object.direction ? object.direction : 0;
+        switch(object.type) {
+            case 'enemy1':
+                newObject = new Character(ox, oy, spriteList['enemy1'], -0.2, 0.8, oAngle);
+                //(x, y, speed, pic, altitude, scale, angle) {
+                break;
+            case 'enemy2':
+                newObject = new Character(ox, oy, spriteList['enemy2'], -0.2, 0.8, oAngle);
+                break;
+            case 'health':
+                newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'health');
+                break;
+            case 'armor':
+                newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'armor');
+                break
+            case 'green key':
+                newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'green key');
+                break;
+            case 'red key':
+                newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'red key');
+                break;
+            case 'blue key':
+                newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'blue key');
+                break;
+            default:
+                continue;
+        }
+        objects.push(newObject);
+    }
 }
 
 function spawnSnow() {

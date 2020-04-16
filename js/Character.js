@@ -1,6 +1,6 @@
 class Character extends GameObject {
-	constructor(x, y, speed, pic, altitude, scale, angle) {
-		super(x, y, speed, pic, altitude, scale, angle);
+	constructor(x, y, pic, altitude, scale, angle) {
+		super(x, y, 0, pic, altitude, scale, angle);
 		this.brain = new EnemyStateMachine(this);
 		this.path = [];
 		this.destination = {x: this.x, y: this.y}; //Next path coordinate
@@ -9,7 +9,7 @@ class Character extends GameObject {
 		this.lastKnownPosition = this.destination; //Last known position of target
 		this.xv = 0;
 		this.yv = 0;
-		this.fov = Math.PI / 3;
+		this.fov = Math.PI / 2;
 		this.attackRange = TILE_SIZE * 3;
 		this.lineOfSight = null;
 		this.health = 100;
