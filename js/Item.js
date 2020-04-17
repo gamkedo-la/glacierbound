@@ -49,7 +49,7 @@ class Item extends GameObject {
             case 'armor':
                 this.createSprite('skyblue');
                 break;
-            case 'yellow key':
+            case 'blue key':
                 this.pic = spriteList['blueKey'];
                 break;
             case 'red key':
