@@ -390,10 +390,10 @@ function loadLevelObjects(levelData) {
                 newObject = new Character(ox, oy, spriteList['enemy2'], -0.2, 0.8, oAngle);
                 break;
             case 'health':
-                newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'health');
+                newObject = new Item(ox, oy, -0.6, 0.5, oAngle, 'health');
                 break;
             case 'armor':
-                newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'armor');
+                newObject = new Item(ox, oy, -0.6, 0.5, oAngle, 'armor');
                 break
             case 'green key':
                 newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'green key');

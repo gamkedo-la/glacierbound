@@ -44,10 +44,10 @@ class Item extends GameObject {
     setSprite(type) {
         switch(type) {
             case 'health':
-                this.createSprite('green');
+                this.pic = spriteList['healthpickup'];
                 break;
             case 'armor':
-                this.createSprite('skyblue');
+                this.pic = spriteList['armorpickup'];
                 break;
             case 'blue key':
                 this.pic = spriteList['blueKey'];
