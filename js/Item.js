@@ -34,6 +34,7 @@ class Item extends GameObject {
             default:
                 break;
         }
+        currentLevel.stats.itemsCollected++;
         this.die();
     }
 

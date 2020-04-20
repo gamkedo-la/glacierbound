@@ -202,8 +202,7 @@ class Level {
     checkLevelCompletion() {
         let distToExit = DistanceBetweenTwoGameObjects(player, this.exit);
         if (distToExit < 50) {
-            if (this.index < levelData.length - 1) loadLevel(this.index + 1);
-            else loadLevel(0);
+            return true;
         }
     }
 
@@ -364,7 +363,15 @@ function loadLevel(index) {
     MAP_NUM_COLS = data.width;
     currentLevel = new Level(data);
     currentLevel.index = index;
+    currentLevel.stats = {
+        startTime: performance.now(),
+        itemsCollected: 0,
+        enemiesKilled : 0,
+        totalItems: 0,
+        totalEnemies: 0,
+    }
     
+    player.reset();
     player.x = data.start.x;
     player.y = data.start.y;
     player.rotationAngle = data.start.rotation;
@@ -384,25 +391,31 @@ function loadLevelObjects(levelData) {
         switch(object.type) {
             case 'enemy1':
                 newObject = new Character(ox, oy, spriteList['enemy1'], -0.2, 0.8, oAngle);
-                //(x, y, speed, pic, altitude, scale, angle) {
+                currentLevel.stats.totalEnemies++;
                 break;
             case 'enemy2':
                 newObject = new Character(ox, oy, spriteList['enemy2'], -0.2, 0.8, oAngle);
+                currentLevel.stats.totalEnemies++;
                 break;
             case 'health':
                 newObject = new Item(ox, oy, -0.6, 0.5, oAngle, 'health');
+                currentLevel.stats.totalItems++;
                 break;
             case 'armor':
                 newObject = new Item(ox, oy, -0.6, 0.5, oAngle, 'armor');
+                currentLevel.stats.totalItems++;
                 break
             case 'green key':
                 newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'green key');
+                currentLevel.stats.totalItems++;
                 break;
             case 'red key':
                 newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'red key');
+                currentLevel.stats.totalItems++;
                 break;
             case 'blue key':
                 newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'blue key');
+                currentLevel.stats.totalItems++;
                 break;
             default:
                 continue;
@@ -430,5 +443,106 @@ function spawnSnow() {
         part.lifeTime = 8;
         part.owner = player;
         objects.push(part);
+    }
+}
+
+class LevelTransition extends State {
+	constructor() {
+        super();
+        this.name = 'Level Transition'
+        this.startTimer = 0;
+        this.statsTimer = 0;
+        this.endTimer = 0;
+    }
+
+	onEnter() { 
+        this.startTimer = 0;
+        this.statsTimer = 0;
+        this.endTimer = 0;
+        let levelEndTime = performance.now();
+        this.stats = {
+            levelName: currentLevel.name ? currentLevel.name : 'Level ' + (currentLevel.index + 1),
+            itemPercent: Math.floor(currentLevel.stats.itemsCollected / currentLevel.stats.totalItems * 100),
+            enemyPercent: Math.floor(currentLevel.stats.enemiesKilled / currentLevel.stats.totalEnemies * 100),
+            playTime: Math.floor((levelEndTime - currentLevel.stats.startTime) / 1000),
+        };
+    }
+
+    run() {
+        this.setAlpha()
+
+        canvasContext.fillStyle = '#3F3F74';
+        canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+        canvasContext.fillStyle = 'white';
+
+        if (this.endTimer > 0) {
+            let newLevel = currentLevel.name ? currentLevel.name : 'Level ' + (currentLevel.index + 1);
+            canvasContext.font = '60px Arial';
+            canvasContext.textAlign = 'center';
+            canvasContext.fillText('Entering ' + newLevel, canvas.width/2, canvas.height/2);
+        } else this.drawStats();
+        
+        if (this.statsTimer >= 100) {
+            if (this.endTimer < 1 && mouseHeld[0]) {
+                this.loadNextLevel();
+            }
+        }
+
+        this.updateTimers();
+    }
+
+    drawStats() {
+        canvasContext.font = '60px Arial';
+        canvasContext.textAlign = 'center';
+        canvasContext.fillText(this.stats.levelName + ' Completed', canvas.width/2, 120);
+
+        if (this.startTimer >= 60) {
+            canvasContext.font = '40px Arial';
+            canvasContext.textAlign = 'left';
+            canvasContext.fillText('Items: ' + Math.floor(lerp(0, this.stats.itemPercent, this.statsTimer/100)) + '%', canvas.width/4, canvas.height/2 - 60);
+            canvasContext.fillText('Enemies: ' + Math.floor(lerp(0, this.stats.enemyPercent, this.statsTimer/100)) + '%', canvas.width/4, canvas.height/2);
+            canvasContext.fillText('Time: ' + Math.floor(lerp(0, this.stats.playTime, this.statsTimer/100)) + ' seconds', canvas.width/4, canvas.height/2 + 60);
+        }
+    }
+
+    loadNextLevel() {
+        this.endTimer = 1;
+        player.reset();
+        if (currentLevel.index < levelData.length - 1) loadLevel(currentLevel.index + 1);
+        else loadLevel(0);
+        moveEverything();
+    }
+
+    setAlpha() {
+        if (this.startTimer <= 60) {
+            drawEverything();
+            canvasContext.globalAlpha = this.startTimer/60;
+        } else if (this.endTimer < 1) {
+            canvasContext.globalAlpha = 1;
+        } else if (this.endTimer > 60) {
+            drawEverything();
+            canvasContext.globalAlpha = 1 - (this.endTimer - 60) / 60;
+        }
+    }
+
+    updateTimers() {
+        if (this.startTimer <= 60) {
+            canvasContext.globalAlpha = 1;
+            this.startTimer++;
+        } else if (this.statsTimer <= 100) {
+            this.statsTimer++;
+        } else if (this.endTimer > 0 && this.endTimer <= 120) {
+            canvasContext.globalAlpha = 1;
+            this.endTimer++;
+        }
+    }
+
+	checkConditions() {
+        if (this.endTimer >= 120) {
+            return 'Game Started';
+        }
+    }
+	onExit() {
+        resetMouse();
     }
 }

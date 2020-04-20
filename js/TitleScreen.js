@@ -7,6 +7,7 @@ class TitleScreen extends State {
     onEnter() {
         this.startHighlighted = false;
         this.creditsHighlighted = false;
+        this.timer = 0;
         resetMouse();
     }
 
@@ -31,9 +32,35 @@ class TitleScreen extends State {
         } else {
             this.creditsHighlighted = false;
         }
+
+        if (this.timer <= 0 && mouseHeld[0] && this.startHighlighted) {
+            resetMouse();
+            loadLevel(0);
+            moveEverything();
+            this.timer++;
+        }
     }
 
     draw() {
+        if (this.timer > 0) {
+            currentLevel.drawBackground();
+            render3DProjection();
+
+            let weight = this.timer/60;
+            let weightCubed = weight * weight * weight;
+            let handsOffset = lerp (210, 0, weightCubed);
+            canvasContext.translate(0, handsOffset);
+            player.drawHands();
+            canvasContext.translate(0, -handsOffset);
+
+            let hudOffset = lerp(-210, 0, weightCubed);
+            canvasContext.translate(hudOffset, 0);
+            drawHUD();
+            canvasContext.translate(-hudOffset, 0);
+
+            canvasContext.globalAlpha = 1 - (this.timer/60);
+        }
+        
         colorRect(0, 0, canvas.width, canvas.height, '#3F3F74');
     
         canvasContext.fillStyle = '#5FCDE4';
@@ -50,18 +77,21 @@ class TitleScreen extends State {
         canvasContext.fillStyle = this.creditsHighlighted ? '#5FCDE4' : 'white';
         canvasContext.fillText("Credits", canvas.width / 2, (canvas.height / 2) + 40);
     
-        drawCursor();
+        if (this.timer <= 0)  {
+            drawCursor();
+        } else this.timer++;
+
+        canvasContext.globalAlpha = 1;
     }
 
     checkConditions() {
-        if (mouseHeld[0] && this.startHighlighted) {
+        if (this.timer > 60) {
+            console.log('starting');
             return "Game Started";
         }
     }
 
     onExit() {
         resetMouse();
-        player.reset();
-        loadLevel(0);
     }
 }

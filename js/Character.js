@@ -66,6 +66,11 @@ class Character extends GameObject {
 	takeDamage(howMuch, from) {
 		this.health -= howMuch;
 		this.damagedBy = from;
+		if (this.health <= 0) {
+			if (from == player) currentLevel.stats.enemiesKilled++;
+			this.die();
+		}
+		
 	}
 
 	move() {
@@ -85,7 +90,6 @@ class Character extends GameObject {
 	update() {
 		this.distance = DistanceBetweenTwoPixelCoords(this.x, this.y, player.x, player.y);
 		this.renderedThisFrame = false;
-		if (this.health <= 0) this.die();
 		if (this.timeToShoot > 0) this.timeToShoot--;
 		this.brain.update();
 		this.move();

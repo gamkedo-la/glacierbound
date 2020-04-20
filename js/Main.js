@@ -28,7 +28,7 @@ window.onload = function () {
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
 
     player = new Player();
-    Game = new FiniteStateMachine({'Title Screen': new TitleScreen(), 'Game Started': new GameStarted(), 'Level Edit': new LevelEdit(), 'Game Over': new GameOver()}, 'Title Screen');
+    Game = new FiniteStateMachine({'Title Screen': new TitleScreen(), 'Level Transition': new LevelTransition, 'Game Started': new GameStarted(), 'Level Edit': new LevelEdit(), 'Game Over': new GameOver()}, 'Title Screen');
     loadImages();
 }
 
@@ -52,8 +52,12 @@ class GameStarted extends State {
             return 'Game Over';
         }
 
+        if (currentLevel.checkLevelCompletion()) {
+            return 'Level Transition';
+        }
+
         if (this.levelEdit) {
-            return 'Level Edit'
+            return 'Level Edit';
         }
     }
 
@@ -151,8 +155,6 @@ function moveEverything() {
     currentLevel.updateWeather();
 
     objects.sort((a, b) => (a.distance < b.distance) ? 1 : -1);
-
-    currentLevel.checkLevelCompletion();
 }
 
 function drawEverything() {
