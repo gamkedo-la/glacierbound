@@ -18,8 +18,8 @@ class TitleScreen extends State {
 
     control() {
         if (!mouseEnabled || mousePos === null) return;
-        var startButton = {x: canvas.width / 2 - 50, y: canvas.height / 2 - 20, w: 100, h: 20};
-        var creditsButton = {x: canvas.width / 2 - 50, y: canvas.height / 2 + 20, w: 100, h: 20};
+        var startButton = {x: canvas.width / 2 - 50, y: canvas.height - 50, w: 100, h: 20};
+        var creditsButton = {x: canvas.width / 2 - 50, y: canvas.height - 80, w: 100, h: 20};
     
         if (pointInRect(mousePos.x, mousePos.y, startButton.x, startButton.y, startButton.w, startButton.h)){
             this.startHighlighted = true;
@@ -66,16 +66,19 @@ class TitleScreen extends State {
         canvasContext.fillStyle = '#5FCDE4';
         canvasContext.font = '80px Arial';
         canvasContext.textAlign = 'center';
-    
-        canvasContext.fillText("GLACIERBOUND", canvas.width / 2, canvas.height / 3);
+		
+		//commenting out the placeholder title, attempting to add the logo images
+		//below code is an attempt at adding logo
+		canvasContext.drawImage(spriteList['logo'], 0, 0, 800, 450);
+        //canvasContext.fillText("GLACIERBOUND", canvas.width / 2, canvas.height / 3);
     
         canvasContext.fillStyle = this.startHighlighted ? '#5FCDE4' : 'white';
         canvasContext.font = '20px Arial';
-        canvasContext.fillText("Start", canvas.width / 2, canvas.height / 2);
+        canvasContext.fillText("Start", canvas.width / 2, canvas.height - 40);
     
     
         canvasContext.fillStyle = this.creditsHighlighted ? '#5FCDE4' : 'white';
-        canvasContext.fillText("Credits", canvas.width / 2, (canvas.height / 2) + 40);
+        canvasContext.fillText("Credits", canvas.width / 2, canvas.height - 70);
     
         if (this.timer <= 0)  {
             drawCursor();
