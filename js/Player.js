@@ -5,6 +5,8 @@ class Player {
         this.radius = TILE_SIZE/4;
         this.moveSpeed = 4.0;
         this.rotationSpeed = 3 * (Math.PI / 180);
+        this.health = 100;
+        this.armor = 0;
         this.maxHealth = 100;
         this.maxArmor = 15;
         this.reset();
@@ -19,8 +21,6 @@ class Player {
         this.rotationAngle = 0;
         this.rays = [];
         this.moveSway = 0;
-        this.health = 100;
-        this.armor = 0;
         this.keys = [];
         this.timeToShoot = 10;
     }
@@ -85,8 +85,9 @@ class Player {
 
     fireWeapon() {
         if (this.timeToShoot > 0) return;
-
-        var newProj = new Projectile(this.x, this.y, 10, null, -0.5, 0.2, this.rotationAngle, false);
+        let pX = this.x + Math.cos(this.rotationAngle) * (this.radius + 0.2 * 64);
+        let pY = this.y + Math.sin(this.rotationAngle) * (this.radius + 0.2 * 64);
+        var newProj = new Projectile(pX, pY, 10, null, -0.5, 0.2, this.rotationAngle, false);
         newProj.shootFrom(this);
         newProj.createSprite('lightblue');
         objects.push(newProj);

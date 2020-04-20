@@ -125,6 +125,8 @@ function pointInRect(px, py, rx, ry, rw, rh) {
     return (px > rx && px < rx + rw && py > ry && py < ry + rh )
 }
 
+//Linear interpolation
+
 function lerp(start, end, weight) {
     return (1 - clamp(weight, 0, 1)) * start + clamp(weight, 0, 1) * end;
 }
@@ -142,4 +144,25 @@ function lerpRGB(start, end, weight) {
     let b = lerp (color1[2], color2[2], weight);
 
     return 'rgb(' + r +',' + g + ',' + b + ')';
+}
+
+//Easing
+//Modify the rate of change/curve of values between 0-1
+
+function smoothStart(weight, magnitude) {
+    let sWeight = weight;
+    for (let i = 0; i < magnitude; i++) {
+        sWeight *= weight;
+    }
+
+    return sWeight;
+}
+
+function smoothStop(weight, magnitude) {
+    let sWeight = 1 - weight;
+    for(let i = 0; i < magnitude; i++) {
+        sWeight *= (1-weight);
+    }
+
+    return 1 - sWeight;
 }

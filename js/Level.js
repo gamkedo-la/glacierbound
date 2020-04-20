@@ -514,14 +514,25 @@ class LevelTransition extends State {
     }
 
     setAlpha() {
+        //Transition from completed level
         if (this.startTimer <= 60) {
-            drawEverything();
-            canvasContext.globalAlpha = this.startTimer/60;
+            let weight = this.startTimer/60;
+            currentLevel.drawBackground();
+            render3DProjection();
+
+            hudTransition(1 - weight);
+            canvasContext.globalAlpha = smoothStart(weight, 3);
+        //Showing stats
         } else if (this.endTimer < 1) {
             canvasContext.globalAlpha = 1;
+        //Transition to next level
         } else if (this.endTimer > 60) {
-            drawEverything();
-            canvasContext.globalAlpha = 1 - (this.endTimer - 60) / 60;
+            currentLevel.drawBackground();
+            render3DProjection();
+
+            let weight = (this.endTimer - 60) / 60;
+            hudTransition(weight);
+            canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
         }
     }
 

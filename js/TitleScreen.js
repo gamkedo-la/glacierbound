@@ -33,8 +33,11 @@ class TitleScreen extends State {
             this.creditsHighlighted = false;
         }
 
+        //Start game
         if (this.timer <= 0 && mouseHeld[0] && this.startHighlighted) {
             resetMouse();
+            player.health = 100;
+            player.armor = 0;
             loadLevel(0);
             moveEverything();
             this.timer++;
@@ -47,18 +50,9 @@ class TitleScreen extends State {
             render3DProjection();
 
             let weight = this.timer/60;
-            let weightCubed = weight * weight * weight;
-            let handsOffset = lerp (210, 0, weightCubed);
-            canvasContext.translate(0, handsOffset);
-            player.drawHands();
-            canvasContext.translate(0, -handsOffset);
+            hudTransition(weight);
 
-            let hudOffset = lerp(-210, 0, weightCubed);
-            canvasContext.translate(hudOffset, 0);
-            drawHUD();
-            canvasContext.translate(-hudOffset, 0);
-
-            canvasContext.globalAlpha = 1 - (this.timer/60);
+            canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
         }
         
         colorRect(0, 0, canvas.width, canvas.height, '#3F3F74');
@@ -86,7 +80,6 @@ class TitleScreen extends State {
 
     checkConditions() {
         if (this.timer > 60) {
-            console.log('starting');
             return "Game Started";
         }
     }
@@ -94,4 +87,21 @@ class TitleScreen extends State {
     onExit() {
         resetMouse();
     }
+}
+
+function hudTransition(weight) {
+    let handsOffset = lerp (210, 0, smoothStop(weight, 3));
+    canvasContext.translate(0, handsOffset);
+    player.drawHands();
+    canvasContext.translate(0, -handsOffset);
+
+    let hudOffset = lerp(-210, 0, smoothStart(weight, 1));
+    canvasContext.translate(hudOffset, 0);
+    drawPlayerArmor();
+    drawPlayerHealth();
+    canvasContext.translate(-hudOffset, 0);
+    
+    canvasContext.translate(-hudOffset, 0);
+    drawPlayerKeys();
+    canvasContext.translate(hudOffset, 0);
 }
