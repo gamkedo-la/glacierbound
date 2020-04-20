@@ -16,6 +16,7 @@ function loadImages() {
 		{tileType: 'door', fileName: 'door_blue.png'},
 		{tileType: 'door', fileName: 'door_red.png'},
 		{tileType: 'door', fileName: 'door_green.png'},
+		{spriteName: 'logo', fileName: 'logo.png'},
 		{spriteName: 'cursor', fileName: 'cursor.png'},
 		{spriteName: 'leftHand', fileName: 'leftHand.png'},
 		{spriteName: 'rightHand', fileName: 'rightHand.png'},
