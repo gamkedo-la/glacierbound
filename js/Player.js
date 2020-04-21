@@ -141,8 +141,9 @@ class Player {
         this.controlKeyForStrafeRight = rightKey;
         this.controlKeyForFire = fireKey;
     }
-
     takeDamage(howMuch, from) {
+		redOverlay = true; //set show im hit overlay to true
+
         let damageRemaining = howMuch;
         if (this.armor > 0) {
             let mitigated = Math.floor(howMuch / 3);
