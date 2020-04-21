@@ -82,14 +82,14 @@ class GameOver extends State {
         if (this.timer < 100) {
             drawEverything();
             alpha = this.timer/100;
-            canvasContext.globalAlpha = alpha;
-            this.timer += 0.75;
+            canvasContext.globalAlpha = smoothStart(alpha, 3);
+            this.timer++;
         }
-        canvasContext.fillStyle = lerpRGB('rgb(255,0,0)', 'rgb(255, 255, 255)', alpha);
+        canvasContext.fillStyle = lerpRGB('rgb(255,0,0)', 'rgb(255, 255, 255)', smoothStart(alpha, 3));
         canvasContext.fillRect(0, 0, canvas.width, canvas.height);
         canvasContext.globalAlpha = 1;
 
-        canvasContext.fillStyle = lerpRGB('rgb(255, 0, 0)', 'rgb(63,63,139)', alpha);;
+        canvasContext.fillStyle = lerpRGB('rgb(255, 0, 0)', 'rgb(63,63,139)', smoothStart(alpha, 3));
         canvasContext.font = '100px Arial';
         canvasContext.testAlign = 'center';
         canvasContext.fillText('YOU DIED', canvas.width/2, canvas.height/2);

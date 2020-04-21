@@ -449,15 +449,12 @@ class LevelTransition extends State {
 	constructor() {
         super();
         this.name = 'Level Transition'
-        this.startTimer = 0;
-        this.statsTimer = 0;
-        this.endTimer = 0;
+        this.timer = 0;
     }
 
 	onEnter() { 
-        this.startTimer = 0;
-        this.statsTimer = 0;
-        this.endTimer = 0;
+        this.timer = 0;
+        this.animation = 0;
         let levelEndTime = performance.now();
         this.stats = {
             levelName: currentLevel.name ? currentLevel.name : 'Level ' + (currentLevel.index + 1),
@@ -468,26 +465,19 @@ class LevelTransition extends State {
     }
 
     run() {
-        this.setAlpha()
+        this.animateAlpha();
 
-        canvasContext.fillStyle = '#3F3F74';
-        canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+        colorRect(0, 0, canvas.width, canvas.height, '#3F3F74');
         canvasContext.fillStyle = 'white';
-
-        if (this.endTimer > 0) {
+        if (this.animation === 1) this.drawStats();
+        if (this.animation === 2) {
             let newLevel = currentLevel.name ? currentLevel.name : 'Level ' + (currentLevel.index + 1);
             canvasContext.font = '60px Arial';
             canvasContext.textAlign = 'center';
             canvasContext.fillText('Entering ' + newLevel, canvas.width/2, canvas.height/2);
-        } else this.drawStats();
-        
-        if (this.statsTimer >= 100) {
-            if (this.endTimer < 1 && mouseHeld[0]) {
-                this.loadNextLevel();
-            }
         }
 
-        this.updateTimers();
+        this.updateTimer();
     }
 
     drawStats() {
@@ -495,60 +485,73 @@ class LevelTransition extends State {
         canvasContext.textAlign = 'center';
         canvasContext.fillText(this.stats.levelName + ' Completed', canvas.width/2, 120);
 
-        if (this.startTimer >= 60) {
-            canvasContext.font = '40px Arial';
-            canvasContext.textAlign = 'left';
-            canvasContext.fillText('Items: ' + Math.floor(lerp(0, this.stats.itemPercent, this.statsTimer/100)) + '%', canvas.width/4, canvas.height/2 - 60);
-            canvasContext.fillText('Enemies: ' + Math.floor(lerp(0, this.stats.enemyPercent, this.statsTimer/100)) + '%', canvas.width/4, canvas.height/2);
-            canvasContext.fillText('Time: ' + Math.floor(lerp(0, this.stats.playTime, this.statsTimer/100)) + ' seconds', canvas.width/4, canvas.height/2 + 60);
-        }
+        canvasContext.font = '40px Arial';
+        canvasContext.textAlign = 'left';
+        canvasContext.fillText('Items: ' + Math.floor(lerp(0, this.stats.itemPercent, this.timer/100)) + '%', canvas.width/4, canvas.height/2 - 60);
+        canvasContext.fillText('Enemies: ' + Math.floor(lerp(0, this.stats.enemyPercent, this.timer/100)) + '%', canvas.width/4, canvas.height/2);
+        canvasContext.fillText('Time: ' + Math.floor(lerp(0, this.stats.playTime, this.timer/100)) + ' seconds', canvas.width/4, canvas.height/2 + 60);
     }
 
     loadNextLevel() {
-        this.endTimer = 1;
+        this.timer = 0;
+        this.animation = 2;
         player.reset();
         if (currentLevel.index < levelData.length - 1) loadLevel(currentLevel.index + 1);
         else loadLevel(0);
         moveEverything();
     }
 
-    setAlpha() {
-        //Transition from completed level
-        if (this.startTimer <= 60) {
-            let weight = this.startTimer/60;
-            currentLevel.drawBackground();
-            render3DProjection();
-
-            hudTransition(1 - weight);
-            canvasContext.globalAlpha = smoothStart(weight, 3);
-        //Showing stats
-        } else if (this.endTimer < 1) {
-            canvasContext.globalAlpha = 1;
-        //Transition to next level
-        } else if (this.endTimer > 60) {
-            currentLevel.drawBackground();
-            render3DProjection();
-
-            let weight = (this.endTimer - 60) / 60;
-            hudTransition(weight);
-            canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
+    animateAlpha() {
+        switch(this.animation) {
+            case 0: //Transition from completed level
+                canvasContext.globalAlpha = 1;
+                currentLevel.drawBackground();
+                render3DProjection();
+    
+                let weight = this.timer/60;
+                hudTransition(1 - weight);
+                canvasContext.globalAlpha = smoothStart(weight, 3);
+                break;
+            case 1: //Counting stats
+                canvasContext.globalAlpha = 1;
+                break;
+            case 2: //Transition to next level
+                if (this.timer > 60) {
+                    canvasContext.globalAlpha = 1;
+                    currentLevel.drawBackground();
+                    render3DProjection();
+        
+                    let weight = (this.timer - 60) / 60;
+                    hudTransition(weight);
+                    canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
+                }
+                break;
+            default:
+                break;
         }
     }
 
-    updateTimers() {
-        if (this.startTimer <= 60) {
-            canvasContext.globalAlpha = 1;
-            this.startTimer++;
-        } else if (this.statsTimer <= 100) {
-            this.statsTimer++;
-        } else if (this.endTimer > 0 && this.endTimer <= 120) {
-            canvasContext.globalAlpha = 1;
-            this.endTimer++;
+    updateTimer() {
+        this.timer++;
+        switch(this.animation) {
+            case 0:
+                if (this.timer > 60) {
+                    this.animation++;
+                    this.timer = 0;
+                }
+                break;
+            case 1:
+                if (this.timer >= 100 && mouseHeld[0]) {
+                    this.loadNextLevel();
+                }
+                break;
+            default:
+                break;
         }
     }
 
 	checkConditions() {
-        if (this.endTimer >= 120) {
+        if (this.animation === 2 && this.timer >= 120) {
             return 'Game Started';
         }
     }
