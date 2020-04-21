@@ -441,7 +441,6 @@ function spawnSnow() {
         };
         part.radius = 0;
         part.lifeTime = 8;
-        part.owner = player;
         objects.push(part);
     }
 }

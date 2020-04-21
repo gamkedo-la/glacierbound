@@ -2,6 +2,7 @@ class Projectile extends GameObject {
     constructor(x, y, speed, pic, altitude, scale, angle, variable_Height) {
         super(x, y, speed, pic, altitude, scale, angle);
         this.lifeTime = 120;
+        this.damage = 0;
         this.hasShadow = false;
         this.variableHeight = variable_Height;
     }
@@ -20,14 +21,15 @@ class Projectile extends GameObject {
     }
 
     updateCollision(other) {
-        if (this.owner === other) return;
+        if (this.owner === other || !this.owner) return;
         if (other.takeDamage != undefined) {
-            other.takeDamage(20, this.owner);
+            other.takeDamage(this.damage, this.owner);
             this.die();
         }
     }
 
-    shootFrom(owner) {
+    shootFrom(owner, damage) {
         this.owner = owner;
+        this.damage = damage ? damage : 0;
     }
 }

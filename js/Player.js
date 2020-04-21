@@ -88,7 +88,7 @@ class Player {
         let pX = this.x + Math.cos(this.rotationAngle) * (this.radius + 0.2 * 64);
         let pY = this.y + Math.sin(this.rotationAngle) * (this.radius + 0.2 * 64);
         var newProj = new Projectile(pX, pY, 10, null, -0.5, 0.2, this.rotationAngle, false);
-        newProj.shootFrom(this);
+        newProj.shootFrom(this, 20);
         newProj.createSprite('lightblue');
         objects.push(newProj);
         this.timeToShoot = 12;
@@ -144,21 +144,17 @@ class Player {
 
     takeDamage(howMuch, from) {
         let damageRemaining = howMuch;
-		if (this.armor > 0) {
-			let mitigated = Math.floor(howMuch/3);
-			this.armor -= mitigated;
+        if (this.armor > 0) {
+            let mitigated = Math.floor(howMuch / 3);
+            this.armor -= mitigated;
 
-			if (this.armor < 0) {
-				mitigated += this.armor
-				this.armor = 0;
-			}
-			damageRemaining -= mitigated;
-		}
-        if (this.health - damageRemaining > 0){
-		  this.health -= damageRemaining;
-        } else {
-          this.health = 0;
+            if (this.armor < 0) {
+                mitigated += this.armor
+                this.armor = 0;
+            }
+            damageRemaining -= mitigated;
         }
+        this.health = clamp(this.health - damageRemaining, 0, this.maxHealth);
     }
 
     castAllRays() {

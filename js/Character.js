@@ -20,7 +20,7 @@ class Character extends GameObject {
 	attack() {
         if (this.timeToShoot > 0) return;
         let newProj = new Projectile(this.x, this.y, 5, null, -0.5, 0.2, this.direction, false);
-        newProj.shootFrom(this);
+        newProj.shootFrom(this, 20);
         newProj.createSprite('orange');
         objects.push(newProj);
         this.timeToShoot = 96;
