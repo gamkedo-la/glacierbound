@@ -2,11 +2,17 @@ class Item extends GameObject {
     constructor(x, y, altitude, scale, angle, type) {
         super(x, y, 0, null, altitude, scale, angle);
         this.type = type;
+        this.touched = false;
         this.setSprite(type);
         this.createTint(currentLevel.colors.sky);
     }
 
     activate() {
+        if (!this.touched) {
+            currentLevel.stats.itemsCollected++;
+            this.touched = true;
+        }
+
         switch(this.type) {
             case 'health':
                 if (player.health === player.maxHealth) return;
@@ -34,7 +40,7 @@ class Item extends GameObject {
             default:
                 break;
         }
-        currentLevel.stats.itemsCollected++;
+        
         this.die();
     }
 
