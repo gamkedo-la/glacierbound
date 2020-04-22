@@ -232,18 +232,25 @@ class Level {
     }
 
     drawBackground() {
-        colorRect(0, 0, canvas.width, canvas.height, this.colors.sky);
         if (this.colors.ground != this.colors.sky && this.visibilityDist < 4500) {
             const lightRadius = canvas.width * (180 / FOV_DEGREES);
             //The distance from the bottom of the screen, to the edge of the visibilityDist
             let viewRadius = (TILE_SIZE / this.visibilityDist) * PROJECTION_PLAIN_DISTANCE;
             viewRadius = canvas.height/2 - viewRadius/2;
-            let drawOffsetY = canvas.height + lightRadius - viewRadius;
+            
+            let drawOffsetY = lightRadius - viewRadius;
+            let skyGradient = canvasContext.createRadialGradient(canvas.width/2, -drawOffsetY, lightRadius, canvas.width/2, -drawOffsetY, lightRadius/2);
+                skyGradient.addColorStop(0, this.colors.sky);
+                skyGradient.addColorStop(0.5, this.colors.ground);
+            colorRect(0, 0, canvas.width, canvas.height/2, skyGradient);
+
+            drawOffsetY += canvas.height;
             let gradient = canvasContext.createRadialGradient(canvas.width/2, drawOffsetY, lightRadius, canvas.width/2, drawOffsetY, lightRadius/2);
                 gradient.addColorStop(0, this.colors.sky);
                 gradient.addColorStop(0.5, this.colors.ground);
             colorRect(0, canvas.height / 2, canvas.width, canvas.height/2, gradient);
         } else {
+            colorRect(0, 0, canvas.width, canvas.height, this.colors.sky);
             colorRect(0, canvas.height / 2, canvas.width, canvas.height/2, this.colors.ground);
         }
 
