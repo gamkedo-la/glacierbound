@@ -16,6 +16,7 @@ class Item extends GameObject {
         switch(this.type) {
             case 'health':
                 if (player.health === player.maxHealth) return;
+                messageConsole.push('Health Pack', 'pink');
                 player['health'] += 15;
                 if (player.health > player.maxHealth){
                     player.health = player.maxHealth;
@@ -23,18 +24,22 @@ class Item extends GameObject {
                 break;
             case 'armor':
                 if (player.armor === player.maxArmor) return;
+                messageConsole.push('Armor', 'lightblue');
                 player['armor'] += 15;
                 if (player.armor > player.maxArmor){
                     player.armor = player.maxArmor;
                 }
                 break;
             case 'blue key':
+                messageConsole.push('Blue Key', 'lightblue');
                 player.keys[0] = true;
                 break;
             case 'red key':
+                messageConsole.push('Red Key', 'red');
                 player.keys[1] = true;
                 break;
             case 'green key':
+                messageConsole.push('Green Key', 'green');
                 player.keys[2] = true;
                 break;
             default:

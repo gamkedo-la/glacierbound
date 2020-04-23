@@ -20,20 +20,6 @@ var level2;
 var objects = [];
 var testObject;
 var testObject2;
-
-var timeToOverlay = 0; //overlay cooldown
-var redOverlay = false; //flag to flash im hit overlay
-
-function showOverlay(){
-	//console.log('logging from func showOverlay');
-	if (timeToOverlay > 12){
-		timeToOverlay = 0;
-		return;
-	}
-	timeToOverlay++;
-	colorRect(0,0, canvas.width, canvas.height, 'red');
-	redOverlay = false;
-}
  
 window.onload = function () {
     canvas = document.getElementById('gameCanvas');
@@ -183,10 +169,6 @@ function drawEverything() {
     }
 
     drawHUD();
-	
-	if(redOverlay){
-		showOverlay();
-	}
 }
 
 function render3DProjection() {

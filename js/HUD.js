@@ -1,9 +1,60 @@
 var debugModeEnabled = false;
+var timeToOverlay = 0; //overlay cooldown
+var redOverlay = false; //flag to flash im hit overlay
+
+var messageConsole = {
+    color: 'white',
+    message: null,
+    _messageLifetime: 240,
+    displayTimer: 0,
+    draw: function() {
+        if (this.displayTimer <= 0) return;
+        let halfTime = this._messageLifetime/2;
+        let weight = halfTime - this.displayTimer;
+        let alpha = 0;
+        if (weight <= 0) alpha = 1 - smoothStart(Math.abs(weight/halfTime), 12);
+        else alpha = 1 - smoothStop(weight/halfTime, 12);
+        
+        canvasContext.font = '30px Arial';
+        let textSize = canvasContext.measureText(this.message);
+
+        canvasContext.globalAlpha = alpha/1.5;
+        canvasContext.fillStyle = '#23233F';
+        canvasContext.fillRect(canvas.width/2 - textSize.width/2 - 6, canvas.height - 45, textSize.width + 12, 45);
+
+
+        canvasContext.globalAlpha = alpha;
+        canvasContext.fillStyle = this.color;
+        canvasContext.fillText(this.message, canvas.width/2, canvas.height - 15);
+
+        canvasContext.globalAlpha = 1;
+        this.update();
+    },
+
+    push: function(newMessage, color) {
+        this.color = color ? color : 'white';
+        this.message = newMessage;
+        this.displayTimer = this._messageLifetime;
+    },
+
+    reset: function() {
+        this.message = null;
+        this.displayTimer = 0;
+    },
+
+    update: function() {
+        if (this.displayTimer > 0) this.displayTimer--;
+    }
+}
 
 function drawHUD() {
+    if(redOverlay){
+		showOverlay();
+	}
     drawPlayerHealth();
     drawPlayerArmor();
     drawPlayerKeys();
+    messageConsole.draw();
 
     if (debugModeEnabled === true) {
         drawDebugStats();
@@ -85,4 +136,14 @@ function drawPlayerKeys() {
 
 function toggleDebugMode(){
     debugModeEnabled = !debugModeEnabled;
+}
+
+function showOverlay(){
+	if (timeToOverlay > 12){
+		timeToOverlay = 0;
+		return;
+	}
+	timeToOverlay++;
+	colorRect(0,0, canvas.width, canvas.height, 'red');
+	redOverlay = false;
 }

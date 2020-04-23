@@ -364,6 +364,17 @@ function getTileName(type) {
     }
 }
 
+function getDoorColor(type) {
+    switch(type) {
+        case 1:
+            return 'Blue';
+        case 2:
+            return 'Red';
+        case 3:
+            return 'Green';
+    }
+}
+
 function loadLevel(index) {
     let data = levelData[index];
     MAP_NUM_ROWS = data.height;

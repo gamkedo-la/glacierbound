@@ -107,7 +107,8 @@ class Player {
             if (doorType === 0 || this.keys[doorType - 1]) {
                 currentLevel.toggleDoor(fIndex);
             } else {
-                console.log('No key for ' + textureList['door'][doorType].src + ' doors');
+                let color = getDoorColor(doorType);
+                messageConsole.push(color + ' Key required', color);
             }
         }
     }
