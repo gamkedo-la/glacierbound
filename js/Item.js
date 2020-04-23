@@ -31,7 +31,7 @@ class Item extends GameObject {
                 }
                 break;
             case 'blue key':
-                messageConsole.push('Blue Key acquired.', 'lightblue');
+                messageConsole.push('Blue Key acquired.', 'blue');
                 player.keys[0] = true;
                 break;
             case 'red key':
