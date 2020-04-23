@@ -91,7 +91,10 @@ function drawDebugStats() {
 }
 
 function drawPlayerArmor() {
+    //armorbar
     canvasContext.drawImage(spriteList['armorbar'], 10, canvas.height - 55);
+
+    //armor fill
     var armorPercent = player.armor / player.maxArmor;
     colorRect(10 + 45, canvas.height - 55 + 15, armorPercent * 145, 20, 'deepskyblue');
 
@@ -105,10 +108,19 @@ function drawPlayerArmor() {
     } else {
         canvasContext.fillText(player.armor + "/" + player.maxArmor, 130, canvas.height - 25);
     }
+
+    //armor pickup
+    canvasContext.drawImage(spriteList['armorpickup_ui'], 205, canvas.height - 55);
+    canvasContext.fillStyle = 'deepskyblue';
+    canvasContext.font = '20px Arial';
+    canvasContext.fillText("5", 227, canvas.height - 20);        
 }
 
 function drawPlayerHealth() {
+    //healthbar
     canvasContext.drawImage(spriteList['healthbar'], 10, canvas.height - 100);
+
+    //health fill
     var healthPercent = player.health / player.maxHealth;
     var healthState;
     if (healthPercent < 0.3) {
@@ -125,6 +137,12 @@ function drawPlayerHealth() {
     canvasContext.textAlign = 'center';
 
     canvasContext.fillText(player.health + "/" + player.maxHealth, 130, canvas.height - 70);
+
+    //health pickup
+    canvasContext.drawImage(spriteList['healthpickup_ui'], 205, canvas.height - 100);
+    canvasContext.fillStyle = 'crimson';
+    canvasContext.font = '20px Arial';
+    canvasContext.fillText("10", 227, canvas.height - 65);    
 }
 
 function drawPlayerKeys() {
