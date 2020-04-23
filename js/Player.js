@@ -6,9 +6,11 @@ class Player {
         this.moveSpeed = 4.0;
         this.rotationSpeed = 3 * (Math.PI / 180);
         this.health = 100;
-        this.armor = 0;
         this.maxHealth = 100;
+        this.healthPickup = 0;
+        this.armor = 0;
         this.maxArmor = 15;
+        this.armorPickup = 0;
         this.reset();
     }
 
@@ -111,6 +113,45 @@ class Player {
                 messageConsole.push(color + ' Key required', color);
             }
         }
+    }
+
+    activatePickUp(pickup) {
+        switch(pickup) {
+            case 'health':
+                if (player.healthPickup == 0) {
+                    messageConsole.push("No Health Packs available.", 'red');
+                } else {
+                    if (player.health === player.maxHealth) {
+                        messageConsole.push("Health still at max.", 'pink');
+                    } else {
+                        player.healthPickup--;
+                        messageConsole.push('Health Pack used. '+player.healthPickup+ ' remaining.', 'pink');
+                        player['health'] += 15;
+                        if (player.health > player.maxHealth){
+                            player.health = player.maxHealth;
+                        } //end of if statement to check that player does not go above max Health
+                    } //end of else statement for pickup to activate if player is damaged
+                } //end of else statement checking that player has health pickup 
+                break;
+            case 'armor':
+                if (player.armorPickup == 0) {
+                        messageConsole.push("No Armor available.", 'red');
+                } else {
+                    if (player.armor === player.maxArmor) {
+                        messageConsole.push("Armor still intact.", 'lightblue');
+                    } else {
+                        player.armorPickup--;
+                        messageConsole.push('Armor activated. '+player.armorPickup+ ' remaining.', 'lightblue');
+                        player['armor'] += 15;
+                        if (player.armor > player.maxArmor){
+                            player.armor = player.maxArmor;
+                        } //end of if statement to check that player does not go above max armor
+                    } // end of else statement for pickup to activate if armor is damaged
+                } // end of else statement checking that player has armor pickup       
+                break;
+            default:
+                break;
+        }        
     }
 
     updateMouse() {

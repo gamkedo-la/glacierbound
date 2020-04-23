@@ -109,11 +109,13 @@ function drawPlayerArmor() {
         canvasContext.fillText(player.armor + "/" + player.maxArmor, 130, canvas.height - 25);
     }
 
-    //armor pickup
+    //armor pickup (hidden if player doesn't have any)
+    if (player.armorPickup > 0 ) {
     canvasContext.drawImage(spriteList['armorpickup_ui'], 205, canvas.height - 55);
-    canvasContext.fillStyle = 'deepskyblue';
+    canvasContext.fillStyle = 'lightblue';
     canvasContext.font = '20px Arial';
-    canvasContext.fillText("5", 227, canvas.height - 20);        
+    canvasContext.fillText(player.armorPickup, 227, canvas.height - 20);
+    }        
 }
 
 function drawPlayerHealth() {
@@ -138,11 +140,13 @@ function drawPlayerHealth() {
 
     canvasContext.fillText(player.health + "/" + player.maxHealth, 130, canvas.height - 70);
 
-    //health pickup
+    //health pickup (hidden if player doesn't have any)
+    if (player.healthPickup > 0) {
     canvasContext.drawImage(spriteList['healthpickup_ui'], 205, canvas.height - 100);
-    canvasContext.fillStyle = 'crimson';
+    canvasContext.fillStyle = 'pink';
     canvasContext.font = '20px Arial';
-    canvasContext.fillText("10", 227, canvas.height - 65);    
+    canvasContext.fillText(player.healthPickup, 227, canvas.height - 65);
+    }    
 }
 
 function drawPlayerKeys() {

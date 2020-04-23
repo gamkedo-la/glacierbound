@@ -15,20 +15,12 @@ class Item extends GameObject {
 
         switch(this.type) {
             case 'health':
-                if (player.health === player.maxHealth) return;
-                messageConsole.push('Health Pack acquired. Press Z to use.', 'pink');
-                player['health'] += 15;
-                if (player.health > player.maxHealth){
-                    player.health = player.maxHealth;
-                }
+                player.healthPickup++;
+                messageConsole.push('Health Pack acquired. Press 1 to use.', 'pink');
                 break;
             case 'armor':
-                if (player.armor === player.maxArmor) return;
-                messageConsole.push('Armor acquired. Press X to activate.', 'lightblue');
-                player['armor'] += 15;
-                if (player.armor > player.maxArmor){
-                    player.armor = player.maxArmor;
-                }
+                player.armorPickup++;
+                messageConsole.push('Armor acquired. Press 2 to activate.', 'lightblue');
                 break;
             case 'blue key':
                 messageConsole.push('Blue Key acquired.', 'blue');
