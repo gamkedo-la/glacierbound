@@ -14,6 +14,8 @@ class Character extends GameObject {
 		this.lineOfSight = null;
 		this.health = 100;
 		this.damagedBy = false;
+		this.timeToOverlay = 0; //overlay cooldown
+		this.damageOverlay = false; //flag to flash enemy hit overlay - flipped in takeDamage
 		this.timeToShoot = 12;
 	}
 
@@ -63,7 +65,25 @@ class Character extends GameObject {
 		this.path = breadthFirstSearch(startIndex, targetIndex, currentLevel.mapGrid);
 	}
 
+	showOverlay(){
+		//return the enemy to normal color
+		if (this.timeToOverlay > 6){
+			this.timeToOverlay = 0;
+			//this.createTint(currentLevel.colors.sky);
+			this.createTint(currentLevel.colors.sky);
+			this.damageOverlay = false;
+			return;
+		}
+		//turn the enemy red
+		this.timeToOverlay++;
+		this.createTint('red');
+		console.log(this.timeToOverlay);
+	}
+
 	takeDamage(howMuch, from) {
+		//below line attempts to tint enemy when taking damage
+		//this.showOverlay();
+		this.damageOverlay = true;
 		this.health -= howMuch;
 		this.damagedBy = from;
 		if (this.health <= 0) {
@@ -90,6 +110,7 @@ class Character extends GameObject {
 	update() {
 		this.distance = DistanceBetweenTwoPixelCoords(this.x, this.y, player.x, player.y);
 		this.renderedThisFrame = false;
+		if (this.damageOverlay) this.showOverlay();
 		if (this.timeToShoot > 0) this.timeToShoot--;
 		this.brain.update();
 		this.move();
