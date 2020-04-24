@@ -66,11 +66,11 @@ class TitleScreen extends State {
         if(this.showingCredits) {
             canvasContext.restore();
             colorRect(0, 0, canvas.width, canvas.height, "#516faf");
+            gameCredits.drawCredits();
             canvasContext.textAlign = 'center';
             canvasContext.fillStyle = 'white';
             canvasContext.font = '20px Arial';
-            canvasContext.fillText("Credits will go here", canvas.width / 2, this.startButton.y + 20);
-            canvasContext.fillText("Click anywhere to exit", canvas.width / 2, canvas.height - 20);
+            canvasContext.fillText("Click anywhere to return", canvas.width / 2, canvas.height - 20);
             return;
         }
 
@@ -144,3 +144,73 @@ function hudTransition(weight) {
     drawPlayerKeys();
     canvasContext.translate(hudOffset, 0);
 }
+
+//Credit Screen
+function Credits() {
+
+    this.creditsMaxCharWidthToWrap = 150;
+    this.creditsScrollRate = 0.0; // no scrolling needed in this case
+
+    this.creditNameList = [
+        "Brian J. Boucher: Project lead, core gameplay and main raycaster code, snow art, custom level editor, projectiles, item pickup code, multiple level support, exit functionality, initial title screen, debug mode visualizations, level design (1 and 2), assorted bug fixing"," ",
+        "Andrew Mushel: Wall texture support, sprite object rendering, mouse input, hand sway, pathfinding, most collision code, enemy AI, image loading improvements, additional texture art, door code, garbage collection, shadows, snow optimizations, HUD refinements, custom cursor, keys, skybox, floor and ceiling distance gradient, level stats and transition"," ",
+        "Catherine San Luis: Health and armor systems (UI, art, related code), inventory pick up messages, damage boost power-up"," ",
+        "Vince McKeown: Player hands graphics, 2 enemy sprites, initial enemy placement, addl. wall texture, sound code integration, sounds for laser and fireball"," ",
+        "Ashleigh M.: Logo, hit feedback for player and enemy, title screen improvements, game over image"," ",
+        "Klaim (A. Joël Lamotte): Avalanche track"," ",
+        "Yong Wei: Strafe input"," ",
+        "Joshua Rigley: Health tracking"," ",
+        " "," ",
+        "Made by members of HomeTeam GameDev (Outpost)"," ","Join at HomeTeamGameDev.com to make games with us!",
+        ];
+
+    this.creditsScroll = 0;
+
+    this.drawCredits = function(){
+        var posHeight = 50;
+        var count = 0;
+
+        var anyDrew = false;
+        var wasFont = canvasContext.font;
+        canvasContext.font = "15px Arial";
+        canvasContext.fillStyle = "white";
+        canvasContext.textAlign = "left";
+        for (count; count < this.creditNameList.length; count++){
+            var drawAt = posHeight+count*18-this.creditsScroll;
+            //if(drawAt > 160 && drawAt < 475) { // used for if we want to conceal top/bottom for other info when scrolling
+                canvasContext.fillText(this.creditNameList[count], 50, drawAt);
+                anyDrew = true;
+            //}
+        }
+        canvasContext.font = wasFont;
+        this.creditsScroll+=this.creditsScrollRate;
+        if(anyDrew==false) { // reset, all off screen
+            this.creditsScroll=0;
+        }
+    }
+
+    this.wrapCredits = function(){ // note: gets calling immediately after definition
+        var newCut = [];
+        var findEnd;
+        for(var i=0;i<this.creditNameList.length;i++) {
+            while(this.creditNameList[i].length > 0) {
+                findEnd = this.creditsMaxCharWidthToWrap;
+                if(this.creditNameList[i].length > this.creditsMaxCharWidthToWrap) {
+                    for(var ii=findEnd;ii>0;ii--) {
+                        if(this.creditNameList[i].charAt(ii) == " ") {
+                            findEnd=ii;
+                            break;
+                        }
+                    }
+                }
+                newCut.push(this.creditNameList[i].substring(0, findEnd));
+                this.creditNameList[i] = this.creditNameList[i].substring(findEnd, this.creditNameList[i].length);
+            }
+        }
+        this.creditNameList = newCut;
+    }
+    this.wrapCredits();
+
+}
+
+var gameCredits = new Credits();
