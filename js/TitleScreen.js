@@ -2,6 +2,8 @@ class TitleScreen extends State {
     constructor() {
         super();
         this.name = 'Title Screen';
+        this.startButton = {x: canvas.width / 2 - 50, y: canvas.height - 160, w: 100, h: 30};
+        this.creditsButton = {x: canvas.width / 2 - 50, y: canvas.height - 130, w: 100, h: 30};
     }
 
     onEnter() {
@@ -18,16 +20,14 @@ class TitleScreen extends State {
 
     control() {
         if (!mouseEnabled || mousePos === null) return;
-        var startButton = {x: canvas.width / 2 - 50, y: canvas.height - 50, w: 100, h: 20};
-        var creditsButton = {x: canvas.width / 2 - 50, y: canvas.height - 80, w: 100, h: 20};
     
-        if (pointInRect(mousePos.x, mousePos.y, startButton.x, startButton.y, startButton.w, startButton.h)){
+        if (pointInRect(mousePos.x, mousePos.y, this.startButton.x, this.startButton.y, this.startButton.w, this.startButton.h)){
             this.startHighlighted = true;
         } else {
             this.startHighlighted = false
         }
     
-        if (pointInRect(mousePos.x, mousePos.y, creditsButton.x, creditsButton.y, creditsButton.w, creditsButton.h)){
+        if (pointInRect(mousePos.x, mousePos.y, this.creditsButton.x, this.creditsButton.y, this.creditsButton.w, this.creditsButton.h)){
             this.creditsHighlighted = true;
         } else {
             this.creditsHighlighted = false;
@@ -45,6 +45,7 @@ class TitleScreen extends State {
     }
 
     draw() {
+        canvasContext.save();
         if (this.timer > 0) {
             currentLevel.drawBackground();
             render3DProjection();
@@ -55,30 +56,37 @@ class TitleScreen extends State {
             canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
         }
         
-        colorRect(0, 0, canvas.width, canvas.height, 'white');
-    
-        canvasContext.fillStyle = '#5FCDE4';
-        canvasContext.font = '80px Arial';
-        canvasContext.textAlign = 'center';
+        let gradient = canvasContext.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height/2, canvas.width/2, canvas.height/2, canvas.height/4);
+            gradient.addColorStop(0, '#516faf');
+            gradient.addColorStop(1, 'white');
+        colorRect(0, 0, canvas.width, canvas.height, gradient);
 		
-		//commenting out the placeholder title, attempting to add the logo images
-		//below code is an attempt at adding logo
-		canvasContext.drawImage(spriteList['logo'], 0, 0, 800, 450);
-        //canvasContext.fillText("GLACIERBOUND", canvas.width / 2, canvas.height / 3);
+        let graphic = spriteList['logo'];
+        let drawRatio = graphic.width >= canvas.width ? canvas.width/graphic.width : graphic.width/canvas.width;
+            drawRatio *= 0.8;
+        let drawWidth = graphic.width * drawRatio, 
+            drawHeight = graphic.height * drawRatio,
+            drawX = (canvas.width - drawWidth) / 2,
+            drawY = (canvas.height - drawHeight) / 2;
+
+        canvasContext.shadowBlur = 2;
+        canvasContext.shadowColor = '#3F3F74';
+        canvasContext.drawImage(graphic, 0, 0, graphic.width, graphic.height, drawX, drawY, drawWidth, drawHeight);
     
+        canvasContext.textAlign = 'center';
         canvasContext.fillStyle = this.startHighlighted ? '#5FCDE4' : '#516faf';
         canvasContext.font = '20px Arial';
-        canvasContext.fillText("Start", canvas.width / 2, canvas.height - 40);
+        canvasContext.fillText("Start", canvas.width / 2, this.startButton.y + 20);
     
     
         canvasContext.fillStyle = this.creditsHighlighted ? '#5FCDE4' : '#516faf';
-        canvasContext.fillText("Credits", canvas.width / 2, canvas.height - 70);
+        canvasContext.fillText("Credits", canvas.width / 2, this.creditsButton.y + 20);
     
         if (this.timer <= 0)  {
             drawCursor();
         } else this.timer++;
 
-        canvasContext.globalAlpha = 1;
+        canvasContext.restore();
     }
 
     checkConditions() {
