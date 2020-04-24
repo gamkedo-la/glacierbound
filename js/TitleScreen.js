@@ -55,7 +55,7 @@ class TitleScreen extends State {
             canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
         }
         
-        colorRect(0, 0, canvas.width, canvas.height, '#3F3F74');
+        colorRect(0, 0, canvas.width, canvas.height, 'white');
     
         canvasContext.fillStyle = '#5FCDE4';
         canvasContext.font = '80px Arial';
@@ -66,12 +66,12 @@ class TitleScreen extends State {
 		canvasContext.drawImage(spriteList['logo'], 0, 0, 800, 450);
         //canvasContext.fillText("GLACIERBOUND", canvas.width / 2, canvas.height / 3);
     
-        canvasContext.fillStyle = this.startHighlighted ? '#5FCDE4' : 'white';
+        canvasContext.fillStyle = this.startHighlighted ? '#5FCDE4' : '#516faf';
         canvasContext.font = '20px Arial';
         canvasContext.fillText("Start", canvas.width / 2, canvas.height - 40);
     
     
-        canvasContext.fillStyle = this.creditsHighlighted ? '#5FCDE4' : 'white';
+        canvasContext.fillStyle = this.creditsHighlighted ? '#5FCDE4' : '#516faf';
         canvasContext.fillText("Credits", canvas.width / 2, canvas.height - 70);
     
         if (this.timer <= 0)  {
