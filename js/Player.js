@@ -11,6 +11,8 @@ class Player {
         this.armor = 0;
         this.maxArmor = 15;
         this.armorPickup = 0;
+        this.damageBoost = 0;
+        this.damageBoostPickup = 5;  //temp value for testing; change to 0 once boost can be picked up in map
         this.reset();
     }
 
@@ -90,8 +92,14 @@ class Player {
         let pX = this.x + Math.cos(this.rotationAngle) * (this.radius + 0.2 * 64);
         let pY = this.y + Math.sin(this.rotationAngle) * (this.radius + 0.2 * 64);
         var newProj = new Projectile(pX, pY, 10, null, -0.5, 0.2, this.rotationAngle, false);
-        newProj.shootFrom(this, 20);
-        newProj.createSprite('lightblue');
+        if (this.damageBoost > 0) {
+            newProj.shootFrom(this, 40); //400% of normal damage
+            newProj.createSprite('midnightblue');
+            this.damageBoost--;    
+        } else {
+            newProj.shootFrom(this, 20);
+            newProj.createSprite('lightblue');
+        }
         objects.push(newProj);
         this.timeToShoot = 12;
 		laserShot.play();
@@ -149,6 +157,14 @@ class Player {
                     } // end of else statement for pickup to activate if armor is damaged
                 } // end of else statement checking that player has armor pickup       
                 break;
+            case 'damage boost':
+                if (player.damageBoostPickup == 0){
+                    messageConsole.push("No Damage Boost available.", 'red');
+                } else {
+                    player.damageBoostPickup--;
+                    messageConsole.push('Damage increased for the next 5 attacks.', 'orange');
+                    this.damageBoost += 5;
+                }
             default:
                 break;
         }        
