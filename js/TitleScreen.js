@@ -4,6 +4,8 @@ class TitleScreen extends State {
         this.name = 'Title Screen';
         this.startButton = {x: canvas.width / 2 - 50, y: canvas.height - 160, w: 100, h: 30};
         this.creditsButton = {x: canvas.width / 2 - 50, y: canvas.height - 130, w: 100, h: 30};
+        this.showingCredits = false;
+        this.clickHeldPrevFrame = false; // to prevent holding from passing between menus
     }
 
     onEnter() {
@@ -20,6 +22,14 @@ class TitleScreen extends State {
 
     control() {
         if (!mouseEnabled || mousePos === null) return;
+
+        if(this.showingCredits) { // click anywhere to exit
+            if(mouseHeld[0] && this.clickHeldPrevFrame == false) { // clicking?
+                this.showingCredits = false;
+            }
+            this.clickHeldPrevFrame = mouseHeld[0];
+            return;
+        }
     
         if (pointInRect(mousePos.x, mousePos.y, this.startButton.x, this.startButton.y, this.startButton.w, this.startButton.h)){
             this.startHighlighted = true;
@@ -33,19 +43,37 @@ class TitleScreen extends State {
             this.creditsHighlighted = false;
         }
 
+        if(this.timer <= 0 && mouseHeld[0] && this.clickHeldPrevFrame == false) { // clicking?
         //Start game
-        if (this.timer <= 0 && mouseHeld[0] && this.startHighlighted) {
-            resetMouse();
-            player.health = 100;
-            player.armor = 0;
-            loadLevel(0);
-            moveEverything();
-            this.timer++;
+            if (this.startHighlighted) {
+                resetMouse();
+                player.health = 100;
+                player.armor = 0;
+                loadLevel(0);
+                moveEverything();
+                this.timer++;
+            } else if (this.creditsHighlighted) {
+                console.log("toggling show credits");
+                this.showingCredits = true;
+            }
         }
+
+        this.clickHeldPrevFrame = mouseHeld[0];
     }
 
     draw() {
         canvasContext.save();
+        if(this.showingCredits) {
+            canvasContext.restore();
+            colorRect(0, 0, canvas.width, canvas.height, "#516faf");
+            canvasContext.textAlign = 'center';
+            canvasContext.fillStyle = 'white';
+            canvasContext.font = '20px Arial';
+            canvasContext.fillText("Credits will go here", canvas.width / 2, this.startButton.y + 20);
+            canvasContext.fillText("Click anywhere to exit", canvas.width / 2, canvas.height - 20);
+            return;
+        }
+
         if (this.timer > 0) {
             currentLevel.drawBackground();
             render3DProjection();
