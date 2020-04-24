@@ -148,7 +148,7 @@ function hudTransition(weight) {
 //Credit Screen
 function Credits() {
 
-    this.creditsMaxCharWidthToWrap = 150;
+    this.creditsMaxCharWidthToWrap = 105;
     this.creditsScrollRate = 0.0; // no scrolling needed in this case
 
     this.creditNameList = [
