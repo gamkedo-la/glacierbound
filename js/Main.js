@@ -87,12 +87,20 @@ class GameOver extends State {
         }
         canvasContext.fillStyle = lerpRGB('rgb(255,0,0)', 'rgb(255, 255, 255)', smoothStart(alpha, 3));
         canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-        canvasContext.globalAlpha = 1;
+
+        let graphic = spriteList['gameover'],
+            drawRatio = graphic.width >= canvas.width ? canvas.width/graphic.width : graphic.width/canvas.width, 
+            drawWidth = graphic.width * drawRatio, drawHeight = graphic.height * drawRatio,
+            drawY = (canvas.height - drawHeight) / 2;
+
+        canvasContext.drawImage(graphic, 0, 0, graphic.width, graphic.height, 0, drawY, drawWidth, drawHeight);
 
         canvasContext.fillStyle = lerpRGB('rgb(255, 0, 0)', 'rgb(63,63,139)', smoothStart(alpha, 3));
-        canvasContext.font = '100px Arial';
+        canvasContext.font = '40px Arial';
         canvasContext.testAlign = 'center';
-        canvasContext.fillText('YOU DIED', canvas.width/2, canvas.height/2);
+        canvasContext.fillText('CLICK TO RESTART', canvas.width/2, canvas.height-60);
+
+        canvasContext.globalAlpha = 1;
     }
 
     checkConditions() {
@@ -103,7 +111,6 @@ class GameOver extends State {
 
     onExit() {
         resetMouse();
-        objects.length = 0;
     }
 }
 

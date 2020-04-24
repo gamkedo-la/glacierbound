@@ -23,6 +23,7 @@ function loadImages() {
 		{spriteName: 'snow', fileName: 'snow.png'},
 		{spriteName: 'enemy1', fileName: 'enemy1.png'},
 		{spriteName: 'enemy2', fileName: 'enemy2.png'},
+		{spriteName: 'gameover', fileName: 'game-over.png'},
 		{spriteName: 'healthbar', fileName: 'healthbar.png'},
 		{spriteName: 'healthpickup', fileName: 'HealthPickup.png'},
 		{spriteName: 'healthpickup_ui', fileName: 'HealthPickup_UI.png'},
