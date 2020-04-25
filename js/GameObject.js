@@ -6,9 +6,7 @@ class GameObject {
         this.moveSpeed = speed;
         this.altitude = altitude ? altitude : 0; //screen y offset
         this.pic = pic;
-        this.tint = document.createElement('canvas');
-        this.tint.ctx = this.tint.getContext('2d');
-        if (this.pic) this.createTint(currentLevel.colors.sky);
+        if (this.pic) this.tint = this.createTint(currentLevel.colors.sky);
         this.scale = scale ? scale : 1; //multiple of draw height/width
         this.radius = (this.scale * TILE_SIZE / 2) - 6;
         this.distance = Infinity; //distance to player
@@ -27,21 +25,22 @@ class GameObject {
         this.pic.ctx.beginPath();
         this.pic.ctx.arc(128, 128, 128, 0, Math.PI * 2, true);
         this.pic.ctx.fill();
-        this.createTint(currentLevel.colors.sky);
+        this.tint = this.createTint(currentLevel.colors.sky);
     }
 
     createTint(color) {
-        this.tint.width = this.pic.width;
-        this.tint.height = this.pic.height;
-        this.setTint(color);
+        let buffer = new OffscreenCanvas(this.pic.width, this.pic.height);
+        buffer.ctx = buffer.getContext('2d');
+        this.setTint(buffer, color);
+        return buffer.transferToImageBitmap();
     }
 
-    setTint(color) {
-        this.tint.ctx.globalCompositeOperation = 'source-over';
-        this.tint.ctx.fillStyle = color;
-        this.tint.ctx.fillRect(0, 0, this.tint.width, this.tint.height);
-        this.tint.ctx.globalCompositeOperation = 'destination-atop';
-        this.tint.ctx.drawImage(this.pic, 0, 0);
+    setTint(tintCanvas, color) {
+        tintCanvas.ctx.globalCompositeOperation = 'source-over';
+        tintCanvas.ctx.fillStyle = color;
+        tintCanvas.ctx.fillRect(0, 0, tintCanvas.width, tintCanvas.height);
+        tintCanvas.ctx.globalCompositeOperation = 'destination-atop';
+        tintCanvas.ctx.drawImage(this.pic, 0, 0);
     }
 
     update() {
