@@ -51,8 +51,10 @@ function drawHUD() {
     if(redOverlay){
 		showOverlay();
 	}
+
     drawPlayerHealth();
     drawPlayerArmor();
+    drawProjectileHUD();
     drawPlayerKeys();
     messageConsole.draw();
 
@@ -90,13 +92,36 @@ function drawDebugStats() {
     }
 }
 
+function drawProjectileHUD() {
+    //armorbar
+    if (player.dBoost1active && player.dBoost2active) {
+        canvasContext.drawImage(spriteList['projectilebar_comboboost'], 10, canvas.height - 43);
+    } else if (player.dBoost1active) {
+       canvasContext.drawImage(spriteList['projectilebar_boost1'], 10, canvas.height - 43);
+    } else if (player.dBoost2active) {
+       canvasContext.drawImage(spriteList['projectilebar_boost2'], 10, canvas.height - 43);
+    } else {
+        canvasContext.drawImage(spriteList['projectilebar'], 10, canvas.height - 43);
+    }    
+
+    //Damage boost 2 timer will go here
+  
+  //Damage boost pickup UI
+    canvasContext.fillStyle = 'black';
+    canvasContext.font = '13px Arial Black';
+    canvasContext.drawImage(spriteList['damageboost1pickup_ui'], 161, canvas.height - 43);
+    canvasContext.fillText(player.dBoost1Pickup, 178, canvas.height - 20);
+    canvasContext.drawImage(spriteList['damageboost2pickup_ui'], 195, canvas.height - 43);
+    canvasContext.fillText(player.dBoost2Pickup, 213, canvas.height - 20);
+    
+}
 function drawPlayerArmor() {
     //armorbar
-    canvasContext.drawImage(spriteList['armorbar'], 10, canvas.height - 55);
+    canvasContext.drawImage(spriteList['armorbar'], 10, canvas.height - 79);
 
     //armor fill
     var armorPercent = player.armor / player.maxArmor;
-    colorRect(10 + 45, canvas.height - 55 + 15, armorPercent * 145, 20, 'deepskyblue');
+    colorRect(10 + 36, canvas.height - 70, armorPercent * 145, 20, 'deepskyblue');
 
     canvasContext.fillStyle = 'white';
     canvasContext.font = '15px Arial';
@@ -104,23 +129,24 @@ function drawPlayerArmor() {
 
 
     if (player.armor == 0) {
-        canvasContext.fillText(0, 130, canvas.height - 25);
+        canvasContext.fillText(0, 120, canvas.height - 55);
     } else {
-        canvasContext.fillText(player.armor + "/" + player.maxArmor, 130, canvas.height - 25);
+        canvasContext.fillText(player.armor + "/" + player.maxArmor, 120, canvas.height - 55);
     }
 
     //armor pickup (hidden if player doesn't have any)
-    if (player.armorPickup > 0 ) {
-    canvasContext.drawImage(spriteList['armorpickup_ui'], 205, canvas.height - 55);
+  if (player.armorPickup > 0 ) {
+    canvasContext.drawImage(spriteList['armorpickup_ui'], 195, canvas.height - 79);
     canvasContext.fillStyle = 'lightblue';
-    canvasContext.font = '20px Arial';
-    canvasContext.fillText(player.armorPickup, 227, canvas.height - 20);
-    }        
+    canvasContext.font = '15px Arial';
+    canvasContext.fillText(player.armorPickup, 212, canvas.height - 55);
+    }
 }
 
 function drawPlayerHealth() {
+ 
     //healthbar
-    canvasContext.drawImage(spriteList['healthbar'], 10, canvas.height - 100);
+    canvasContext.drawImage(spriteList['healthbar'], 10, canvas.height - 115);
 
     //health fill
     var healthPercent = player.health / player.maxHealth;
@@ -132,20 +158,20 @@ function drawPlayerHealth() {
     } else {
         healthState = 'green';
     }
-    colorRect(10 + 45, canvas.height - 100 + 15, healthPercent * 145, 20, healthState);
+    colorRect(10 + 36, canvas.height - 106, healthPercent * 145, 20, healthState);
 
     canvasContext.fillStyle = 'white';
     canvasContext.font = '15px Arial';
     canvasContext.textAlign = 'center';
 
-    canvasContext.fillText(player.health + "/" + player.maxHealth, 130, canvas.height - 70);
+    canvasContext.fillText(player.health + "/" + player.maxHealth, 120, canvas.height - 91);
 
     //health pickup (hidden if player doesn't have any)
-    if (player.healthPickup > 0) {
-    canvasContext.drawImage(spriteList['healthpickup_ui'], 205, canvas.height - 100);
+   if (player.healthPickup > 0) {
+    canvasContext.drawImage(spriteList['healthpickup_ui'], 195, canvas.height - 115);
     canvasContext.fillStyle = 'pink';
-    canvasContext.font = '20px Arial';
-    canvasContext.fillText(player.healthPickup, 227, canvas.height - 65);
+    canvasContext.font = '15px Arial';
+    canvasContext.fillText(player.healthPickup, 212, canvas.height - 91);
     }    
 }
 

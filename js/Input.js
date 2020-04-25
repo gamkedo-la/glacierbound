@@ -14,8 +14,8 @@ const KEY_ALT = 18;
 const KEY_SPACE = 32;
 const KEY_NUMBER_1 =  49; //Health Pick-up activate
 const KEY_NUMBER_2 =  50; //Armor Pick-up 
-const KEY_NUMBER_3  = 51; //Damage Boost
-
+const KEY_NUMBER_3  = 51; //Damage Boost Type 1
+const KEY_NUMBER_4  = 52; //Damage Boost Type 2
 
 function initInput() {
   document.addEventListener("keydown", keyPressed);
@@ -45,7 +45,9 @@ function setKeyHoldState(thisKey, setTo) {
 
   if (thisKey == KEY_NUMBER_1 && setTo === true) player.activatePickUp('health');
   if (thisKey == KEY_NUMBER_2 && setTo === true) player.activatePickUp('armor');
-  if (thisKey == KEY_NUMBER_3 && setTo === true) player.activatePickUp('damage boost');
+  if (thisKey == KEY_NUMBER_3 && setTo === true) player.activatePickUp('damageboost1');
+  if (thisKey == KEY_NUMBER_4 && setTo === true) player.activatePickUp('damageboost2');
+
 }
 
 function keyPressed(evt) {

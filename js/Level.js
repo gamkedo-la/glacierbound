@@ -527,6 +527,14 @@ function loadLevelObjects(levelData) {
                 newObject = new Item(ox, oy, -0.5, 0.2, oAngle, 'blue key');
                 currentLevel.stats.totalItems++;
                 break;
+            case 'boost1':
+                newObject = new Item(ox, oy, -0.6, 0.5, oAngle, 'boost1');
+                currentLevel.stats.totalItems++;
+                break;
+            case 'boost2':
+                newObject = new Item(ox, oy, -0.6, 0.5, oAngle, 'boost2');
+                currentLevel.stats.totalItems++;
+                break;
             default:
                 continue;
         }
