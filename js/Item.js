@@ -4,7 +4,7 @@ class Item extends GameObject {
         this.type = type;
         this.touched = false;
         this.setSprite(type);
-        this.createTint(currentLevel.colors.sky);
+        this.tint = this.createTint(currentLevel.colors.sky);
     }
 
     activate() {
