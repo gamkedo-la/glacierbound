@@ -1,3 +1,5 @@
+
+
 class TitleScreen extends State {
     constructor() {
         super();
@@ -214,3 +216,18 @@ function Credits() {
 }
 
 var gameCredits = new Credits();
+var Introduction = ["Once upon a time, an old wizard woke up from a long sleep."," ",
+        "When he regained his senses, his last memory came rushing back. His worst enemy, the White Magician of the Northern Kingdoms, riding his Wonderful Dragon, giving him a fatal blow."," ",
+        "He remembered the pain and rubbed his temples. But then came the image of a young boy."," ",
+        "'The Prince! He must know that I am alive and I should protect him'"," ",
+        "He stood up. 'Where am I? It looks like a crypt. I had better be on the lookout for danger...'", " ",];
+
+var Conclusion = [
+"Surrounded by glass castles and a kind of magic he did not fully understand, the wizard realized he had slept for a longer time than he ever could have imagined. . ",
+"The Great Magicien, his goat, the Northern Kingdoms and the Prince, all were part of a world which was fading into the past.",
+"But still, looking around, he felt a deep hope.",
+"People were still around, same as they were two thousand years ago! He noticed a 10 year old boy approaching him. His kind face expressed a profound curiosity. ",
+"So the wizard did what he knew to be his duty. So the wizard did was his duty was.",
+"'Sir! Would you agree to be my new Prince?'",
+"The wizard asked. The boy smiled. He nodded. A new story was about to begin.",
+]
