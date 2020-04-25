@@ -210,6 +210,8 @@ class Level {
 
         if (debugModeEnabled === false) return;
 
+        colorRect(0, 0, TILE_SIZE * MAP_NUM_COLS * MINIMAP_SCALE_FACTOR, TILE_SIZE * MAP_NUM_ROWS * MINIMAP_SCALE_FACTOR, 'black');
+
         for (var eachRow = 0; eachRow < MAP_NUM_ROWS; eachRow++) {
             for (var eachCol = 0; eachCol < MAP_NUM_COLS; eachCol++) {
 
