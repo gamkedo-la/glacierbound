@@ -50,7 +50,6 @@ function loadImages() {
 		{spriteName: 'armorpickup_ui', fileName: 'HUD/pickups/ShieldPickup_UI.png'},
 		{spriteName: 'damageboost1pickup_ui', fileName: 'HUD/pickups/damageBoost1Pickup_UI.png'},
 		{spriteName: 'damageboost2pickup_ui', fileName: 'HUD/pickups/damageBoost2Pickup_UI.png'},
-		{spriteName: 'bars', fileName: 'bars.png'},
 	]
 	
 	imagesToLoad = imageList.length;

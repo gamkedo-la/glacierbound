@@ -93,7 +93,7 @@ function drawDebugStats() {
 }
 
 function drawProjectileHUD() {
-    //armorbar
+    //projectilebar
     if (player.dBoost1active && player.dBoost2active) {
         canvasContext.drawImage(spriteList['projectilebar_comboboost'], 10, canvas.height - 43);
     } else if (player.dBoost1active) {
@@ -103,18 +103,49 @@ function drawProjectileHUD() {
     } else {
         canvasContext.drawImage(spriteList['projectilebar'], 10, canvas.height - 43);
     }    
-
-    //Damage boost 2 timer will go here
   
-  //Damage boost pickup UI
+    //Damage boost type 2 timer HUD
+    var timePercent = player.dBoost2timeLeft / player.dBoost2duration;
+    if (timePercent >= 0) {
+    colorRect(10 + 36, canvas.height - 34, timePercent * 111, 20, 'magenta');
+    }
+
+
+    //Damage info display
+    canvasContext.font = '13px Arial';
+    canvasContext.textAlign = 'center';
+    if (player.dBoost1active && player.dBoost2active) {        
+        canvasContext.fillStyle = 'cyan';
+        canvasContext.fillText("Damage: "+player.dBoost1damageMultiplier*player.dBoost2damageMultiplier+"00%", 100, canvas.height - 20);    
+    } else if (player.dBoost1active) {
+        colorRect(10 + 36, canvas.height - 34, 111, 20, 'orangered');  
+        canvasContext.fillStyle = 'white';
+        canvasContext.fillText("Damage: "+player.dBoost1damageMultiplier+"00%", 100, canvas.height - 20);
+    } else if (player.dBoost2active) {
+        canvasContext.fillStyle = 'white';
+        canvasContext.fillText("Damage: "+player.dBoost2damageMultiplier+"00%", 100, canvas.height - 20);    
+    } else {
+        canvasContext.fillStyle = 'white';
+        canvasContext.fillText("Damage: 100%", 100, canvas.height - 20); 
+    }
+
+    //Damage boost pickup HUD
     canvasContext.fillStyle = 'black';
     canvasContext.font = '13px Arial Black';
-    canvasContext.drawImage(spriteList['damageboost1pickup_ui'], 161, canvas.height - 43);
-    canvasContext.fillText(player.dBoost1Pickup, 178, canvas.height - 20);
-    canvasContext.drawImage(spriteList['damageboost2pickup_ui'], 195, canvas.height - 43);
-    canvasContext.fillText(player.dBoost2Pickup, 213, canvas.height - 20);
-    
+    if (player.dBoost1Pickup > 0 ) {
+        canvasContext.drawImage(spriteList['damageboost1pickup_ui'], 161, canvas.height - 43);
+        canvasContext.fillText(player.dBoost1Pickup, 178, canvas.height - 20);
+    }
+    if (player.dBoost1Pickup == 0 && player.dBoost2Pickup > 0 ) {
+        canvasContext.drawImage(spriteList['damageboost2pickup_ui'], 161, canvas.height - 43);
+        canvasContext.fillText(player.dBoost2Pickup, 178, canvas.height - 20);
+    } else if (player.dBoost2Pickup > 0 ) {
+        canvasContext.drawImage(spriteList['damageboost2pickup_ui'], 195, canvas.height - 43);
+        canvasContext.fillText(player.dBoost2Pickup, 213, canvas.height - 20);
+    }
+
 }
+
 function drawPlayerArmor() {
     //armorbar
     canvasContext.drawImage(spriteList['armorbar'], 10, canvas.height - 79);
