@@ -224,7 +224,7 @@ var Introduction = ["Once upon a time, an old wizard woke up from a long sleep."
 
 var Conclusion = [
 "Surrounded by glass castles and a kind of magic he did not fully understand, the wizard realized he had slept for a longer time than he ever could have imagined. . ",
-"The Great Magicien, his goat, the Northern Kingdoms and the Prince, all were part of a world which was fading into the past.",
+"The Great Magicien, his Wonderful Dragon, the Northern Kingdoms and the Prince, all were part of a world which was fading into the past.",
 "But still, looking around, he felt a deep hope.",
 "People were still around, same as they were two thousand years ago! He noticed a 10 year old boy approaching him. His kind face expressed a profound curiosity. ",
 "So the wizard did what he knew to be his duty. So the wizard did was his duty was.",
