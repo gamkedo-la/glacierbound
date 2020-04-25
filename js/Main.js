@@ -167,8 +167,8 @@ function moveEverything() {
 function drawEverything() {
     currentLevel.drawBackground();
     render3DProjection();
-    player.draw();
     currentLevel.draw();
+    player.draw();
     player.drawHands();
 
     for (let o of objects) {
