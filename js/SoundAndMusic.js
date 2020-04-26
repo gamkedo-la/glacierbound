@@ -78,11 +78,16 @@ function SoundOverlapsClass(filenameWithPath) {
 }
 
 function BackgroundMusicClass(filenameWithPath) {
-	let musicSound = null;
 	let filePath = "audio/" + filenameWithPath + audioFormat;
+	let musicSound = new Audio(filePath);
+	let playing = false;
+
+	this.isPlaying = function() {
+		return playing;
+	}
 
 	this.getVolume = function(){
-		return musicSound ? musicSound.volume : 0.0;
+		return musicSound.volume;
 	};
 
 	this.setVolume = function(value) {
@@ -90,27 +95,25 @@ function BackgroundMusicClass(filenameWithPath) {
 			value = 0.0;
 		if(value > 1.0)
 			value = 1.0;
-		if(musicSound != null){
-			musicSound.volume = value;
-		}
+		musicSound.volume = value;
 	};
 
-    this.play = function(loop = true) {
-		stop();
-		musicSound = new Audio(filePath);
+	this.play = function(loop = true) {
 		this.setVolume(musicVolume);
+		musicSound.currentTime = 0;
 		musicSound.loop = loop;
-		musicSound.play();
-		allBGMs.push(this); // Make sure changes applied to BGM reach this object.
-		console.log("Playing " + filePath);
+		musicSound.play().then(() => {
+			playing = true;
+			allBGMs.push(this); // Make sure changes applied to BGM reach this object.
+			console.log("Playing " + filePath);
+		 }, (error_reason) => {
+			console.warn(`Failed to play music ${filePath} : ${error_reason}`);
+		 });
 	};
 
 	this.stop = function() {
-		if(musicSound != null)
-		{
-			musicSound.pause();
-			musicSound = null;
-		}
+		musicSound.pause();
+		playing = false;
 
 		// Remove from BGMs if not playing.
 		const index = allBGMs.indexOf(this);
@@ -118,5 +121,4 @@ function BackgroundMusicClass(filenameWithPath) {
 			allBGMs.splice(index, 1);
 		}
 	};
-
 }

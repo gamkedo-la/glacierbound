@@ -25,6 +25,11 @@ class TitleScreen extends State {
     run() {
         this.control();
         this.draw();
+
+        // this is to workaround the protection preventing non-interracted pages to play audio.
+        if(!this.music.isPlaying()){
+            this.music.play(false); // no looping
+        }
     }
 
     control() {
