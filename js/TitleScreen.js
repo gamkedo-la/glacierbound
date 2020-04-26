@@ -230,22 +230,23 @@ function Credits() {
     this.creditsScrollRate = 0.0; // no scrolling needed in this case
 
     this.creditNameList = [
-        "Brian J. Boucher: Project lead, core gameplay and main raycaster code, snow art, custom level editor, projectiles, item pickup code, multiple level support, exit functionality, initial title screen, debug mode visualizations, level design (1 and 2), assorted bug fixing"," ",
-        "Andrew Mushel: Wall texture support, sprite object rendering, mouse input, hand sway, pathfinding, most collision code, enemy AI, image loading improvements, additional texture art, door code, garbage collection, shadows, snow optimizations, HUD refinements, custom cursor, keys, skybox, floor and ceiling distance gradient, level stats and transition"," ",
-        "Catherine San Luis: Health and armor systems (UI, art, related code), inventory pick up messages, damage boost power-up"," ",
+        "Brian J. Boucher: Project lead, core gameplay and main raycaster code, snow art, custom level editor, projectiles, item pickup code, multiple level support, exit functionality, initial title screen, debug mode visualizations, level design, assorted bug fixing, minimap"," ",
+        "Andrew Mushel: Wall texture support, sprite object rendering, mouse input, hand sway, pathfinding, most collision code, enemy AI, image loading improvements, additional texture art, door code, garbage collection, shadows, snow optimizations, HUD refinements, custom cursor, keys (code and animation), skybox, floor and ceiling distance gradient, level stats and transition, fog rendering, assorted bug fixing, enemy death animation"," ",
+        "Catherine San Luis: Health and armor systems (UI, art, related code), inventory pick up messages, damage boost power-ups, credits display improvement, game over fixes, projectile sprites, pause screen, controls page improvements"," ",
+        "Klaim (A. Joël Lamotte): Music (Banquise, Avalanche theme, main menu)"," ",
         "Vince McKeown: Player hands graphics, 2 enemy sprites, initial enemy placement, addl. wall texture, sound code integration, sounds for laser and fireball"," ",
         "Ashleigh M.: Logo, hit feedback for player and enemy, title screen improvements, game over image"," ",
-        "Klaim (A. Joël Lamotte): Avalanche track"," ",
+        "Powerproust: Intro and end text display"," ",
         "Yong Wei: Strafe input"," ",
         "Joshua Rigley: Health tracking"," ",
-        " "," ",
+        "Ashleigh M.: Testing"," ",
         "Made by members of HomeTeam GameDev (Outpost)"," ","Join at HomeTeamGameDev.com to make games with us!",
         ];
 
     this.creditsScroll = 0;
 
     this.drawCredits = function(){
-        var posHeight = 50;
+        var posHeight = 30;
         var count = 0;
 
         var anyDrew = false;
@@ -254,10 +255,15 @@ function Credits() {
         canvasContext.fillStyle = "white";
         canvasContext.textAlign = "left";
         for (count; count < this.creditNameList.length; count++){
-            var drawAt = posHeight+count*18-this.creditsScroll;
+            var drawAt = posHeight-this.creditsScroll;
             //if(drawAt > 160 && drawAt < 475) { // used for if we want to conceal top/bottom for other info when scrolling
                 canvasContext.fillText(this.creditNameList[count], 50, drawAt);
                 anyDrew = true;
+            if(this.creditNameList[count] != " ") {
+                posHeight+=18;
+            } else { // shorter skips for spacing
+                posHeight+=13;
+            }
             //}
         }
         canvasContext.font = wasFont;
