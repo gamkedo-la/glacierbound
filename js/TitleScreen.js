@@ -5,13 +5,16 @@ class TitleScreen extends State {
         super();
         this.name = 'Title Screen';
         this.startButton = {x: canvas.width / 2 - 50, y: canvas.height - 160, w: 100, h: 30};
-        this.creditsButton = {x: canvas.width / 2 - 50, y: canvas.height - 130, w: 100, h: 30};
+        this.controlsButton = {x: canvas.width / 2 - 50, y: canvas.height - 130, w: 100, h: 30};
+        this.creditsButton = {x: canvas.width / 2 - 50, y: canvas.height - 100, w: 100, h: 30};
         this.showingCredits = false;
+        this.showingControls = false;
     }
 
     onEnter() {
         this.startHighlighted = false;
         this.creditsHighlighted = false;
+        this.controlsHighlighted = false;
         this.timer = 0;
         resetMouse();
     }
@@ -29,17 +32,29 @@ class TitleScreen extends State {
             return;
         }
     
+        if(this.showingControls && mouseClicked(0)) { // click anywhere to exit
+            this.showingControls = false;
+            return;
+        }
+
         if (pointInRect(mousePos.x, mousePos.y, this.startButton.x, this.startButton.y, this.startButton.w, this.startButton.h)){
             this.startHighlighted = true;
         } else {
             this.startHighlighted = false
         }
     
+        if (pointInRect(mousePos.x, mousePos.y, this.creditsButton.x, this.controlsButton.y, this.controlsButton.w, this.controlsButton.h)){
+            this.controlsHighlighted = true;
+        } else {
+            this.controlsHighlighted = false;
+        }
+
         if (pointInRect(mousePos.x, mousePos.y, this.creditsButton.x, this.creditsButton.y, this.creditsButton.w, this.creditsButton.h)){
             this.creditsHighlighted = true;
         } else {
             this.creditsHighlighted = false;
         }
+
 
         if(this.timer <= 0 && mouseClicked(0)) { // clicking?
         //Start game
@@ -57,6 +72,8 @@ class TitleScreen extends State {
             } else if (this.creditsHighlighted) {
                 console.log("toggling show credits");
                 this.showingCredits = true;
+            }  else if (this.controlsHighlighted) {
+                this.showingControls = true;
             }
         }
     }
@@ -67,6 +84,15 @@ class TitleScreen extends State {
             canvasContext.restore();
             colorRect(0, 0, canvas.width, canvas.height, "#516faf");
             gameCredits.drawCredits();
+            canvasContext.textAlign = 'center';
+            canvasContext.fillStyle = 'white';
+            canvasContext.font = '20px Arial';
+            canvasContext.fillText("Click anywhere to return", canvas.width / 2, canvas.height - 20);
+            return;
+        }  else if (this.showingControls) {
+            canvasContext.restore();
+            colorRect(0, 0, canvas.width, canvas.height, "#516faf");
+            drawControls();
             canvasContext.textAlign = 'center';
             canvasContext.fillStyle = 'white';
             canvasContext.font = '20px Arial';
@@ -106,6 +132,8 @@ class TitleScreen extends State {
         canvasContext.font = '20px Arial';
         canvasContext.fillText("Start", canvas.width / 2, this.startButton.y + 20);
     
+        canvasContext.fillStyle = this.controlsHighlighted ? '#5FCDE4' : '#516faf';
+        canvasContext.fillText("Controls", canvas.width / 2, this.controlsButton.y + 20);
     
         canvasContext.fillStyle = this.creditsHighlighted ? '#5FCDE4' : '#516faf';
         canvasContext.fillText("Credits", canvas.width / 2, this.creditsButton.y + 20);
@@ -144,6 +172,34 @@ function hudTransition(weight) {
     canvasContext.translate(-hudOffset, 0);
     drawPlayerKeys();
     canvasContext.translate(hudOffset, 0);
+}
+
+//Controls Screen
+function drawControls(){
+        var titleHeight = 100;
+        var spaceBetweenTitleAndList =  70;
+        var firstText = titleHeight + spaceBetweenTitleAndList;
+        var textHeight = 25;
+        var listLeftPad =   250;
+
+        canvasContext.fillStyle = 'white';
+        canvasContext.textAlign = 'center';
+        canvasContext.font = '30px Arial';
+        canvasContext.fillText("CONTROLS", canvas.width / 2, titleHeight);
+        
+        canvasContext.textAlign = 'left';
+        canvasContext.font = '20px Arial';
+        canvasContext.fillText("W                  Move Forward", listLeftPad, firstText);
+        canvasContext.fillText("A                   Move Left", listLeftPad, firstText + textHeight);
+        canvasContext.fillText("S                   Move Backward", listLeftPad, firstText + textHeight*2);
+        canvasContext.fillText("D                   Move Right", listLeftPad, firstText + textHeight*3);
+        canvasContext.fillText("E                   Fire", listLeftPad, firstText + textHeight*4);
+        canvasContext.fillText("P                   Pause Game", listLeftPad, firstText + textHeight*5);
+        canvasContext.fillText("1                   Use Health Pack", listLeftPad, firstText + textHeight*6);
+        canvasContext.fillText("2                   Use Shield", listLeftPad, firstText + textHeight*7);
+        canvasContext.fillText("3                   Use Damage Boost Type 1", listLeftPad, firstText + textHeight*8);
+        canvasContext.fillText("4                   Use Damage Boost Type 2", listLeftPad, firstText + textHeight*9);
+        canvasContext.fillText("Mouseclick          Fire", listLeftPad, firstText + textHeight*10);
 }
 
 //Credit Screen
