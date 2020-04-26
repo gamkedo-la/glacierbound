@@ -16,13 +16,14 @@ function setFormat() {
 		audioFormat = ".ogg";
     }
 }
+setFormat(); // do it only once
 
 function SoundOverlapsClass(filenameWithPath) {
     setFormat();
     var altSoundTurn = false;
     var mainSound = new Audio("audio/" + filenameWithPath + audioFormat);
     var altSound = new Audio("audio/" + filenameWithPath + audioFormat);
-    
+
     this.play = function() {
     	if (isMuted) {
     		console.log ("audio muted");
@@ -43,29 +44,33 @@ function SoundOverlapsClass(filenameWithPath) {
 		}
 		altSoundTurn = !altSoundTurn;
     }
-}  
+}
 
 function BackgroundMusicClass(filenameWithPath) {
-    var musicSound = null;
-    this.loopSong = function(filenameWithPath) {
-		setFormat();
+	var musicSound = null;
+	var filePath = "audio/" + filenameWithPath + audioFormat;
 
-		if (musicSound != null) {
-			musicSound.pause();
-			musicSound = null;
-		}
-		musicSound = new Audio("audio/" + filenameWithPath + audioFormat);
+    this.play = function(loop = true) {
+		stop();
+		musicSound = new Audio(filePath);
 		if(soundSetforMeetings){
 			musicSound.volume = 0.04; //quieter for screen sharing during meetings
 		}
-		musicSound.loop = true;
+		musicSound.loop = loop;
 		musicSound.play();
-    }
+	}
+
+	this.stop = function() {
+		if(musicSound != null)
+		{
+			musicSound.pause();
+		}
+	}
 
     this.startOrStopMusic = function() {
         if (!musicSound) {
             console.error("ERROR: musicSound not initialized before startOrStopMusic was run!");
-            return; 
+            return;
         }
 		if (isMuted == false) {
 			musicSound.play();

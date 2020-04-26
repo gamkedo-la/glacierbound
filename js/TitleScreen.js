@@ -9,6 +9,7 @@ class TitleScreen extends State {
         this.creditsButton = {x: canvas.width / 2 - 50, y: canvas.height - 100, w: 100, h: 30};
         this.showingCredits = false;
         this.showingControls = false;
+        this.music = new BackgroundMusicClass("klaim-main_menu");
     }
 
     onEnter() {
@@ -17,6 +18,7 @@ class TitleScreen extends State {
         this.controlsHighlighted = false;
         this.timer = 0;
         resetMouse();
+        this.music.play(false); // no looping
     }
 
     run() {
@@ -31,7 +33,7 @@ class TitleScreen extends State {
             this.showingCredits = false;
             return;
         }
-    
+
         if(this.showingControls && mouseClicked(0)) { // click anywhere to exit
             this.showingControls = false;
             return;
@@ -42,7 +44,7 @@ class TitleScreen extends State {
         } else {
             this.startHighlighted = false
         }
-    
+
         if (pointInRect(mousePos.x, mousePos.y, this.creditsButton.x, this.controlsButton.y, this.controlsButton.w, this.controlsButton.h)){
             this.controlsHighlighted = true;
         } else {
@@ -109,16 +111,16 @@ class TitleScreen extends State {
 
             canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
         }
-        
+
         let gradient = canvasContext.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height/2, canvas.width/2, canvas.height/2, canvas.height/4);
             gradient.addColorStop(0, '#516faf');
             gradient.addColorStop(1, 'white');
         colorRect(0, 0, canvas.width, canvas.height, gradient);
-		
+
         let graphic = spriteList['logo'];
         let drawRatio = graphic.width >= canvas.width ? canvas.width/graphic.width : graphic.width/canvas.width;
             drawRatio *= 0.8;
-        let drawWidth = graphic.width * drawRatio, 
+        let drawWidth = graphic.width * drawRatio,
             drawHeight = graphic.height * drawRatio,
             drawX = (canvas.width - drawWidth) / 2,
             drawY = (canvas.height - drawHeight) / 2;
@@ -126,18 +128,18 @@ class TitleScreen extends State {
         canvasContext.shadowBlur = 2;
         canvasContext.shadowColor = '#3F3F74';
         canvasContext.drawImage(graphic, 0, 0, graphic.width, graphic.height, drawX, drawY, drawWidth, drawHeight);
-    
+
         canvasContext.textAlign = 'center';
         canvasContext.fillStyle = this.startHighlighted ? '#5FCDE4' : '#516faf';
         canvasContext.font = '20px Arial';
         canvasContext.fillText("Start", canvas.width / 2, this.startButton.y + 20);
-    
+
         canvasContext.fillStyle = this.controlsHighlighted ? '#5FCDE4' : '#516faf';
         canvasContext.fillText("Controls", canvas.width / 2, this.controlsButton.y + 20);
-    
+
         canvasContext.fillStyle = this.creditsHighlighted ? '#5FCDE4' : '#516faf';
         canvasContext.fillText("Credits", canvas.width / 2, this.creditsButton.y + 20);
-    
+
         if (this.timer <= 0)  {
             drawCursor();
         } else this.timer++;
@@ -152,6 +154,7 @@ class TitleScreen extends State {
     }
 
     onExit() {
+        this.music.stop();
         resetMouse();
     }
 }
@@ -168,7 +171,7 @@ function hudTransition(weight) {
     drawPlayerHealth();
     drawProjectileHUD();
     canvasContext.translate(-hudOffset, 0);
-    
+
     canvasContext.translate(-hudOffset, 0);
     drawPlayerKeys();
     canvasContext.translate(hudOffset, 0);
@@ -186,7 +189,7 @@ function drawControls(){
         canvasContext.textAlign = 'center';
         canvasContext.font = '30px Arial';
         canvasContext.fillText("CONTROLS", canvas.width / 2, titleHeight);
-        
+
         canvasContext.textAlign = 'left';
         canvasContext.font = '20px Arial';
         canvasContext.fillText("W                  Move Forward", listLeftPad, firstText);
