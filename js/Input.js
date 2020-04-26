@@ -14,9 +14,11 @@ const KEY_LETTER_P = 80;
 const KEY_ALT = 18;
 const KEY_SPACE = 32;
 const KEY_NUMBER_1 =  49; //Health Pick-up activate
-const KEY_NUMBER_2 =  50; //Armor Pick-up 
+const KEY_NUMBER_2 =  50; //Armor Pick-up
 const KEY_NUMBER_3  = 51; //Damage Boost Type 1
 const KEY_NUMBER_4  = 52; //Damage Boost Type 2
+const KEY_RIGHT_BRACKET = 221;
+const KEY_LEFT_BRACKET = 219;
 
 function initInput() {
   document.addEventListener("keydown", keyPressed);
@@ -54,6 +56,9 @@ function setKeyHoldState(thisKey, setTo) {
   if (thisKey == KEY_NUMBER_2 && setTo === true) player.activatePickUp('armor');
   if (thisKey == KEY_NUMBER_3 && setTo === true) player.activatePickUp('damageboost1');
   if (thisKey == KEY_NUMBER_4 && setTo === true) player.activatePickUp('damageboost2');
+
+  if (thisKey == KEY_RIGHT_BRACKET && setTo === true) increaseBGMVolume();
+  if (thisKey == KEY_LEFT_BRACKET && setTo === true) decreaseBGMVolume();
 
 }
 

@@ -203,14 +203,16 @@ function drawControls(){
             {control: '2', usage: 'Use Shield'},
             {control: '3', usage: 'Use Damage Boost Type 1'},
             {control: '4', usage: 'Use Damage Boost Type 2'},
-        ] 
+            {control: '[', usage: 'Decrease Music Volume'},
+            {control: ']', usage: 'Increase Music Volume'},
+        ]
 
         canvasContext.textAlign = 'left';
         canvasContext.font = '18px Arial';
 
         for (i = 0; i < controlsList.length; i++){
             canvasContext.fillText(controlsList[i].usage, usageLeftPad, firstText +  textHeight * i);
-            canvasContext.fillText(controlsList[i].control, controlsLeftPad, firstText +  textHeight * i);         
+            canvasContext.fillText(controlsList[i].control, controlsLeftPad, firstText +  textHeight * i);
         }
 }
 
