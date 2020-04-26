@@ -54,6 +54,10 @@ class Character extends GameObject {
 		else return false;
 	}
 
+	die() {
+		this.isDying = true;
+	}
+
 	distToTarget() {
 		if (!this.target) return Infinity;
 		else if (this.target === player) return this.distance;
@@ -61,6 +65,10 @@ class Character extends GameObject {
 	}
 
 	draw() {
+		if (this.isDying)  {
+			super.draw();
+			return;
+		}
 		const srcPic = this.pic;
 		this.pic = this.justDamaged ? this.damagedPic : this.pic;
 		super.draw();
@@ -85,6 +93,7 @@ class Character extends GameObject {
 	}
 
 	move() {
+		if (this.isDead || this.isDying) return;
 		this.xv = Math.cos(this.direction) * this.moveSpeed;
 		this.yv = Math.sin(this.direction) * this.moveSpeed;
 
@@ -93,7 +102,7 @@ class Character extends GameObject {
 
 		if (Math.abs(this.xv) > Math.abs(this.deltaX)) this.xv = deltaX;
 		if (Math.abs(this.yv) > Math.abs(this.deltaY)) this.yv = deltaY;
-		
+
 		if (!objectMapCollision(this.x + this.xv, this.y, this.radius)) this.x += this.xv;
 		if (!objectMapCollision(this.x, this.y + this.yv, this.radius)) this.y += this.yv;
 	}

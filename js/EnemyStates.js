@@ -1,6 +1,7 @@
 class EnemyStateMachine extends FiniteStateMachine {
 	constructor(body) {
-		let stateList = { 'Idle': new EnemyIdleState(), 'Wandering': new EnemyWanderState(), 'Patrolling': new EnemyPatrolState(), 'Attacking': new EnemyAttackState(), 'Searching': new EnemySearchState };
+		let stateList = {'Idle': new EnemyIdleState(), 'Wandering': new EnemyWanderState(), 'Patrolling': new EnemyPatrolState(), 
+						'Attacking': new EnemyAttackState(), 'Searching': new EnemySearchState(), 'Dying' : new EnemyDyingState() };
 		super(stateList, 'Idle');
 		this.body = body;
 	}
@@ -94,6 +95,10 @@ class EnemyWanderState extends State {
 	}
 
 	checkConditions(character) {
+		if (character.isDying) {
+			return 'Dying';
+		}
+
 		if (character.targetVisible) {
 			return 'Attacking';
 		}
@@ -131,6 +136,9 @@ class EnemyPatrolState extends State {
 	}
 
 	checkConditions(character) {
+		if (character.isDying) {
+			return 'Dying';
+		}
 		if (!character.targetVisible) {
 			return 'Attacking';
 		}
@@ -179,6 +187,9 @@ class EnemyAttackState extends State {
 	}
 
 	checkConditions(character) {
+		if (character.isDying) {
+			return 'Dying';
+		}
 		if (character.target.isDead) {
 			return 'Wandering';
 		}
@@ -261,6 +272,9 @@ class EnemySearchState extends State {
 	}
 
 	checkConditions(character) {
+		if (character.isDying) {
+			return 'Dying';
+		}
 		if (character.target.isDead) {
 			return 'Wandering';
 		}
@@ -278,5 +292,28 @@ class EnemySearchState extends State {
 	onExit(character, to) {
 		character.path = [];
 		if (character.target.isDead) character.target = null;
+	}
+}
+
+class EnemyDyingState extends State {
+	constructor() {
+		super();
+	}
+	onEnter(character, from) { 
+		character.createSprite('white');
+	}
+
+	run(character) { 
+		character.scale -= 0.05;
+		character.altitude -= 0.025;
+		if (character.scale <= 0) character.isDead = true;
+	}
+	checkConditions() { 
+		//End state. No transitions.
+		return;
+	}
+	
+	onExit() {
+		return;
 	}
 }
