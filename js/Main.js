@@ -85,6 +85,7 @@ class GameOver extends State {
             canvasContext.globalAlpha = smoothStart(alpha, 3);
             this.timer++;
         }
+        
         canvasContext.fillStyle = lerpRGB('rgb(255,0,0)', 'rgb(255, 255, 255)', smoothStart(alpha, 3));
         canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -104,7 +105,7 @@ class GameOver extends State {
     }
 
     checkConditions() {
-        if (mouseHeld[0]) {
+        if (this.timer >= 100 && mouseClicked(0)) {
             return 'Title Screen';
         }
     }
@@ -120,6 +121,7 @@ function initRenderLoop() {
 
     Game.start()
     setInterval(function () {
+        pollInput();
         Game.update();                     
     }, 1000 / framesPerSecond);
 }

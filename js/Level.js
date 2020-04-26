@@ -717,8 +717,13 @@ class LevelTransition extends State {
                 }
                 break;
             case 1:
-                if (this.timer >= 100 && mouseHeld[0]) {
-                    this.loadNextLevel();
+                if (mouseClicked(0)) {
+                    if (this.timer < 98 ) {
+                        this.timer = 98;
+                    }
+                    if (this.timer >= 100) {
+                        this.loadNextLevel();
+                    }
                 }
                 break;
             default:

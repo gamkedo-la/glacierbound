@@ -49,7 +49,7 @@ class Player {
         this.updateCollisions();
         this.castAllRays();
         if (this.timeToShoot > 0) this.timeToShoot--;
-        if (this.keyHeld_Fire) this.fireWeapon();
+        if (this.keyHeld_Fire || mouseHeld(0)) this.fireWeapon();
         this.rotationAngle = normalizeAngle(this.rotationAngle);
     }
 

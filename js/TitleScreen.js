@@ -7,7 +7,6 @@ class TitleScreen extends State {
         this.startButton = {x: canvas.width / 2 - 50, y: canvas.height - 160, w: 100, h: 30};
         this.creditsButton = {x: canvas.width / 2 - 50, y: canvas.height - 130, w: 100, h: 30};
         this.showingCredits = false;
-        this.clickHeldPrevFrame = false; // to prevent holding from passing between menus
     }
 
     onEnter() {
@@ -25,11 +24,8 @@ class TitleScreen extends State {
     control() {
         if (!mouseEnabled || mousePos === null) return;
 
-        if(this.showingCredits) { // click anywhere to exit
-            if(mouseHeld[0] && this.clickHeldPrevFrame == false) { // clicking?
-                this.showingCredits = false;
-            }
-            this.clickHeldPrevFrame = mouseHeld[0];
+        if(this.showingCredits && mouseClicked(0)) { // click anywhere to exit
+            this.showingCredits = false;
             return;
         }
     
@@ -45,7 +41,7 @@ class TitleScreen extends State {
             this.creditsHighlighted = false;
         }
 
-        if(this.timer <= 0 && mouseHeld[0] && this.clickHeldPrevFrame == false) { // clicking?
+        if(this.timer <= 0 && mouseClicked(0)) { // clicking?
         //Start game
             if (this.startHighlighted) {
                 resetMouse();
@@ -59,8 +55,6 @@ class TitleScreen extends State {
                 this.showingCredits = true;
             }
         }
-
-        this.clickHeldPrevFrame = mouseHeld[0];
     }
 
     draw() {

@@ -26,6 +26,10 @@ function initInput() {
   initMouse();
 }
 
+function pollInput() {
+  pollMouseButtons();
+}
+
 function setKeyHoldState(thisKey, setTo) {
   if (thisKey == player.controlKeyForStrafeLeft) player.keyHeld_Left = setTo;
 

@@ -298,6 +298,7 @@ class EnemySearchState extends State {
 class EnemyDyingState extends State {
 	constructor() {
 		super();
+		this.name = 'Dying'
 	}
 	onEnter(character, from) { 
 		character.createSprite('white');
@@ -312,7 +313,7 @@ class EnemyDyingState extends State {
 		//End state. No transitions.
 		return;
 	}
-	
+
 	onExit() {
 		return;
 	}

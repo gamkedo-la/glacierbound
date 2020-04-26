@@ -82,6 +82,7 @@ class Character extends GameObject {
 	}
 
 	takeDamage(howMuch, from) {
+		if (this.isDying) return;
 		this.justDamaged = 6;
 		this.health -= howMuch;
 		this.damagedBy = from;
