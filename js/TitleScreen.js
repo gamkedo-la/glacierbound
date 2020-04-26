@@ -47,6 +47,10 @@ class TitleScreen extends State {
                 resetMouse();
                 player.health = 100;
                 player.armor = 0;
+                player.healthPickup = 0;
+                player.armorPickup = 0;
+                player.dBoost1Pickup = 0;
+                player.dBoost2Pickup = 0;
                 loadLevel(0);
                 moveEverything();
                 this.timer++;

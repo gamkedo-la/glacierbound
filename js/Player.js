@@ -38,10 +38,6 @@ class Player {
         this.moveSway = 0;
         this.keys = [];
         this.timeToShoot = 10;
-        this.healthPickup = 0;
-        this.armorPickup = 0;
-        this.dBoost1Pickup = 0;
-        this.dBoost2Pickup = 0;
     }
 
     update() {
