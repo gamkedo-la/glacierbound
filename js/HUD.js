@@ -208,9 +208,11 @@ function drawPlayerHealth() {
 
 function drawPlayerKeys() {
     let keyAnchorX = canvas.width - 192 - 16;
-    if (player.keys[0]) canvasContext.drawImage(spriteList['blueKey'], 0, 0, 64, 64, keyAnchorX, canvas.height-80, 64, 64);
-    if (player.keys[1]) canvasContext.drawImage(spriteList['redKey'], 0, 0, 64, 64, keyAnchorX + 64, canvas.height-80, 64, 64);
-    if (player.keys[2]) canvasContext.drawImage(spriteList['greenKey'], 0, 0, 64, 64, keyAnchorX + 128, canvas.height-80, 64, 64);
+    canvasContext.imageSmoothingEnabled = false;
+    if (player.keys[0]) canvasContext.drawImage(spriteList['blueKey'], 0, 0, 16, 16, keyAnchorX, canvas.height-80, 64, 64);
+    if (player.keys[1]) canvasContext.drawImage(spriteList['redKey'], 0, 0, 16, 16, keyAnchorX + 64, canvas.height-80, 64, 64);
+    if (player.keys[2]) canvasContext.drawImage(spriteList['greenKey'], 0, 0, 16, 16, keyAnchorX + 128, canvas.height-80, 64, 64);
+    canvasContext.imageSmoothingEnabled = true;
 }
 
 function toggleDebugMode(){

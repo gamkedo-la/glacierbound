@@ -102,7 +102,7 @@ class GameObject {
             //Add half of the division to center the range for each rotation frame
             rotationAngle += (Math.PI / this.pic.rotationFrames);
             //Convert to a range from 0 to the number of rotation frames
-            let frameY = normalizeAngle(rotationAngle) / (Math.PI*2) * this.pic.rotationFrames;
+            let frameY = this.pic.rotationFrames ? normalizeAngle(rotationAngle) / (Math.PI*2) * this.pic.rotationFrames : 0;
             frameY = Math.floor(frameY) * this.pic.frameHeight;
             canvasContext.drawImage(this.pic, frameX, frameY, this.pic.frameWidth, this.pic.frameHeight, drawX - (drawWidth * this.scale) / 2, drawY, drawWidth * this.scale, drawHeight * this.scale);
 

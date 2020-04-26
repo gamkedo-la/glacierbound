@@ -4,6 +4,7 @@ class Item extends GameObject {
         this.type = type;
         this.touched = false;
         this.setSprite(type);
+        this.bobTimer = 0;
         this.tint = this.createTint(currentLevel.colors.sky);
     }
 
@@ -49,6 +50,23 @@ class Item extends GameObject {
         this.die();
     }
 
+    draw() {
+        const altitude = this.altitude;
+        if (this.isBobEnabled()) {
+            this.bobTimer++;
+            if (this.bobTimer > 100) {
+                this.bobTimer = 0;
+            }
+            this.altitude += Math.cos(this.bobTimer/100 * Math.PI * 2) / 8;
+        }
+        
+        canvasContext.imageSmoothingEnabled = false;
+        super.draw();
+        canvasContext.imageSmoothingEnabled = true;
+
+        this.altitude = altitude;
+    }
+
     updateCollision(other) {
         if (other === player) this.activate();
     }
@@ -85,5 +103,9 @@ class Item extends GameObject {
         if (type === undefined || type === null) {
             this.type = 'health'
         } else this.type = type;
+    }
+
+    isBobEnabled() {
+        return this.type === 'blue key' || this.type === 'red key' || this.type === 'green key';
     }
 }

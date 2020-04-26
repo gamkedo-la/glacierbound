@@ -165,7 +165,7 @@ function hudTransition(weight) {
     player.drawHands();
     canvasContext.translate(0, -handsOffset);
 
-    let hudOffset = lerp(-210, 0, smoothStart(weight, 1));
+    let hudOffset = lerp(-230, 0, smoothStart(weight, 1));
     canvasContext.translate(hudOffset, 0);
     drawPlayerArmor();
     drawPlayerHealth();

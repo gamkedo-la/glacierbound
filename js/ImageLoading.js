@@ -34,9 +34,9 @@ function loadImages() {
 		{spriteName: 'damageboost1pickup', fileName: 'itempickups/DamageBoost1Pickup.png'},
 		{spriteName: 'damageboost2pickup', fileName: 'itempickups/DamageBoost2Pickup.png'},
 		//keys
-		{spriteName: 'blueKey', fileName: 'keys/bluekey.png', rotationFrames: 8, frameWidth: 64, frameHeight: 64},
-		{spriteName: 'greenKey', fileName: 'keys/greenkey.png', rotationFrames: 8, frameWidth: 64, frameHeight: 64},
-		{spriteName: 'redKey', fileName: 'keys/redkey.png', rotationFrames: 8, frameWidth: 64, frameHeight: 64},
+		{spriteName: 'blueKey', fileName: 'keys/bluekey.png', animationFrames: 8, frameWidth: 16, frameHeight: 16},
+		{spriteName: 'greenKey', fileName: 'keys/greenkey.png', animationFrames: 8, frameWidth: 16, frameHeight: 16},
+		{spriteName: 'redKey', fileName: 'keys/redkey.png', animationFrames: 8, frameWidth: 16, frameHeight: 16},
 		//projectiles
 		{spriteName: 'projectile', fileName: 'projectiles/projectile_normal.png'},
 		{spriteName: 'projectile_boost1', fileName: 'projectiles/projectile_boost1.png'},
