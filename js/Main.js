@@ -101,7 +101,7 @@ class GameOver extends State {
         canvasContext.fillStyle = lerpRGB('rgb(255, 0, 0)', 'rgb(63,63,139)', smoothStart(alpha, 3));
         canvasContext.font = '40px Arial';
         canvasContext.testAlign = 'center';
-        canvasContext.fillText('CLICK TO RESTART', canvas.width/2, canvas.height-60);
+        canvasContext.fillText('Click to Restart', canvas.width/2, canvas.height-60);
 
         canvasContext.globalAlpha = 1;
     }

@@ -87,7 +87,7 @@ class Character extends GameObject {
 		this.health -= howMuch;
 		this.damagedBy = from;
 		if (this.health <= 0) {
-			if (from == player) currentLevel.stats.enemiesKilled++;
+			currentLevel.stats.enemiesKilled++;
 			this.die();
 		}
 		
