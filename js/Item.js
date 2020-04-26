@@ -36,11 +36,11 @@ class Item extends GameObject {
                 break;
             case 'boost1':
                 player.dBoost1Pickup++;
-                messageConsole.push('Damage Boost Type 1 acquired. Press 3 to use.', 'orangered');
+                messageConsole.push('Damage Boost Type 1 acquired. Press 3 to use.', 'coral');
                 break;
             case 'boost2':
                 player.dBoost2Pickup++;
-                messageConsole.push('Damage Boost Type 2 acquired. Press 4 to activate.', 'magenta');
+                messageConsole.push('Damage Boost Type 2 acquired. Press 4 to activate.', 'hotpink');
                 break;
             default:
                 break;

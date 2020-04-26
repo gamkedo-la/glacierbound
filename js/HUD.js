@@ -15,12 +15,12 @@ var messageConsole = {
         if (weight <= 0) alpha = 1 - smoothStart(Math.abs(weight/halfTime), 12);
         else alpha = 1 - smoothStop(weight/halfTime, 12);
         
-        canvasContext.font = '30px Arial';
+        canvasContext.font = '20px Arial';
         let textSize = canvasContext.measureText(this.message);
 
         canvasContext.globalAlpha = alpha/1.5;
         canvasContext.fillStyle = '#23233F';
-        canvasContext.fillRect(canvas.width/2 - textSize.width/2 - 6, canvas.height - 45, textSize.width + 12, 45);
+        canvasContext.fillRect(canvas.width/2 - textSize.width/2 - 6, canvas.height - 40, textSize.width + 12, 35);
 
 
         canvasContext.globalAlpha = alpha;

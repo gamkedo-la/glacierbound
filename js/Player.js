@@ -187,9 +187,9 @@ class Player {
                     player.dBoost1Pickup--;
                     player.dBoost1active++;
                     if (player.dBoost1active == 1) {    
-                        messageConsole.push('Damage of next attack increased by '+this.dBoost1damageMultiplier+'00%.', 'orangered');
+                        messageConsole.push('Damage of next attack increased by '+this.dBoost1damageMultiplier+'00%.', 'coral');
                     } else {
-                        messageConsole.push('Damage of next '+player.dBoost1active+' attacks increased by '+this.dBoost1damageMultiplier+'00%.', 'orangered');
+                        messageConsole.push('Damage of next '+player.dBoost1active+' attacks increased by '+this.dBoost1damageMultiplier+'00%.', 'coral');
                     }
                 }
                 break;
@@ -201,7 +201,7 @@ class Player {
                        messageConsole.push("Damage Boost Type 2 is still active.", 'lightblue'); 
                     } else {
                         player.dBoost2Pickup--;
-                        messageConsole.push('Damage increased by '+this.dBoost2damageMultiplier+'00% for the next '+this.dBoost2duration+' seconds.', 'magenta');
+                        messageConsole.push('Damage increased by '+this.dBoost2damageMultiplier+'00% for the next '+this.dBoost2duration+' seconds.', 'hotpink');
                         player.dBoost2active = true;
 
                         //timer
