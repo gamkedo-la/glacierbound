@@ -10,6 +10,7 @@ const KEY_LETTER_D = 68;
 const KEY_LETTER_E = 69;
 const KEY_LETTER_L = 76;
 const KEY_LETTER_M = 77;
+const KEY_LETTER_P = 80;
 const KEY_ALT = 18;
 const KEY_SPACE = 32;
 const KEY_NUMBER_1 =  49; //Health Pick-up activate
@@ -46,6 +47,8 @@ function setKeyHoldState(thisKey, setTo) {
   if (thisKey === KEY_LETTER_L && setTo === true) toggleLevelEditMode();
 
   if (thisKey === KEY_LETTER_M && setTo === true) toggleDebugMode();
+
+  if (thisKey == KEY_LETTER_P && setTo === true) pauseGame();
 
   if (thisKey == KEY_NUMBER_1 && setTo === true) player.activatePickUp('health');
   if (thisKey == KEY_NUMBER_2 && setTo === true) player.activatePickUp('armor');

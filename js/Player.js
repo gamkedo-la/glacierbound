@@ -23,6 +23,7 @@ class Player {
         this.dBoost2duration  = 10;
         this.dBoost2damageMultiplier = 2;
         this.dBoost2timeLeft = 0;
+        this.dboost2Timer;
 
         this.reset();
     }
@@ -199,24 +200,33 @@ class Player {
                         player.dBoost2Pickup--;
                         messageConsole.push('Damage increased by '+this.dBoost2damageMultiplier+'00% for the next '+this.dBoost2duration+' seconds.', 'hotpink');
                         player.dBoost2active = true;
-
-                        //timer
                         player.dBoost2timeLeft = this.dBoost2duration;
-                        var boost2Timer = setInterval(function(){
-                          if(player.dBoost2timeLeft <= 0){
-                            clearInterval(boost2Timer);
-                            player.dBoost2active = false;
-                            messageConsole.push("Damage Boost Type 2 has ended.", 'red');
-                          }
-                          player.dBoost2timeLeft--;
-                          console.log("Time left on Damage Boost Type 2: "+player.dBoost2timeLeft);
-                        }, 1000);
+                        this.pauseBoost2Timer();
                     }
                 }
                 break;
             default:
                 break;
         }        
+    }
+
+    pauseBoost2TimerPause(){
+            console.log("Timer Paused!")
+            player.dboost2Timer = clearInterval(player.dboost2Timer);
+    }
+
+    pauseBoost2Timer(){
+            if(player.dBoost2timeLeft > 0) {
+            player.dboost2Timer = setInterval(function(){ 
+                              if(player.dBoost2timeLeft <= 0){
+                                clearInterval(player.dboost2Timer);
+                                player.dBoost2active = false;
+                                messageConsole.push("Damage Boost Type 2 has ended.", 'red');
+                              }
+                              player.dBoost2timeLeft--;
+                              console.log("Time left on Damage Boost Type 2: "+player.dBoost2timeLeft);
+                            }, 1000);
+            }
     }
 
     updateMouse() {

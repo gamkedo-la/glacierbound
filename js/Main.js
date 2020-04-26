@@ -20,7 +20,9 @@ var level2;
 var objects = [];
 var testObject;
 var testObject2;
- 
+var gamePaused = false;
+var gameRunning;
+
 window.onload = function () {
     canvas = document.getElementById('gameCanvas');
     canvasContext = canvas.getContext('2d');
@@ -120,12 +122,28 @@ function initRenderLoop() {
     initInput();
 
     Game.start()
-    setInterval(function () {
+    gameRunning = setInterval(function () {
         pollInput();
-        Game.update();                     
+        Game.update();            
     }, 1000 / framesPerSecond);
 }
 
+function pauseGame() {
+  var framesPerSecond = 60;  
+    if (!gamePaused && Game.currentState.name == 'Game Started') {
+    gameRunning = clearInterval(gameRunning);
+    player.pauseBoost2TimerPause();
+    gamePaused = true;
+    pauseScreen();
+  } else if (gamePaused) {
+    gameRunning = setInterval(function () {
+        pollInput();
+        Game.update();
+    }, 1000 / framesPerSecond);
+    player.pauseBoost2Timer();
+    gamePaused = false;
+  }
+}
 function initTestObjects() {
     objects.length = 0;
     testObject = new Character(300, 275, spriteList['enemy1'], 0, 1, 0);
@@ -240,4 +258,16 @@ function removeDead() {
     for (let d = objects.length - 1; d >= 0; d--) {
         if (objects[d].isDead) objects.splice(d, 1);
     }
+}
+
+function pauseScreen(){
+        canvasContext.globalAlpha = 0.5;
+        canvasContext.fillStyle = '#23233F';
+        canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+        canvasContext.globalAlpha = 1;
+        canvasContext.textAlign = 'center';
+        canvasContext.fillStyle = 'dodgerblue';
+        canvasContext.font = '50px Arial';
+        canvasContext.fillText("GAME PAUSED", canvas.width / 2, canvas.height/2);
 }
