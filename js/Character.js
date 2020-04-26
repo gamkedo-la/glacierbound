@@ -1,5 +1,5 @@
 class Character extends GameObject {
-	constructor(x, y, pic, altitude, scale, angle, health = 100, timeToShoot = 96) {
+	constructor(x, y, pic, projectile_pic, altitude, scale, angle, health = 100, timeToShoot = 96) {
 		super(x, y, 0, pic, altitude, scale, angle);
 		if (this.pic) this.damagedPic = this.createTint('red');
 		this.brain = new EnemyStateMachine(this);
@@ -18,13 +18,13 @@ class Character extends GameObject {
 		this.justDamaged = 0; //overlay cooldown
 		this.initialTimeToShoot = timeToShoot;
 		this.timeToShoot = timeToShoot;
+		this.projPic = projectile_pic;
 	}
 
 	attack() {
         if (this.timeToShoot > 0) return;
-        let newProj = new Projectile(this.x, this.y, 5, null, -0.5, 0.2, this.direction, false);
+        let newProj = new Projectile(this.x, this.y, 5, this.projPic, -0.5, 0.2, this.direction, false);
         newProj.shootFrom(this, 20);
-        newProj.createSprite('orange');
         objects.push(newProj);
         this.timeToShoot = this.initialTimeToShoot;
 		fireBallShot.play();

@@ -558,11 +558,11 @@ function loadLevelObjects(levelData) {
         let oTimeToShoot = object.timeToShoot ? object.timeToShoot : 96;
         switch(object.type) {
             case 'enemy1':
-                newObject = new Character(ox, oy, spriteList['enemy1'], -0.2, 0.8, oAngle, oHealth, oTimeToShoot);
+                newObject = new Character(ox, oy, spriteList['enemy1'], spriteList['enemy1_projectile'], -0.2, 0.8, oAngle, oHealth, oTimeToShoot);
                 currentLevel.stats.totalEnemies++;
                 break;
             case 'enemy2':
-                newObject = new Character(ox, oy, spriteList['enemy2'], -0.2, 0.8, oAngle, oHealth, oTimeToShoot);
+                newObject = new Character(ox, oy, spriteList['enemy2'], spriteList['enemy2_projectile'], -0.2, 0.8, oAngle, oHealth, oTimeToShoot);
                 currentLevel.stats.totalEnemies++;
                 break;
             case 'health':

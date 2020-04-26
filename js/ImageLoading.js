@@ -42,6 +42,8 @@ function loadImages() {
 		{spriteName: 'projectile_boost1', fileName: 'projectiles/projectile_boost1.png'},
 		{spriteName: 'projectile_boost2', fileName: 'projectiles/projectile_boost2.png'},
 		{spriteName: 'projectile_comboboost', fileName: 'projectiles/projectile_comboboost.png'},
+		{spriteName: 'enemy1_projectile', fileName: 'projectiles/enemy1_projectile.png'},
+		{spriteName: 'enemy2_projectile', fileName: 'projectiles/enemy2_projectile.png'},
 		//HUD
 		{spriteName: 'healthbar', fileName: 'HUD/healthbar.png'},
 		{spriteName: 'armorbar', fileName: 'HUD/armorbar.png'},
