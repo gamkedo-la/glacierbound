@@ -43,6 +43,7 @@ class GameStarted extends State {
     }
 
     onEnter() {
+        console.log("GameStarted state enter");
         this.music.play();
         return;
     }
@@ -67,6 +68,7 @@ class GameStarted extends State {
     }
 
     onExit() {
+        console.log("GameStarted state exit");
         this.music.stop();
         this.levelEdit = false;
     }

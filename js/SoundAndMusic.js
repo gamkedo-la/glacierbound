@@ -102,12 +102,14 @@ function BackgroundMusicClass(filenameWithPath) {
 		musicSound.loop = loop;
 		musicSound.play();
 		allBGMs.push(this); // Make sure changes applied to BGM reach this object.
+		console.log("Playing " + filePath);
 	};
 
 	this.stop = function() {
 		if(musicSound != null)
 		{
 			musicSound.pause();
+			musicSound = null;
 		}
 
 		// Remove from BGMs if not playing.

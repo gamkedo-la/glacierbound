@@ -13,6 +13,7 @@ class TitleScreen extends State {
     }
 
     onEnter() {
+        console.log("TitleScreen state enter");
         this.startHighlighted = false;
         this.creditsHighlighted = false;
         this.controlsHighlighted = false;
@@ -154,6 +155,7 @@ class TitleScreen extends State {
     }
 
     onExit() {
+        console.log("TitleScreen state exit");
         this.music.stop();
         resetMouse();
     }
