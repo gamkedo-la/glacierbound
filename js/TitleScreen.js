@@ -183,26 +183,35 @@ function drawControls(){
         var spaceBetweenTitleAndList =  70;
         var firstText = titleHeight + spaceBetweenTitleAndList;
         var textHeight = 25;
-        var listLeftPad =   250;
+        var usageLeftPad =   250;
+        var controlsLeftPad = 500;
 
         canvasContext.fillStyle = 'white';
         canvasContext.textAlign = 'center';
         canvasContext.font = '30px Arial';
         canvasContext.fillText("CONTROLS", canvas.width / 2, titleHeight);
 
+        var controlsList = [
+            {control: 'W', usage: 'Move Forward'},
+            {control: 'A', usage: 'Strafe Left'},
+            {control: 'S', usage: 'Move Backward'},
+            {control: 'D', usage: 'Strafe Right'},
+            {control: 'E / Mouseclick', usage: 'Fire'},
+            {control: 'Spacebar', usage: 'Open Door'},
+            {control: 'P', usage: 'Pause Game'},
+            {control: '1', usage: 'Use Health Pack'},
+            {control: '2', usage: 'Use Shield'},
+            {control: '3', usage: 'Use Damage Boost Type 1'},
+            {control: '4', usage: 'Use Damage Boost Type 2'},
+        ] 
+
         canvasContext.textAlign = 'left';
-        canvasContext.font = '20px Arial';
-        canvasContext.fillText("W                  Move Forward", listLeftPad, firstText);
-        canvasContext.fillText("A                   Move Left", listLeftPad, firstText + textHeight);
-        canvasContext.fillText("S                   Move Backward", listLeftPad, firstText + textHeight*2);
-        canvasContext.fillText("D                   Move Right", listLeftPad, firstText + textHeight*3);
-        canvasContext.fillText("E                   Fire", listLeftPad, firstText + textHeight*4);
-        canvasContext.fillText("P                   Pause Game", listLeftPad, firstText + textHeight*5);
-        canvasContext.fillText("1                   Use Health Pack", listLeftPad, firstText + textHeight*6);
-        canvasContext.fillText("2                   Use Shield", listLeftPad, firstText + textHeight*7);
-        canvasContext.fillText("3                   Use Damage Boost Type 1", listLeftPad, firstText + textHeight*8);
-        canvasContext.fillText("4                   Use Damage Boost Type 2", listLeftPad, firstText + textHeight*9);
-        canvasContext.fillText("Mouseclick          Fire", listLeftPad, firstText + textHeight*10);
+        canvasContext.font = '18px Arial';
+
+        for (i = 0; i < controlsList.length; i++){
+            canvasContext.fillText(controlsList[i].usage, usageLeftPad, firstText +  textHeight * i);
+            canvasContext.fillText(controlsList[i].control, controlsLeftPad, firstText +  textHeight * i);         
+        }
 }
 
 //Credit Screen
