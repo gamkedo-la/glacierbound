@@ -4,7 +4,7 @@ class Item extends GameObject {
         this.type = type;
         this.touched = false;
         this.setSprite(type);
-        this.createTint(currentLevel.colors.sky);
+        this.tint = this.createTint(currentLevel.colors.sky);
     }
 
     activate() {
@@ -34,6 +34,14 @@ class Item extends GameObject {
                 messageConsole.push('Green Key acquired.', 'green');
                 player.keys[2] = true;
                 break;
+            case 'boost1':
+                player.dBoost1Pickup++;
+                messageConsole.push('Damage Boost Type 1 acquired. Press 3 to use.', 'coral');
+                break;
+            case 'boost2':
+                player.dBoost2Pickup++;
+                messageConsole.push('Damage Boost Type 2 acquired. Press 4 to activate.', 'hotpink');
+                break;
             default:
                 break;
         }
@@ -61,6 +69,12 @@ class Item extends GameObject {
                 break;
             case 'green key':
                 this.pic = spriteList['greenKey'];
+                break;
+            case 'boost1':
+                this.pic = spriteList['damageboost1pickup'];
+                break;
+            case 'boost2':
+                this.pic = spriteList['damageboost2pickup'];
                 break;
             default:
                 break;
