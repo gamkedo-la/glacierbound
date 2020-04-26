@@ -221,6 +221,8 @@ class EnemySearchState extends State {
 	}
 
 	run(character) {
+		let destIndex = Math.floor(character.destination.x / TILE_SIZE) + Math.floor(character.destination.y / TILE_SIZE) * MAP_NUM_COLS;
+		let currentIndex = Math.floor(character.x / TILE_SIZE) + Math.floor(character.y / TILE_SIZE) * MAP_NUM_COLS;
 		let deltaX = character.destination.x - character.x;
 		let deltaY = character.destination.y - character.y;
 		let dist = Math.hypot(deltaX, deltaY);
@@ -230,9 +232,14 @@ class EnemySearchState extends State {
 
 		let dp = dotProduct(Math.cos(character.direction - Math.PI / 2), Math.sin(character.direction - Math.PI / 2), deltaX, deltaY);
 
+
 		if (dp > 0) character.direction -= Math.PI / 45;
 		if (dp < 0) character.direction += Math.PI / 45;
 
+		let checkIndex = Math.floor(currentLevel.mapGrid[currentIndex]) === 2 ? currentIndex : destIndex;
+		if (Math.floor(currentLevel.mapGrid[checkIndex]) === 2 && currentLevel.doorOffsets[checkIndex] === 64)
+			currentLevel.toggleDoor(destIndex);
+		
 		if (dist > TILE_SIZE / 4) {
 			character.moveSpeed = 1;
 		} else if (character.path.length > 1) {

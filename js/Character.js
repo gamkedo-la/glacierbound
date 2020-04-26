@@ -92,10 +92,10 @@ class Character extends GameObject {
 		let deltaY = this.destination.y - this.y;
 
 		if (Math.abs(this.xv) > Math.abs(this.deltaX)) this.xv = deltaX;
-		else if (!objectMapCollision(this.x + this.xv, this.y, this.radius)) this.x += this.xv;
-
 		if (Math.abs(this.yv) > Math.abs(this.deltaY)) this.yv = deltaY;
-		else if (!objectMapCollision(this.x, this.y + this.yv, this.radius)) this.y += this.yv;
+		
+		if (!objectMapCollision(this.x + this.xv, this.y, this.radius)) this.x += this.xv;
+		if (!objectMapCollision(this.x, this.y + this.yv, this.radius)) this.y += this.yv;
 	}
 
 	update() {
