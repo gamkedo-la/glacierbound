@@ -140,6 +140,7 @@ function hudTransition(weight) {
     canvasContext.translate(hudOffset, 0);
     drawPlayerArmor();
     drawPlayerHealth();
+    drawProjectileHUD();
     canvasContext.translate(-hudOffset, 0);
     
     canvasContext.translate(-hudOffset, 0);
