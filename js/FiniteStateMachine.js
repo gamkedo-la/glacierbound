@@ -3,7 +3,6 @@ class FiniteStateMachine {
 		this.states = stateList;
 		this.currentState = stateList[initialState];
 		this.isActive = true;
-		this.start();
 	}
 
 	start() {
