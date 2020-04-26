@@ -23,6 +23,7 @@ var testObject2;
 var gamePaused = false;
 var gameRunning;
 
+
 window.onload = function () {
     canvas = document.getElementById('gameCanvas');
     canvasContext = canvas.getContext('2d');
@@ -38,9 +39,11 @@ class GameStarted extends State {
     constructor() {
         super();
         this.name = 'Game Started';
+        this.music = new BackgroundMusicClass("klaim-banquise"); // TODO: change the music depending on the level
     }
 
     onEnter() {
+        this.music.play();
         return;
     }
 
@@ -64,6 +67,7 @@ class GameStarted extends State {
     }
 
     onExit() {
+        this.music.stop();
         this.levelEdit = false;
     }
 }
@@ -87,12 +91,12 @@ class GameOver extends State {
             canvasContext.globalAlpha = smoothStart(alpha, 3);
             this.timer++;
         }
-        
+
         canvasContext.fillStyle = lerpRGB('rgb(255,0,0)', 'rgb(255, 255, 255)', smoothStart(alpha, 3));
         canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
         let graphic = spriteList['gameover'],
-            drawRatio = graphic.width >= canvas.width ? canvas.width/graphic.width : graphic.width/canvas.width, 
+            drawRatio = graphic.width >= canvas.width ? canvas.width/graphic.width : graphic.width/canvas.width,
             drawWidth = graphic.width * drawRatio, drawHeight = graphic.height * drawRatio,
             drawY = (canvas.height - drawHeight) / 2;
 
@@ -124,12 +128,12 @@ function initRenderLoop() {
     Game.start()
     gameRunning = setInterval(function () {
         pollInput();
-        Game.update();            
+        Game.update();
     }, 1000 / framesPerSecond);
 }
 
 function pauseGame() {
-  var framesPerSecond = 60;  
+  var framesPerSecond = 60;
     if (!gamePaused && Game.currentState.name == 'Game Started') {
     gameRunning = clearInterval(gameRunning);
     player.pauseBoost2TimerPause();
@@ -148,7 +152,7 @@ function initTestObjects() {
     objects.length = 0;
     testObject = new Character(300, 275, spriteList['enemy1'], 0, 1, 0);
     objects.push(testObject);
-	
+
 	testObject2 = new Character(500, 100, spriteList['enemy2'], 0, 1, 0);
     objects.push(testObject2);
 
