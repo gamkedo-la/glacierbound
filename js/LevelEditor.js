@@ -91,6 +91,7 @@ function setSelectedTile() {
 }
 
 function toggleLevelEditMode() {
+    return; //level edit mode disabled
     if (Game.currentState.name === 'Game Started') {
         Game.currentState.levelEdit = true;
     } else {
