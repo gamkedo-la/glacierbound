@@ -662,10 +662,12 @@ class LevelTransition extends State {
         canvasContext.fillStyle = 'white';
         if (this.animation === 1) this.drawStats();
         if (this.animation === 2) {
-            let newLevel = currentLevel.name ? currentLevel.name : 'Level ' + (currentLevel.index + 1);
-            canvasContext.font = '60px Arial';
-            canvasContext.textAlign = 'center';
-            canvasContext.fillText('Entering ' + newLevel, canvas.width/2, canvas.height/2);
+            if (!this.endGame) {
+                let newLevel = currentLevel.name ? currentLevel.name : 'Level ' + (currentLevel.index + 1);
+                canvasContext.font = '60px Arial';
+                canvasContext.textAlign = 'center';
+                canvasContext.fillText('Entering ' + newLevel, canvas.width/2, canvas.height/2);
+            }
         }
 
         this.updateTimer();
@@ -688,18 +690,19 @@ class LevelTransition extends State {
         this.animation = 2;
         player.reset();
         if (currentLevel.index < levelData.length - 1) loadLevel(currentLevel.index + 1);
-        else loadLevel(0);
+        else (this.endGame = true);
         moveEverything();
     }
 
     animateAlpha() {
+        let weight = 1;
         switch(this.animation) {
             case 0: //Transition from completed level
                 canvasContext.globalAlpha = 1;
                 currentLevel.drawBackground();
                 render3DProjection();
     
-                let weight = this.timer/60;
+                weight = this.timer/60;
                 hudTransition(1 - weight);
                 canvasContext.globalAlpha = smoothStart(weight, 3);
                 break;
@@ -707,12 +710,15 @@ class LevelTransition extends State {
                 canvasContext.globalAlpha = 1;
                 break;
             case 2: //Transition to next level
-                if (this.timer > 60) {
+                if (this.endGame) {
+                    weight = this.timer/120;
+                    colorRect(0, 0, canvas.width, canvas.height, '#0F0F28');
+                    canvasContext.globalAlpha = 1 - smoothStart(weight, 3);
+                } else if (this.timer > 60) {
+                    weight = (this.timer - 60) / 60;
                     canvasContext.globalAlpha = 1;
                     currentLevel.drawBackground();
                     render3DProjection();
-        
-                    let weight = (this.timer - 60) / 60;
                     hudTransition(weight);
                     canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
                 }
@@ -748,7 +754,9 @@ class LevelTransition extends State {
 
 	checkConditions() {
         if (this.animation === 2 && this.timer >= 120) {
-            return 'Game Started';
+            if (!this.endGame) {
+                return 'Game Started';
+            } else return 'Conclusion'   
         }
     }
 	onExit() {

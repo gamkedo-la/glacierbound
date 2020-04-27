@@ -31,7 +31,14 @@ window.onload = function () {
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
 
     player = new Player();
-    Game = new FiniteStateMachine({'Title Screen': new TitleScreen(), 'Level Transition': new LevelTransition, 'Game Started': new GameStarted(), 'Level Edit': new LevelEdit(), 'Game Over': new GameOver()}, 'Title Screen');
+    Game = new FiniteStateMachine({ 'Title Screen': new TitleScreen(), 
+                                    'Introduction': new StoryIntroduction(), 
+                                    'Level Transition': new LevelTransition(), 
+                                    'Game Started': new GameStarted(), 
+                                    'Level Edit': new LevelEdit(), 
+                                    'Game Over': new GameOver(), 
+                                    'Conclusion': new StoryConclusion()
+                                }, 'Title Screen');
     loadImages();
 }
 

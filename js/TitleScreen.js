@@ -109,12 +109,8 @@ class TitleScreen extends State {
         }
 
         if (this.timer > 0) {
-            currentLevel.drawBackground();
-            render3DProjection();
-
+            colorRect(0, 0, canvas.width, canvas.height, '#0F0F28');
             let weight = this.timer/60;
-            hudTransition(weight);
-
             canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
         }
 
@@ -155,7 +151,7 @@ class TitleScreen extends State {
 
     checkConditions() {
         if (this.timer > 60) {
-            return "Game Started";
+            return "Introduction";
         }
     }
 
@@ -297,18 +293,238 @@ function Credits() {
 }
 
 var gameCredits = new Credits();
-var Introduction = ["Once upon a time, an old wizard woke up from a long sleep."," ",
-        "When he regained his senses, his last memory came rushing back. His worst enemy, the White Magician of the Northern Kingdoms, riding his Wonderful Dragon, giving him a fatal blow."," ",
-        "He remembered the pain and rubbed his temples. But then came the image of a young boy."," ",
-        "'The Prince! He must know that I am alive and I should protect him'"," ",
-        "He stood up. 'Where am I? It looks like a crypt. I had better be on the lookout for danger...'", " ",];
 
-var Conclusion = [
-"Surrounded by glass castles and a kind of magic he did not fully understand, the wizard realized he had slept for a longer time than he ever could have imagined. . ",
-"The Great Magicien, his Wonderful Dragon, the Northern Kingdoms and the Prince, all were part of a world which was fading into the past.",
-"But still, looking around, he felt a deep hope.",
-"People were still around, same as they were two thousand years ago! He noticed a 10 year old boy approaching him. His kind face expressed a profound curiosity. ",
-"So the wizard did what he knew to be his duty. So the wizard did was his duty was.",
-"'Sir! Would you agree to be my new Prince?'",
-"The wizard asked. The boy smiled. He nodded. A new story was about to begin.",
-]
+class StoryIntroduction extends State {
+	constructor() {
+        super();
+        this.name = 'Introduction'
+        this.timer = 0;
+        this.text = ["Once upon a time, an old wizard woke up from a long sleep.",
+                    "When he regained his senses, his last memory came rushing back.", 
+                    "His worst enemy, the White Magician of the Northern Kingdoms,", 
+                    "riding his Wonderful Dragon, giving him a fatal blow.",
+                    "He remembered the pain and rubbed his temples.", 
+                    "But then came the image of a young boy.",
+                    "'The Prince! He must know that I am alive and I should protect him'",
+                    "He stood up.", 
+                    "'Where am I? It looks like a crypt. I had better be on the lookout for danger...'",];
+    }
+
+	onEnter() { 
+        this.timer = 0;
+        this.animation = 0;
+    }
+
+    run() {
+        this.animateAlpha();
+        
+        colorRect(0, 0, canvas.width, canvas.height, '#3F3F74');
+        canvasContext.fillStyle = 'white';
+        if (this.animation === 1) {
+            let weight = this.timer/60;
+            let startY = (canvas.height / 2) - (this.text.length * 25) / 2;
+            let displayLength = Math.ceil(lerp(0, this.text.length, weight));
+            canvasContext.font = '16px Arial';
+            canvasContext.textAlign = 'center';
+            for (let t = 0; t < displayLength; t++) {
+                canvasContext.fillText(this.text[t], canvas.width/2, startY + t * 25);
+            }
+            //draw main content
+        } else if (this.animation === 2) {
+            //draw transition to next state
+            canvasContext.font = '60px Arial';
+            canvasContext.textAlign = 'center';
+            canvasContext.fillText('Entering Level 1', canvas.width/2, canvas.height/2);
+        }
+
+        this.updateTimer();
+    }
+
+    loadGame() {
+        this.timer = 0;
+        this.animation = 2;
+        player.reset();
+        loadLevel(0);
+        moveEverything();
+    }
+
+    animateAlpha() {
+        switch(this.animation) {
+            case 0: //Transition from completed level
+                //draw content from previous state
+                //lerp alpha for transition content
+                let weight = this.timer/60;
+                canvasContext.globalAlpha = smoothStart(weight, 3);
+                break;
+            case 1: //Counting stats
+                canvasContext.globalAlpha = 1;
+                break;
+            case 2: //Transition to next level
+                //wait 60 frames (~1 second)
+                if (this.timer > 60) {
+                    //draw content from next state
+                    canvasContext.globalAlpha = 1;
+                    currentLevel.drawBackground();
+                    render3DProjection();
+        
+                    //lerp transition content
+                    let weight = (this.timer - 60) / 60;
+                    hudTransition(weight);
+                    canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    updateTimer() {
+        this.timer++;
+        switch(this.animation) {
+            case 0:
+                if (this.timer > 60) {
+                    this.animation++;
+                    this.timer = 0;
+                }
+                break;
+            case 1:
+                this.timer -= 0.95;
+                if (mouseClicked(0)) {
+                    if (this.timer < 98 ) {
+                        //interrupt content animation
+                        this.timer = 98;
+                    }
+                    if (this.timer >= 100) {
+                        //load content for next state
+                        this.loadGame();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+	checkConditions() {
+        if (this.animation === 2 && this.timer >= 120) {
+            return 'Game Started';
+        }
+    }
+	onExit() {
+        resetMouse();
+    }
+}
+
+class StoryConclusion extends State {
+	constructor() {
+        super();
+        this.name = 'Conclusion'
+        this.timer = 0;
+        this.text = ["Surrounded by glass castles and a kind of magic he did not fully understand,",
+                    "the wizard realized he had slept far longer than he ever could have imagined. . ",
+                    "The Great Magicien, his Wonderful Dragon, the Northern Kingdoms and the Prince,", 
+                    "all were part of a world which was fading into the past.",
+                    "But still, looking around, he felt a deep hope.",
+                    "People were still around, same as they were two thousand years ago!", 
+                    "He noticed a 10 year old boy approaching him. His kind face expressed a profound curiosity. ",
+                    "So the wizard did what he knew to be his duty. So the wizard did was his duty was.",
+                    "'Sir! Would you agree to be my new Prince?'",
+                    "The wizard asked. The boy smiled. He nodded. A new story was about to begin.",
+                    ]
+    }
+
+	onEnter() { 
+        this.timer = 0;
+        this.animation = 0;
+    }
+
+    run() {
+        this.animateAlpha();
+        
+        colorRect(0, 0, canvas.width, canvas.height, '#3F3F74');
+        if (this.animation > 0) {
+            canvasContext.fillStyle = 'white';
+            let weight = this.timer/60;
+            let startY = (canvas.height / 2) - (this.text.length * 25) / 2;
+            let displayLength = this.animation === 1 ? Math.ceil(lerp(0, this.text.length, weight)) : this.text.length;
+            canvasContext.font = '16px Arial';
+            canvasContext.textAlign = 'center';
+            for (let t = 0; t < displayLength; t++) {
+                canvasContext.fillText(this.text[t], canvas.width/2, startY + t * 25);
+            }
+        }
+
+        this.updateTimer();
+    }
+
+    loadGame() {
+        this.timer = 0;
+        this.animation = 2;
+        player.reset();
+        loadLevel(0);
+        moveEverything();
+    }
+
+    animateAlpha() {
+        let weight = 1;
+        switch(this.animation) {
+            case 0: //Transition from completed game
+                //draw content from previous state
+                //lerp alpha for transition content
+                weight = this.timer/60;
+                canvasContext.globalAlpha = smoothStart(weight, 3);
+                break;
+            case 1: //Counting stats
+                canvasContext.globalAlpha = 1;
+                break;
+            case 2: //Transition to Title Screen
+                //draw content from next state
+                canvasContext.globalAlpha = 1;
+                colorRect(0, 0, canvas.width, canvas.height, '#0F0F28');
+                Game.states['Title Screen'].draw();
+                //lerp transition content
+                weight = this.timer/60;
+                canvasContext.globalAlpha = 1 - smoothStop(weight, 3);
+                break;
+            default:
+                break;
+        }
+    }
+
+    updateTimer() {
+        this.timer++;
+        switch(this.animation) {
+            case 0:
+                if (this.timer > 60) {
+                    this.animation++;
+                    this.timer = 0;
+                }
+                break;
+            case 1:
+                this.timer -= 0.95;
+                if (mouseClicked(0)) {
+                    if (this.timer < 98 ) {
+                        //interrupt content animation
+                        this.timer = 98;
+                    }
+                    if (this.timer >= 100) {
+                        //load content for next state
+                        this.loadGame();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+	checkConditions() {
+        if (this.animation === 2 && this.timer >= 60) {
+            return 'Title Screen';
+        }
+    }
+	onExit() {
+        canvasContext.globalAlpha = 1;
+        resetMouse();
+    }
+}
