@@ -203,15 +203,15 @@ function drawControls(){
             {control: 'A', usage: 'Strafe Left'},
             {control: 'S', usage: 'Move Backward'},
             {control: 'D', usage: 'Strafe Right'},
-            {control: 'E / Mouseclick', usage: 'Fire'},
+            {control: 'E / LMB', usage: 'Fire'},
             {control: 'Spacebar', usage: 'Open Door'},
-            {control: 'P', usage: 'Pause Game'},
             {control: '1', usage: 'Use Health Pack'},
             {control: '2', usage: 'Use Shield'},
             {control: '3', usage: 'Use Damage Boost Type 1'},
             {control: '4', usage: 'Use Damage Boost Type 2'},
             {control: '[', usage: 'Decrease Music Volume'},
             {control: ']', usage: 'Increase Music Volume'},
+            {control: 'P', usage: 'Pause Game'},
         ]
 
         canvasContext.textAlign = 'left';
