@@ -229,7 +229,7 @@ function Credits() {
         "Brian J. Boucher: Project lead, core gameplay and main raycaster code, snow art, custom level editor, projectiles, item pickup code, multiple level support, exit functionality, initial title screen, debug mode visualizations, level design, assorted bug fixing, minimap"," ",
         "Andrew Mushel: Wall texture support, sprite object rendering, mouse input, hand sway, pathfinding, most collision code, enemy AI, image loading improvements, additional texture art, door code, garbage collection, shadows, snow optimizations, HUD refinements, custom cursor, keys (code and animation), skybox, floor and ceiling distance gradient, level stats and transition, fog rendering, assorted bug fixing, enemy death animation"," ",
         "Catherine San Luis: Health and armor systems (UI, art, related code), inventory pick up messages, damage boost power-ups, credits display improvement, game over fixes, projectile sprites, pause screen, controls page improvements"," ",
-        "Klaim (A. Joël Lamotte): Music (Banquise, Avalanche theme, main menu), testing"," ",
+        "Klaim (A. Joël Lamotte): Music (Banquise, Avalanche theme, main menu), music system improvements, music volume keys, testing"," ",
         "Vince McKeown: Player hands graphics, 2 enemy sprites, initial enemy placement, addl. wall texture, sound code integration, sounds for laser and fireball"," ",
         "Ashleigh M.: Logo, hit feedback for player and enemy, title screen improvements, game over image, testing"," ",
         "Powerproust: Intro and end text display"," ",
@@ -300,24 +300,24 @@ class StoryIntroduction extends State {
         this.name = 'Introduction'
         this.timer = 0;
         this.text = ["Once upon a time, an old wizard woke up from a long sleep.",
-                    "When he regained his senses, his last memory came rushing back.", 
-                    "His worst enemy, the White Magician of the Northern Kingdoms,", 
+                    "When he regained his senses, his last memory came rushing back.",
+                    "His worst enemy, the White Magician of the Northern Kingdoms,",
                     "riding his Wonderful Dragon, giving him a fatal blow.",
-                    "He remembered the pain and rubbed his temples.", 
+                    "He remembered the pain and rubbed his temples.",
                     "But then came the image of a young boy.",
                     "'The Prince! He must know that I am alive and I should protect him'",
-                    "He stood up.", 
+                    "He stood up.",
                     "'Where am I? It looks like a crypt. I had better be on the lookout for danger...'",];
     }
 
-	onEnter() { 
+	onEnter() {
         this.timer = 0;
         this.animation = 0;
     }
 
     run() {
         this.animateAlpha();
-        
+
         colorRect(0, 0, canvas.width, canvas.height, '#3F3F74');
         canvasContext.fillStyle = 'white';
         if (this.animation === 1) {
@@ -366,7 +366,7 @@ class StoryIntroduction extends State {
                     canvasContext.globalAlpha = 1;
                     currentLevel.drawBackground();
                     render3DProjection();
-        
+
                     //lerp transition content
                     let weight = (this.timer - 60) / 60;
                     hudTransition(weight);
@@ -422,10 +422,10 @@ class StoryConclusion extends State {
         this.timer = 0;
         this.text = ["Surrounded by glass castles and a kind of magic he did not fully understand,",
                     "the wizard realized he had slept far longer than he ever could have imagined. . ",
-                    "The Great Magicien, his Wonderful Dragon, the Northern Kingdoms and the Prince,", 
+                    "The Great Magicien, his Wonderful Dragon, the Northern Kingdoms and the Prince,",
                     "all were part of a world which was fading into the past.",
                     "But still, looking around, he felt a deep hope.",
-                    "People were still around, same as they were two thousand years ago!", 
+                    "People were still around, same as they were two thousand years ago!",
                     "He noticed a 10 year old boy approaching him. His kind face expressed a profound curiosity. ",
                     "So the wizard did what he knew to be his duty. So the wizard did was his duty was.",
                     "'Sir! Would you agree to be my new Prince?'",
@@ -433,14 +433,14 @@ class StoryConclusion extends State {
                     ]
     }
 
-	onEnter() { 
+	onEnter() {
         this.timer = 0;
         this.animation = 0;
     }
 
     run() {
         this.animateAlpha();
-        
+
         colorRect(0, 0, canvas.width, canvas.height, '#3F3F74');
         if (this.animation > 0) {
             canvasContext.fillStyle = 'white';
