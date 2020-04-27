@@ -21,7 +21,7 @@ class Item extends GameObject {
                 break;
             case 'armor':
                 player.armorPickup++;
-                messageConsole.push('Armor acquired. Press 2 to activate.', 'lightblue');
+                messageConsole.push('Shield acquired. Press 2 to activate.', 'lightblue');
                 break;
             case 'blue key':
                 messageConsole.push('Blue Key acquired.', 'blue');
