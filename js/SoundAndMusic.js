@@ -2,7 +2,7 @@ var audioFormat;
 var isMuted = false;
 var soundSetforMeetings = false; //make false to hear at normal level
 
-let musicVolume = 0.3; // TODO: add menu option to up and down volume
+let musicVolume = 0.5; // TODO: add menu option to up and down volume
 let musicVolumeStep = 0.1;
 let allBGMs = [];
 
