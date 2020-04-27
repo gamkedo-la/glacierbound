@@ -233,13 +233,12 @@ function Credits() {
         "Brian J. Boucher: Project lead, core gameplay and main raycaster code, snow art, custom level editor, projectiles, item pickup code, multiple level support, exit functionality, initial title screen, debug mode visualizations, level design, assorted bug fixing, minimap"," ",
         "Andrew Mushel: Wall texture support, sprite object rendering, mouse input, hand sway, pathfinding, most collision code, enemy AI, image loading improvements, additional texture art, door code, garbage collection, shadows, snow optimizations, HUD refinements, custom cursor, keys (code and animation), skybox, floor and ceiling distance gradient, level stats and transition, fog rendering, assorted bug fixing, enemy death animation"," ",
         "Catherine San Luis: Health and armor systems (UI, art, related code), inventory pick up messages, damage boost power-ups, credits display improvement, game over fixes, projectile sprites, pause screen, controls page improvements"," ",
-        "Klaim (A. Joël Lamotte): Music (Banquise, Avalanche theme, main menu)"," ",
+        "Klaim (A. Joël Lamotte): Music (Banquise, Avalanche theme, main menu), testing"," ",
         "Vince McKeown: Player hands graphics, 2 enemy sprites, initial enemy placement, addl. wall texture, sound code integration, sounds for laser and fireball"," ",
-        "Ashleigh M.: Logo, hit feedback for player and enemy, title screen improvements, game over image"," ",
+        "Ashleigh M.: Logo, hit feedback for player and enemy, title screen improvements, game over image, testing"," ",
         "Powerproust: Intro and end text display"," ",
         "Yong Wei: Strafe input"," ",
         "Joshua Rigley: Health tracking"," ",
-        "Ashleigh M.: Testing"," ",
         "Made by members of HomeTeam GameDev (Outpost)"," ","Join at HomeTeamGameDev.com to make games with us!",
         ];
 

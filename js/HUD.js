@@ -216,6 +216,7 @@ function drawPlayerKeys() {
 }
 
 function toggleDebugMode(){
+    return; //Debug Mode Disabled
     debugModeEnabled = !debugModeEnabled;
 }
 

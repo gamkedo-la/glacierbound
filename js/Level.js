@@ -353,6 +353,18 @@ class Level {
         if (distToExit < 50) {
             return true;
         }
+
+        if (currentLevel.index === 5 && currentLevel.stats.enemiesKilled > 0 && currentLevel.stats.totalItems === 0){
+            var newObject = new Item(224, 352, -0.5, 0.2, 0, 'green key');
+            currentLevel.stats.totalItems++;
+            objects.push(newObject);
+        }
+
+        if (currentLevel.index === 5 && currentLevel.stats.itemsCollected > 0){
+            return true;
+        }
+
+
     }
 
     draw() {
