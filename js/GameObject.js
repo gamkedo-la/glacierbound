@@ -29,10 +29,12 @@ class GameObject {
     }
 
     createTint(color) {
-        let buffer = new OffscreenCanvas(this.pic.width, this.pic.height);
+        let buffer = document.createElement('canvas');
+        buffer.width = this.pic.width;
+        buffer.height = this.pic.height
         buffer.ctx = buffer.getContext('2d');
         this.setTint(buffer, color);
-        return buffer.transferToImageBitmap();
+        return buffer;
     }
 
     setTint(tintCanvas, color) {
