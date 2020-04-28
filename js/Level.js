@@ -329,7 +329,8 @@ const levelData = [
 ]
 
 class Level {
-    constructor(levelObject) {
+    constructor(index, levelObject) {
+        this.index = index;
         this.mapGrid = levelObject.mapGrid.slice(0);
         this.height = levelObject.height;
         this.width = levelObject.width;
@@ -346,6 +347,7 @@ class Level {
 
         this.doorOffsets = this.doorStates.slice();
         this.doorOffsets.fill(64);
+        this.musicTrack = getMusicForLevel(index);
     }
 
     checkLevelCompletion() {
@@ -400,7 +402,7 @@ class Level {
             //The distance from the bottom of the screen, to the edge of the visibilityDist
             let viewRadius = (TILE_SIZE / this.visibilityDist) * PROJECTION_PLAIN_DISTANCE;
             viewRadius = canvas.height/2 - viewRadius/2;
-            
+
             let drawOffsetY = lightRadius - viewRadius;
             let skyGradient = canvasContext.createRadialGradient(canvas.width/2, -drawOffsetY, lightRadius, canvas.width/2, -drawOffsetY, lightRadius/2);
                 skyGradient.addColorStop(0, this.colors.sky);
@@ -424,13 +426,13 @@ class Level {
         if (!this.skybox) return;
         const twoPI = Math.PI * 2;
         let boxScale = FOV_RADS / twoPI;
-    
+
         let skyBox = spriteList[this.skybox];
         let skyHeight = PROJECTION_PLANE_HEIGHT/2;
         let boxWidth = skyBox.width * boxScale;
         let xOffset = skyBox.width * (angle / twoPI);
         canvasContext.drawImage(skyBox, xOffset, 0, boxWidth, skyBox.height, 0, 0, canvas.width, skyHeight);
-    
+
         let overDraw = twoPI - player.rotationAngle;
         if (Math.abs(overDraw) <= FOV_RADS) {
             xOffset = canvas.width * (overDraw / FOV_RADS);
@@ -538,11 +540,21 @@ function getDoorColor(type) {
     }
 }
 
+function getMusicForLevel(index){
+    switch(index){
+        case 2:
+        case 5:
+            return "klaim-glacier";
+        default:
+            return "klaim-banquise";
+    }
+}
+
 function loadLevel(index) {
     let data = levelData[index];
     MAP_NUM_ROWS = data.height;
     MAP_NUM_COLS = data.width;
-    currentLevel = new Level(data);
+    currentLevel = new Level(index, data);
     currentLevel.index = index;
     currentLevel.stats = {
         startTime: performance.now(),
@@ -551,7 +563,7 @@ function loadLevel(index) {
         totalItems: 0,
         totalEnemies: 0,
     }
-    
+
     player.reset();
     player.x = data.start.x;
     player.y = data.start.y;
@@ -621,7 +633,7 @@ function spawnSnow() {
         var part = new Projectile(player.x + Math.cos(offsetAng) * (64 + Math.random() * 64), //x
             player.y + Math.sin(offsetAng) * (64 + Math.random() * 64), //y
             20, //speed
-            spriteList['snow'], //sprite 
+            spriteList['snow'], //sprite
             Math.floor(Math.random() * 1.5), //height
             Math.random(), //scale
             0.5, //angle
@@ -643,7 +655,7 @@ class LevelTransition extends State {
         this.timer = 0;
     }
 
-	onEnter() { 
+	onEnter() {
         this.timer = 0;
         this.animation = 0;
         let levelEndTime = performance.now();
@@ -701,7 +713,7 @@ class LevelTransition extends State {
                 canvasContext.globalAlpha = 1;
                 currentLevel.drawBackground();
                 render3DProjection();
-    
+
                 weight = this.timer/60;
                 hudTransition(1 - weight);
                 canvasContext.globalAlpha = smoothStart(weight, 3);
@@ -756,7 +768,7 @@ class LevelTransition extends State {
         if (this.animation === 2 && this.timer >= 120) {
             if (!this.endGame) {
                 return 'Game Started';
-            } else return 'Conclusion'   
+            } else return 'Conclusion'
         }
     }
 	onExit() {

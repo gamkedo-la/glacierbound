@@ -31,12 +31,12 @@ window.onload = function () {
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
 
     player = new Player();
-    Game = new FiniteStateMachine({ 'Title Screen': new TitleScreen(), 
-                                    'Introduction': new StoryIntroduction(), 
-                                    'Level Transition': new LevelTransition(), 
-                                    'Game Started': new GameStarted(), 
-                                    'Level Edit': new LevelEdit(), 
-                                    'Game Over': new GameOver(), 
+    Game = new FiniteStateMachine({ 'Title Screen': new TitleScreen(),
+                                    'Introduction': new StoryIntroduction(),
+                                    'Level Transition': new LevelTransition(),
+                                    'Game Started': new GameStarted(),
+                                    'Level Edit': new LevelEdit(),
+                                    'Game Over': new GameOver(),
                                     'Conclusion': new StoryConclusion()
                                 }, 'Title Screen');
     loadImages();
@@ -46,11 +46,11 @@ class GameStarted extends State {
     constructor() {
         super();
         this.name = 'Game Started';
-        this.music = new BackgroundMusicClass("klaim-banquise"); // TODO: change the music depending on the level
     }
 
     onEnter() {
         console.log("GameStarted state enter");
+        this.music = new BackgroundMusicClass(currentLevel.musicTrack); // TODO: change the music depending on the level
         this.music.play();
         return;
     }
