@@ -15,12 +15,12 @@ var messageConsole = {
         if (weight <= 0) alpha = 1 - smoothStart(Math.abs(weight/halfTime), 12);
         else alpha = 1 - smoothStop(weight/halfTime, 12);
         
-        canvasContext.font = '30px Arial';
+        canvasContext.font = '20px Arial';
         let textSize = canvasContext.measureText(this.message);
 
         canvasContext.globalAlpha = alpha/1.5;
         canvasContext.fillStyle = '#23233F';
-        canvasContext.fillRect(canvas.width/2 - textSize.width/2 - 6, canvas.height - 45, textSize.width + 12, 45);
+        canvasContext.fillRect(canvas.width/2 - textSize.width/2 - 6, canvas.height - 40, textSize.width + 12, 35);
 
 
         canvasContext.globalAlpha = alpha;
@@ -208,12 +208,15 @@ function drawPlayerHealth() {
 
 function drawPlayerKeys() {
     let keyAnchorX = canvas.width - 192 - 16;
-    if (player.keys[0]) canvasContext.drawImage(spriteList['blueKey'], 0, 0, 64, 64, keyAnchorX, canvas.height-80, 64, 64);
-    if (player.keys[1]) canvasContext.drawImage(spriteList['redKey'], 0, 0, 64, 64, keyAnchorX + 64, canvas.height-80, 64, 64);
-    if (player.keys[2]) canvasContext.drawImage(spriteList['greenKey'], 0, 0, 64, 64, keyAnchorX + 128, canvas.height-80, 64, 64);
+    canvasContext.imageSmoothingEnabled = false;
+    if (player.keys[0]) canvasContext.drawImage(spriteList['blueKey'], 0, 0, 16, 16, keyAnchorX, canvas.height-80, 64, 64);
+    if (player.keys[1]) canvasContext.drawImage(spriteList['redKey'], 0, 0, 16, 16, keyAnchorX + 64, canvas.height-80, 64, 64);
+    if (player.keys[2]) canvasContext.drawImage(spriteList['greenKey'], 0, 0, 16, 16, keyAnchorX + 128, canvas.height-80, 64, 64);
+    canvasContext.imageSmoothingEnabled = true;
 }
 
 function toggleDebugMode(){
+    return; //Debug Mode Disabled
     debugModeEnabled = !debugModeEnabled;
 }
 

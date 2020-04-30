@@ -1,6 +1,7 @@
 class EnemyStateMachine extends FiniteStateMachine {
 	constructor(body) {
-		let stateList = { 'Idle': new EnemyIdleState(), 'Wandering': new EnemyWanderState(), 'Patrolling': new EnemyPatrolState(), 'Attacking': new EnemyAttackState(), 'Searching': new EnemySearchState };
+		let stateList = {'Idle': new EnemyIdleState(), 'Wandering': new EnemyWanderState(), 'Patrolling': new EnemyPatrolState(), 
+						'Attacking': new EnemyAttackState(), 'Searching': new EnemySearchState(), 'Dying' : new EnemyDyingState() };
 		super(stateList, 'Idle');
 		this.body = body;
 	}
@@ -94,6 +95,10 @@ class EnemyWanderState extends State {
 	}
 
 	checkConditions(character) {
+		if (character.isDying) {
+			return 'Dying';
+		}
+
 		if (character.targetVisible) {
 			return 'Attacking';
 		}
@@ -131,6 +136,9 @@ class EnemyPatrolState extends State {
 	}
 
 	checkConditions(character) {
+		if (character.isDying) {
+			return 'Dying';
+		}
 		if (!character.targetVisible) {
 			return 'Attacking';
 		}
@@ -179,6 +187,9 @@ class EnemyAttackState extends State {
 	}
 
 	checkConditions(character) {
+		if (character.isDying) {
+			return 'Dying';
+		}
 		if (character.target.isDead) {
 			return 'Wandering';
 		}
@@ -221,6 +232,8 @@ class EnemySearchState extends State {
 	}
 
 	run(character) {
+		let destIndex = Math.floor(character.destination.x / TILE_SIZE) + Math.floor(character.destination.y / TILE_SIZE) * MAP_NUM_COLS;
+		let currentIndex = Math.floor(character.x / TILE_SIZE) + Math.floor(character.y / TILE_SIZE) * MAP_NUM_COLS;
 		let deltaX = character.destination.x - character.x;
 		let deltaY = character.destination.y - character.y;
 		let dist = Math.hypot(deltaX, deltaY);
@@ -230,9 +243,14 @@ class EnemySearchState extends State {
 
 		let dp = dotProduct(Math.cos(character.direction - Math.PI / 2), Math.sin(character.direction - Math.PI / 2), deltaX, deltaY);
 
+
 		if (dp > 0) character.direction -= Math.PI / 45;
 		if (dp < 0) character.direction += Math.PI / 45;
 
+		let checkIndex = Math.floor(currentLevel.mapGrid[currentIndex]) === 2 ? currentIndex : destIndex;
+		if (Math.floor(currentLevel.mapGrid[checkIndex]) === 2 && currentLevel.doorOffsets[checkIndex] === 64)
+			currentLevel.toggleDoor(destIndex);
+		
 		if (dist > TILE_SIZE / 4) {
 			character.moveSpeed = 1;
 		} else if (character.path.length > 1) {
@@ -254,6 +272,9 @@ class EnemySearchState extends State {
 	}
 
 	checkConditions(character) {
+		if (character.isDying) {
+			return 'Dying';
+		}
 		if (character.target.isDead) {
 			return 'Wandering';
 		}
@@ -271,5 +292,29 @@ class EnemySearchState extends State {
 	onExit(character, to) {
 		character.path = [];
 		if (character.target.isDead) character.target = null;
+	}
+}
+
+class EnemyDyingState extends State {
+	constructor() {
+		super();
+		this.name = 'Dying'
+	}
+	onEnter(character, from) { 
+		character.createSprite('white');
+	}
+
+	run(character) { 
+		character.scale -= 0.05;
+		character.altitude -= 0.025;
+		if (character.scale <= 0) character.isDead = true;
+	}
+	checkConditions() { 
+		//End state. No transitions.
+		return;
+	}
+
+	onExit() {
+		return;
 	}
 }

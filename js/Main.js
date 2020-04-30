@@ -20,7 +20,10 @@ var level2;
 var objects = [];
 var testObject;
 var testObject2;
- 
+var gamePaused = false;
+var gameRunning;
+
+
 window.onload = function () {
     canvas = document.getElementById('gameCanvas');
     canvasContext = canvas.getContext('2d');
@@ -28,7 +31,14 @@ window.onload = function () {
     canvasContext.canvas.height = PROJECTION_PLANE_HEIGHT;
 
     player = new Player();
-    Game = new FiniteStateMachine({'Title Screen': new TitleScreen(), 'Level Transition': new LevelTransition, 'Game Started': new GameStarted(), 'Level Edit': new LevelEdit(), 'Game Over': new GameOver()}, 'Title Screen');
+    Game = new FiniteStateMachine({ 'Title Screen': new TitleScreen(),
+                                    'Introduction': new StoryIntroduction(),
+                                    'Level Transition': new LevelTransition(),
+                                    'Game Started': new GameStarted(),
+                                    'Level Edit': new LevelEdit(),
+                                    'Game Over': new GameOver(),
+                                    'Conclusion': new StoryConclusion()
+                                }, 'Title Screen');
     loadImages();
 }
 
@@ -39,6 +49,9 @@ class GameStarted extends State {
     }
 
     onEnter() {
+        console.log("GameStarted state enter");
+        this.music = new BackgroundMusicClass(currentLevel.musicTrack); // TODO: change the music depending on the level
+        this.music.play();
         return;
     }
 
@@ -62,6 +75,8 @@ class GameStarted extends State {
     }
 
     onExit() {
+        console.log("GameStarted state exit");
+        this.music.stop();
         this.levelEdit = false;
     }
 }
@@ -85,11 +100,12 @@ class GameOver extends State {
             canvasContext.globalAlpha = smoothStart(alpha, 3);
             this.timer++;
         }
+
         canvasContext.fillStyle = lerpRGB('rgb(255,0,0)', 'rgb(255, 255, 255)', smoothStart(alpha, 3));
         canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
         let graphic = spriteList['gameover'],
-            drawRatio = graphic.width >= canvas.width ? canvas.width/graphic.width : graphic.width/canvas.width, 
+            drawRatio = graphic.width >= canvas.width ? canvas.width/graphic.width : graphic.width/canvas.width,
             drawWidth = graphic.width * drawRatio, drawHeight = graphic.height * drawRatio,
             drawY = (canvas.height - drawHeight) / 2;
 
@@ -98,13 +114,13 @@ class GameOver extends State {
         canvasContext.fillStyle = lerpRGB('rgb(255, 0, 0)', 'rgb(63,63,139)', smoothStart(alpha, 3));
         canvasContext.font = '40px Arial';
         canvasContext.testAlign = 'center';
-        canvasContext.fillText('CLICK TO RESTART', canvas.width/2, canvas.height-60);
+        canvasContext.fillText('Click to Restart', canvas.width/2, canvas.height-60);
 
         canvasContext.globalAlpha = 1;
     }
 
     checkConditions() {
-        if (mouseHeld[0]) {
+        if (this.timer >= 100 && mouseClicked(0)) {
             return 'Title Screen';
         }
     }
@@ -119,16 +135,33 @@ function initRenderLoop() {
     initInput();
 
     Game.start()
-    setInterval(function () {
-        Game.update();                     
+    gameRunning = setInterval(function () {
+        pollInput();
+        Game.update();
     }, 1000 / framesPerSecond);
 }
 
+function pauseGame() {
+  var framesPerSecond = 60;
+    if (!gamePaused && Game.currentState.name == 'Game Started') {
+    gameRunning = clearInterval(gameRunning);
+    player.pauseBoost2TimerPause();
+    gamePaused = true;
+    pauseScreen();
+  } else if (gamePaused) {
+    gameRunning = setInterval(function () {
+        pollInput();
+        Game.update();
+    }, 1000 / framesPerSecond);
+    player.pauseBoost2Timer();
+    gamePaused = false;
+  }
+}
 function initTestObjects() {
     objects.length = 0;
     testObject = new Character(300, 275, spriteList['enemy1'], 0, 1, 0);
     objects.push(testObject);
-	
+
 	testObject2 = new Character(500, 100, spriteList['enemy2'], 0, 1, 0);
     objects.push(testObject2);
 
@@ -238,4 +271,16 @@ function removeDead() {
     for (let d = objects.length - 1; d >= 0; d--) {
         if (objects[d].isDead) objects.splice(d, 1);
     }
+}
+
+function pauseScreen(){
+        canvasContext.globalAlpha = 0.5;
+        canvasContext.fillStyle = '#23233F';
+        canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+        canvasContext.globalAlpha = 1;
+        canvasContext.textAlign = 'center';
+        canvasContext.fillStyle = 'dodgerblue';
+        canvasContext.font = '50px Arial';
+        canvasContext.fillText("GAME PAUSED", canvas.width / 2, canvas.height/2);
 }

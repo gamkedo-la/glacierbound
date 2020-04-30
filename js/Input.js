@@ -10,12 +10,15 @@ const KEY_LETTER_D = 68;
 const KEY_LETTER_E = 69;
 const KEY_LETTER_L = 76;
 const KEY_LETTER_M = 77;
+const KEY_LETTER_P = 80;
 const KEY_ALT = 18;
 const KEY_SPACE = 32;
 const KEY_NUMBER_1 =  49; //Health Pick-up activate
-const KEY_NUMBER_2 =  50; //Armor Pick-up 
+const KEY_NUMBER_2 =  50; //Armor Pick-up
 const KEY_NUMBER_3  = 51; //Damage Boost Type 1
 const KEY_NUMBER_4  = 52; //Damage Boost Type 2
+const KEY_RIGHT_BRACKET = 221;
+const KEY_LEFT_BRACKET = 219;
 
 function initInput() {
   document.addEventListener("keydown", keyPressed);
@@ -24,6 +27,10 @@ function initInput() {
   player.setupControls(KEY_LETTER_W, KEY_LETTER_S, KEY_LETTER_A, KEY_LETTER_D, KEY_LETTER_E);
 
   initMouse();
+}
+
+function pollInput() {
+  pollMouseButtons();
 }
 
 function setKeyHoldState(thisKey, setTo) {
@@ -43,10 +50,15 @@ function setKeyHoldState(thisKey, setTo) {
 
   if (thisKey === KEY_LETTER_M && setTo === true) toggleDebugMode();
 
+  if (thisKey == KEY_LETTER_P && setTo === true) pauseGame();
+
   if (thisKey == KEY_NUMBER_1 && setTo === true) player.activatePickUp('health');
   if (thisKey == KEY_NUMBER_2 && setTo === true) player.activatePickUp('armor');
   if (thisKey == KEY_NUMBER_3 && setTo === true) player.activatePickUp('damageboost1');
   if (thisKey == KEY_NUMBER_4 && setTo === true) player.activatePickUp('damageboost2');
+
+  if (thisKey == KEY_RIGHT_BRACKET && setTo === true) increaseBGMVolume();
+  if (thisKey == KEY_LEFT_BRACKET && setTo === true) decreaseBGMVolume();
 
 }
 

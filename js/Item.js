@@ -4,6 +4,7 @@ class Item extends GameObject {
         this.type = type;
         this.touched = false;
         this.setSprite(type);
+        this.bobTimer = 0;
         this.tint = this.createTint(currentLevel.colors.sky);
     }
 
@@ -20,7 +21,7 @@ class Item extends GameObject {
                 break;
             case 'armor':
                 player.armorPickup++;
-                messageConsole.push('Armor acquired. Press 2 to activate.', 'lightblue');
+                messageConsole.push('Shield acquired. Press 2 to activate.', 'lightblue');
                 break;
             case 'blue key':
                 messageConsole.push('Blue Key acquired.', 'blue');
@@ -36,17 +37,34 @@ class Item extends GameObject {
                 break;
             case 'boost1':
                 player.dBoost1Pickup++;
-                messageConsole.push('Damage Boost Type 1 acquired. Press 3 to use.', 'orangered');
+                messageConsole.push('Damage Boost Type 1 acquired. Press 3 to use.', 'coral');
                 break;
             case 'boost2':
                 player.dBoost2Pickup++;
-                messageConsole.push('Damage Boost Type 2 acquired. Press 4 to activate.', 'magenta');
+                messageConsole.push('Damage Boost Type 2 acquired. Press 4 to activate.', 'hotpink');
                 break;
             default:
                 break;
         }
         
         this.die();
+    }
+
+    draw() {
+        const altitude = this.altitude;
+        if (this.isBobEnabled()) {
+            this.bobTimer++;
+            if (this.bobTimer > 100) {
+                this.bobTimer = 0;
+            }
+            this.altitude += Math.cos(this.bobTimer/100 * Math.PI * 2) / 8;
+        }
+        
+        canvasContext.imageSmoothingEnabled = false;
+        super.draw();
+        canvasContext.imageSmoothingEnabled = true;
+
+        this.altitude = altitude;
     }
 
     updateCollision(other) {
@@ -85,5 +103,9 @@ class Item extends GameObject {
         if (type === undefined || type === null) {
             this.type = 'health'
         } else this.type = type;
+    }
+
+    isBobEnabled() {
+        return this.type === 'blue key' || this.type === 'red key' || this.type === 'green key';
     }
 }

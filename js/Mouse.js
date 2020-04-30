@@ -6,7 +6,7 @@ let mouseDelta = {
     y: 0
 };
 
-let mouseHeld = [];
+let mouseButtonStates = [-1, -1, -1];
 
 var mousePos = null;
 
@@ -52,7 +52,7 @@ function drawCursor() {
 }
 
 function mouseDown(evt) {
-    clickMouse(true, evt.button);
+    if (mouseButtonStates[evt.button] < 1) mouseButtonStates[evt.button] = 1;
 }
 
 function mouseUp(evt) {
@@ -66,12 +66,14 @@ function mouseUp(evt) {
         displayLevelData();
     }
 
-    clickMouse(false, evt.button);
+    if (mouseButtonStates[evt.button] > -1) mouseButtonStates[evt.button] = -1;
 }
 
-function clickMouse(state, button) {
-    mouseHeld[button] = state;
-    player.keyHeld_Fire = state;
+function pollMouseButtons() {
+    for (let m = 0; m < mouseButtonStates.length; m++) {
+        if (mouseButtonStates[m] > 0 && mouseButtonStates[m] <= 10) mouseButtonStates[m]++; 
+        if (mouseButtonStates[m] < 0 && mouseButtonStates[m] >= -10) mouseButtonStates[m]--;
+    }
 }
 
 function calculateMousePos(evt) {
@@ -93,5 +95,17 @@ function resetMouse() {
         y: 0
     };
     mousePos = null;
-    mouseHeld.fill(false);
+    mouseButtonStates.fill(-1);
+}
+
+function mouseClicked(button) {
+    return (mouseButtonStates[button] > 0 && mouseButtonStates[button] < 3);
+}
+
+function mouseReleased(button) {
+    return (mouseButtonStates[button] < 0 && mouseButtonStates[button] > -3);
+}
+
+function mouseHeld(button) {
+    return mouseButtonStates[button] > 0;
 }

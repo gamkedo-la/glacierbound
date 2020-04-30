@@ -1,5 +1,5 @@
 class Character extends GameObject {
-	constructor(x, y, pic, altitude, scale, angle) {
+	constructor(x, y, pic, projectile_pic, altitude, scale, angle, health = 100, timeToShoot = 96) {
 		super(x, y, 0, pic, altitude, scale, angle);
 		if (this.pic) this.damagedPic = this.createTint('red');
 		this.brain = new EnemyStateMachine(this);
@@ -13,19 +13,20 @@ class Character extends GameObject {
 		this.fov = Math.PI / 2;
 		this.attackRange = TILE_SIZE * 3;
 		this.lineOfSight = null;
-		this.health = 100;
+		this.health = health;
 		this.damagedBy = false;
 		this.justDamaged = 0; //overlay cooldown
-		this.timeToShoot = 12;
+		this.initialTimeToShoot = timeToShoot;
+		this.timeToShoot = timeToShoot;
+		this.projPic = projectile_pic;
 	}
 
 	attack() {
         if (this.timeToShoot > 0) return;
-        let newProj = new Projectile(this.x, this.y, 5, null, -0.5, 0.2, this.direction, false);
+        let newProj = new Projectile(this.x, this.y, 5, this.projPic, -0.5, 0.2, this.direction, false);
         newProj.shootFrom(this, 20);
-        newProj.createSprite('orange');
         objects.push(newProj);
-        this.timeToShoot = 96;
+        this.timeToShoot = this.initialTimeToShoot;
 		fireBallShot.play();
     }
 
@@ -53,6 +54,10 @@ class Character extends GameObject {
 		else return false;
 	}
 
+	die() {
+		this.isDying = true;
+	}
+
 	distToTarget() {
 		if (!this.target) return Infinity;
 		else if (this.target === player) return this.distance;
@@ -60,6 +65,10 @@ class Character extends GameObject {
 	}
 
 	draw() {
+		if (this.isDying)  {
+			super.draw();
+			return;
+		}
 		const srcPic = this.pic;
 		this.pic = this.justDamaged ? this.damagedPic : this.pic;
 		super.draw();
@@ -73,17 +82,19 @@ class Character extends GameObject {
 	}
 
 	takeDamage(howMuch, from) {
+		if (this.isDying) return;
 		this.justDamaged = 6;
 		this.health -= howMuch;
 		this.damagedBy = from;
 		if (this.health <= 0) {
-			if (from == player) currentLevel.stats.enemiesKilled++;
+			currentLevel.stats.enemiesKilled++;
 			this.die();
 		}
 		
 	}
 
 	move() {
+		if (this.isDead || this.isDying) return;
 		this.xv = Math.cos(this.direction) * this.moveSpeed;
 		this.yv = Math.sin(this.direction) * this.moveSpeed;
 
@@ -91,10 +102,10 @@ class Character extends GameObject {
 		let deltaY = this.destination.y - this.y;
 
 		if (Math.abs(this.xv) > Math.abs(this.deltaX)) this.xv = deltaX;
-		else if (!objectMapCollision(this.x + this.xv, this.y, this.radius)) this.x += this.xv;
-
 		if (Math.abs(this.yv) > Math.abs(this.deltaY)) this.yv = deltaY;
-		else if (!objectMapCollision(this.x, this.y + this.yv, this.radius)) this.y += this.yv;
+
+		if (!objectMapCollision(this.x + this.xv, this.y, this.radius)) this.x += this.xv;
+		if (!objectMapCollision(this.x, this.y + this.yv, this.radius)) this.y += this.yv;
 	}
 
 	update() {

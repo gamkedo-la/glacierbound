@@ -2,6 +2,37 @@ var audioFormat;
 var isMuted = false;
 var soundSetforMeetings = false; //make false to hear at normal level
 
+let musicVolume = 0.5; // TODO: add menu option to up and down volume
+let musicVolumeStep = 0.1;
+let allBGMs = [];
+
+if(soundSetforMeetings){
+	musicVolume = 0.04; //quieter for screen sharing during meetings
+}
+
+function updateAllBGMVolumes() {
+	if(musicVolume < 0.0)
+		musicVolume = 0.0;
+	if(musicVolume > 1.0)
+		musicVolume = 1.0;
+	allBGMs.forEach(bgm => {
+		bgm.setVolume(musicVolume);
+		console.log("new volume = " + bgm.getVolume());
+	});
+}
+
+function increaseBGMVolume(){
+	console.log("BGM Volume UP");
+	musicVolume += musicVolumeStep;
+	updateAllBGMVolumes();
+}
+
+function decreaseBGMVolume(){
+	console.log("BGM Volume DOWN");
+	musicVolume -= musicVolumeStep;
+	updateAllBGMVolumes();
+}
+
 //sounds
 //background music
 var hauntedHoedownSound = new BackgroundMusicClass("HauntedHoedown"); //borrowed from Ghost Rustlers
@@ -16,13 +47,14 @@ function setFormat() {
 		audioFormat = ".ogg";
     }
 }
+setFormat(); // do it only once
 
 function SoundOverlapsClass(filenameWithPath) {
     setFormat();
     var altSoundTurn = false;
     var mainSound = new Audio("audio/" + filenameWithPath + audioFormat);
     var altSound = new Audio("audio/" + filenameWithPath + audioFormat);
-    
+
     this.play = function() {
     	if (isMuted) {
     		console.log ("audio muted");
@@ -43,34 +75,50 @@ function SoundOverlapsClass(filenameWithPath) {
 		}
 		altSoundTurn = !altSoundTurn;
     }
-}  
+}
 
 function BackgroundMusicClass(filenameWithPath) {
-    var musicSound = null;
-    this.loopSong = function(filenameWithPath) {
-		setFormat();
+	let filePath = "audio/" + filenameWithPath + audioFormat;
+	let musicSound = new Audio(filePath);
+	let playing = false;
 
-		if (musicSound != null) {
-			musicSound.pause();
-			musicSound = null;
-		}
-		musicSound = new Audio("audio/" + filenameWithPath + audioFormat);
-		if(soundSetforMeetings){
-			musicSound.volume = 0.04; //quieter for screen sharing during meetings
-		}
-		musicSound.loop = true;
-		musicSound.play();
-    }
+	this.isPlaying = function() {
+		return playing;
+	}
 
-    this.startOrStopMusic = function() {
-        if (!musicSound) {
-            console.error("ERROR: musicSound not initialized before startOrStopMusic was run!");
-            return; 
-        }
-		if (isMuted == false) {
-			musicSound.play();
-		} else {
-			musicSound.pause();
+	this.getVolume = function(){
+		return musicSound.volume;
+	};
+
+	this.setVolume = function(value) {
+		if(value < 0.0)
+			value = 0.0;
+		if(value > 1.0)
+			value = 1.0;
+		musicSound.volume = value;
+	};
+
+	this.play = function(loop = true) {
+		this.setVolume(musicVolume);
+		musicSound.currentTime = 0;
+		musicSound.loop = loop;
+		musicSound.play().then(() => {
+			playing = true;
+			allBGMs.push(this); // Make sure changes applied to BGM reach this object.
+			console.log("Playing " + filePath);
+		 }, (error_reason) => {
+			console.warn(`Failed to play music ${filePath} : ${error_reason}`);
+		 });
+	};
+
+	this.stop = function() {
+		musicSound.pause();
+		playing = false;
+
+		// Remove from BGMs if not playing.
+		const index = allBGMs.indexOf(this);
+		if (index > -1) {
+			allBGMs.splice(index, 1);
 		}
-    }
+	};
 }
