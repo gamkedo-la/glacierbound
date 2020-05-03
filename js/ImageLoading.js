@@ -7,7 +7,7 @@ var textureList = 	{"wall": [],
 var spriteList = {};
 
 function loadImages() {
-	
+
 	var imageList = [
 		{spriteName: 'logo', fileName: 'logo.png'},
 		{spriteName: 'gameover', fileName: 'game-over.png'},
@@ -26,8 +26,8 @@ function loadImages() {
 		{tileType: 'door', fileName: 'doors/door_red.png'},
 		{tileType: 'door', fileName: 'doors/door_green.png'},
 		//enemies
-		{spriteName: 'enemy1', fileName: 'enemies/enemy1.png'},
-		{spriteName: 'enemy2', fileName: 'enemies/enemy2.png'},
+		{spriteName: 'enemy1', fileName: 'enemies/Enemy1.png'},
+		{spriteName: 'enemy2', fileName: 'enemies/Enemy2.png'},
 		//pickups
 		{spriteName: 'healthpickup', fileName: 'itempickups/HealthPickup.png'},
 		{spriteName: 'armorpickup', fileName: 'itempickups/ShieldPickup.png'},
@@ -56,13 +56,13 @@ function loadImages() {
 		{spriteName: 'damageboost1pickup_ui', fileName: 'HUD/pickups/damageBoost1Pickup_hud.png'},
 		{spriteName: 'damageboost2pickup_ui', fileName: 'HUD/pickups/damageBoost2Pickup_hud.png'},
 	]
-	
+
 	imagesToLoad = imageList.length;
-	
+
 	for (var i=0; i<imageList.length; i++) {
 		let newImage = document.createElement('img');
 		beginLoadingImage(newImage, imageList[i].fileName);
-		
+
 		if(imageList[i].spriteName != undefined) {
 			if (imageList[i].animationFrames || imageList[i].rotationFrames) {
 				newImage.rotationFrames = imageList[i].rotationFrames;
@@ -80,7 +80,7 @@ function loadImages() {
 function beginLoadingImage(imgVar, fileName) {
 	imgVar.src = 'images/'+fileName;
 	imgVar.onload = function() {countImagesOrStartGame()};
-}	
+}
 
 function countImagesOrStartGame() {
 	imagesToLoad--;

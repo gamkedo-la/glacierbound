@@ -50,8 +50,7 @@ function stopBGM()
 
 //sounds
 //background music
-var hauntedHoedownSound = new BackgroundMusicClass("HauntedHoedown"); //borrowed from Ghost Rustlers
-var laserShot = new SoundOverlapsClass("laser");
+var laserShot = new SoundOverlapsClass("Laser");
 var fireBallShot = new SoundOverlapsClass("fireBallShot");
 var doorOpen = new SoundOverlapsClass("klaim-door_open");
 var doorClose = new SoundOverlapsClass("klaim-door_close");
