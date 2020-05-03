@@ -478,6 +478,14 @@ class Level {
         } else {
             this.doorStates[index] *= -1;
         }
+
+        console.log(`Toggled door ${index} = ${this.doorStates[index]}`);
+        if(this.doorStates[index] > 0){
+            doorOpen.play();
+        } else {
+            doorClose.play();
+        }
+
     }
 
     toggleDoors() {

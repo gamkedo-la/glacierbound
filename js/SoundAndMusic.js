@@ -1,4 +1,6 @@
 var audioFormat;
+setFormat(); // do it only once
+
 var isMuted = false;
 var soundSetforMeetings = false; //make false to hear at normal level
 
@@ -52,6 +54,8 @@ function stopBGM()
 var hauntedHoedownSound = new BackgroundMusicClass("HauntedHoedown"); //borrowed from Ghost Rustlers
 var laserShot = new SoundOverlapsClass("laser");
 var fireBallShot = new SoundOverlapsClass("fireBallShot");
+var doorOpen = new SoundOverlapsClass("klaim-door_open");
+var doorClose = new SoundOverlapsClass("klaim-door_close");
 
 function setFormat() {
     var audio = new Audio();
@@ -61,10 +65,8 @@ function setFormat() {
 		audioFormat = ".ogg";
     }
 }
-setFormat(); // do it only once
 
 function SoundOverlapsClass(filenameWithPath) {
-    setFormat();
     var altSoundTurn = false;
     var mainSound = new Audio("audio/" + filenameWithPath + audioFormat);
     var altSound = new Audio("audio/" + filenameWithPath + audioFormat);
