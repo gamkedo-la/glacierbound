@@ -186,6 +186,7 @@ const levelData = [
         colors: {sky: 'rgb(255, 255, 255)', ground: 'rgb(255, 255, 255)'},
         skybox: null,
         music: "klaim-banquise",
+        ambient: "klaim-tempest",
         start: {x: 128, y: 608, rotation: 0},
         exit: {x: 280, y: 344},
         objects: [
@@ -291,6 +292,7 @@ const levelData = [
         music: "klaim-banquise",
         colors: {sky: 'rgb(255, 255, 255)', ground: 'rgb(255, 255, 255)'},
         skybox: null,
+        ambient: "klaim-tempest",
         start: {x: 224, y: 1696, rotation: FACING_E},
         exit: {x: 1120, y: 1120},
         objects: [
@@ -354,6 +356,8 @@ class Level {
         this.doorOffsets = this.doorStates.slice();
         this.doorOffsets.fill(64);
         this.musicTrack = new BackgroundMusicClass(levelObject.music);
+        if(levelObject.ambient)
+            this.ambientTrack = new BackgroundMusicClass(levelObject.ambient);
     }
 
     checkLevelCompletion() {

@@ -51,6 +51,10 @@ class GameStarted extends State {
     onEnter() {
         console.log("GameStarted state enter");
         playBGM(currentLevel.musicTrack);
+        if(currentLevel.ambientTrack){
+            currentLevel.ambientTrack.setVolume(0.3); // TODO: have a way to change the volume of ambiant, sounds, and general audio
+            currentLevel.ambientTrack.play(true);
+        }
         return;
     }
 
@@ -77,6 +81,8 @@ class GameStarted extends State {
         console.log("GameStarted state exit");
         this.levelEdit = false;
         stopBGM();
+        if(currentLevel.ambientTrack)
+            currentLevel.ambientTrack.stop();
     }
 }
 
