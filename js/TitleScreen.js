@@ -430,11 +430,13 @@ class StoryConclusion extends State {
                     "'Sir! Would you agree to be my new Prince?'",
                     "The wizard asked. The boy smiled. He nodded. A new story was about to begin.",
                     ]
+        this.music = new BackgroundMusicClass("klaim-avalanche");
     }
 
 	onEnter() {
         this.timer = 0;
         this.animation = 0;
+        plauBGM(this.music, false);
     }
 
     run() {

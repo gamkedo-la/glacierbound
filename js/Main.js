@@ -85,7 +85,7 @@ class GameOver extends State {
         super();
         this.name = 'Game Over';
         this.timer = 0;
-        this.music = new BackgroundMusicClass("klaim-avalanche");
+        this.music = new BackgroundMusicClass("klaim-gameover");
     }
 
     onEnter() {
