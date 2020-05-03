@@ -159,17 +159,26 @@ class EnemyAttackState extends State {
 		if(currentLevel.index == 5)
 		{
 			this.battleMusic = new BackgroundMusicClass("klaim-ice_wizard-battle");
+			this.sound = soundWizardLaugh;
+		}
+		else
+		{
+			this.sound = soundMonster2;
 		}
 	}
 
 	onEnter(character, from) {
 		character.damagedBy = false;
 
-		if(this.firstTimeAttacking && currentLevel.index == 5) // Special case for when the boss starts attacking the player for the first time
-		{
-			playBGM(this.battleMusic);
-		}
 
+		if(this.firstTimeAttacking)
+		{
+			if(currentLevel.index == 5) { // Special case for when the boss starts attacking the player for the first time
+				playBGM(this.battleMusic);
+			}
+			character.ticksSinceLastLaugh = 0;
+			this.sound.play();
+		}
 		this.firstTimeAttacking = false;
 	}
 
@@ -177,6 +186,13 @@ class EnemyAttackState extends State {
 		if (character.target === null) {
 			character.targetVisible = false;
 			return;
+		}
+
+		character.ticksSinceLastLaugh++;
+		if(character.ticksSinceLastLaugh > 4 * 60)
+		{
+			character.ticksSinceLastLaugh = 0;
+			this.sound.play();
 		}
 
 		let deltaX = character.target.x - character.x;
@@ -310,10 +326,12 @@ class EnemySearchState extends State {
 class EnemyDyingState extends State {
 	constructor() {
 		super();
-		this.name = 'Dying'
+		this.name = 'Dying';
+		this.sound = soundMonster4;
 	}
 	onEnter(character, from) {
 		character.createSprite('white');
+		this.sound.play();
 	}
 
 	run(character) {

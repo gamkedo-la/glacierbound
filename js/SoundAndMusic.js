@@ -8,6 +8,8 @@ let musicVolume = 0.5; // TODO: add menu option to up and down volume
 let musicVolumeStep = 0.1;
 let currentBGM = null;
 
+let soundVolume = 0.6;
+
 if(soundSetforMeetings){
 	musicVolume = 0.04; //quieter for screen sharing during meetings
 }
@@ -54,6 +56,15 @@ var fireBallShot = new SoundOverlapsClass("fireBallShot");
 var doorOpen = new SoundOverlapsClass("klaim-door_open");
 var doorClose = new SoundOverlapsClass("klaim-door_close");
 
+
+var soundMonster1 = new SoundOverlapsClass("klaim-monster_aru");
+var soundMonster2 = new SoundOverlapsClass("klaim-monster_barf");
+var soundMonster3 = new SoundOverlapsClass("klaim-monster_die");
+var soundMonster4 = new SoundOverlapsClass("klaim-monster_mew");
+var soundPlayerHurt1 = new SoundOverlapsClass("klaim-player_hurt-1");
+var soundPlayerHurt2 = new SoundOverlapsClass("klaim-player_hurt-2");
+var soundWizardLaugh = new SoundOverlapsClass("klaim-wizard_laugh");
+
 function setFormat() {
     var audio = new Audio();
     if (audio.canPlayType("sound/mp3")) {
@@ -75,12 +86,14 @@ function SoundOverlapsClass(filenameWithPath) {
     	}
 		if (altSoundTurn) {
 			altSound.currentTime = 0;
+			altSound.volume = soundVolume;
 			if(soundSetforMeetings){
 				altSound.volume = 0.05;  //quieter for screen sharing during meetings
 			}
 			altSound.play();
 		} else {
 			mainSound.currentTime = 0;
+			mainSound.volume = soundVolume;
 			if(soundSetforMeetings){
 				mainSound.volume = 0.05; //quieter for screen sharing during meetings
 			}

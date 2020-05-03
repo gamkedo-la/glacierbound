@@ -31,7 +31,7 @@ class Character extends GameObject {
     }
 
 	objectInView(what) {
-		if (what === null | what.isDead) return false; 
+		if (what === null | what.isDead) return false;
 
 		let deltaX = what.x - this.x;
 		let deltaY = what.y - this.y;
@@ -89,8 +89,11 @@ class Character extends GameObject {
 		if (this.health <= 0) {
 			currentLevel.stats.enemiesKilled++;
 			this.die();
+		} else {
+			console.log("HIT");
+			soundMonster3.play();
 		}
-		
+
 	}
 
 	move() {
@@ -125,7 +128,7 @@ class Character extends GameObject {
         canvasContext.font =  drawHeight + 'px Arial';
 		canvasContext.textAlign = 'center';
 		canvasContext.fillStyle = 'yellow';
-        canvasContext.fillText(this.brain.currentState.name, screenX, screenY - drawHeight); 
+        canvasContext.fillText(this.brain.currentState.name, screenX, screenY - drawHeight);
     }
 
 	draw2D() {
