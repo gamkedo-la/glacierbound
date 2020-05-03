@@ -663,6 +663,9 @@ class LevelTransition extends State {
             enemyPercent: Math.floor(currentLevel.stats.enemiesKilled / currentLevel.stats.totalEnemies * 100),
             playTime: Math.floor((levelEndTime - currentLevel.stats.startTime) / 1000),
         };
+        currentBGM.stop();
+        currentBGM = new BackgroundMusicClass("klaim-avalanche");
+        currentBGM.play();
     }
 
     run() {
