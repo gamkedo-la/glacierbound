@@ -159,6 +159,7 @@ const levelData = [
         drawDist: 400,
         colors: {sky: 'rgb(0, 0, 0)', ground: 'rgb(255, 255, 255)'},
         skybox: null,
+        music: "klaim-banquise",
         start: {x: 416, y: 608, rotation: FACING_N},
         exit: {x: 864, y: 608},
         objects: [
@@ -184,6 +185,7 @@ const levelData = [
         drawDist: 600,
         colors: {sky: 'rgb(255, 255, 255)', ground: 'rgb(255, 255, 255)'},
         skybox: null,
+        music: "klaim-banquise",
         start: {x: 128, y: 608, rotation: 0},
         exit: {x: 280, y: 344},
         objects: [
@@ -203,6 +205,7 @@ const levelData = [
         width: 20,
         height: 20,
         drawDist: 10000,
+        music: "klaim-glacier",
         colors: {sky: 'rgb(63,63,116)', ground: 'rgb(125, 125, 125)'},
         skybox: 'skybox',
         start: {x: 96, y: 640, rotation: FACING_E},
@@ -246,6 +249,7 @@ const levelData = [
         width: 30,
         height: 30,
         drawDist: 1000,
+        music: "klaim-banquise",
         colors: {sky: 'rgb(0,0,0)', ground: 'rgb(255, 255, 255)'},
         skybox: null,
         start: {x: 224, y: 1696, rotation: FACING_E},
@@ -284,6 +288,7 @@ const levelData = [
         width: 30,
         height: 30,
         drawDist: 600,
+        music: "klaim-banquise",
         colors: {sky: 'rgb(255, 255, 255)', ground: 'rgb(255, 255, 255)'},
         skybox: null,
         start: {x: 224, y: 1696, rotation: FACING_E},
@@ -316,6 +321,7 @@ const levelData = [
         width: 15,
         height: 11,
         drawDist: 300,
+        music: "klaim-ice_wizard-intro",
         colors: {sky: 'rgb(0, 0, 0)', ground: 'rgb(255, 255, 255)'},
         skybox: null,
         start: {x: 864, y: 352, rotation: FACING_W},
@@ -347,7 +353,7 @@ class Level {
 
         this.doorOffsets = this.doorStates.slice();
         this.doorOffsets.fill(64);
-        this.musicTrack = getMusicForLevel(index);
+        this.musicTrack = levelObject.music;
     }
 
     checkLevelCompletion() {
@@ -540,17 +546,8 @@ function getDoorColor(type) {
     }
 }
 
-function getMusicForLevel(index){
-    switch(index){
-        case 2:
-        case 5:
-            return "klaim-glacier";
-        default:
-            return "klaim-banquise";
-    }
-}
-
 function loadLevel(index) {
+    console.log(`Loading level ${index} ...`);
     let data = levelData[index];
     MAP_NUM_ROWS = data.height;
     MAP_NUM_COLS = data.width;
@@ -572,6 +569,7 @@ function loadLevel(index) {
 
     if (data.objects) loadLevelObjects(data);
     else initTestObjects();
+    console.log(`Loading level ${index} - DONE`);
 }
 
 function loadLevelObjects(levelData) {
@@ -701,8 +699,13 @@ class LevelTransition extends State {
         this.timer = 0;
         this.animation = 2;
         player.reset();
-        if (currentLevel.index < levelData.length - 1) loadLevel(currentLevel.index + 1);
-        else (this.endGame = true);
+
+        if (currentLevel.index < levelData.length - 1) {
+            loadLevel(currentLevel.index + 1);
+        } else {
+            this.endGame = true;
+        }
+
         moveEverything();
     }
 

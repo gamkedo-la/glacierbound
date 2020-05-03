@@ -1,6 +1,6 @@
 class EnemyStateMachine extends FiniteStateMachine {
 	constructor(body) {
-		let stateList = {'Idle': new EnemyIdleState(), 'Wandering': new EnemyWanderState(), 'Patrolling': new EnemyPatrolState(), 
+		let stateList = {'Idle': new EnemyIdleState(), 'Wandering': new EnemyWanderState(), 'Patrolling': new EnemyPatrolState(),
 						'Attacking': new EnemyAttackState(), 'Searching': new EnemySearchState(), 'Dying' : new EnemyDyingState() };
 		super(stateList, 'Idle');
 		this.body = body;
@@ -155,10 +155,20 @@ class EnemyAttackState extends State {
 	constructor() {
 		super();
 		this.name = 'Attacking'
+		this.firstTimeAttacking = true;
 	}
 
 	onEnter(character, from) {
 		character.damagedBy = false;
+
+		if(this.firstTimeAttacking && currentLevel.index == 5) // Special case for when the boss starts attacking the player for the first time
+		{
+			currentBGM.stop();
+			currentBGM = new BackgroundMusicClass("klaim-ice_wizard-battle");
+			currentBGM.play();
+		}
+
+		this.firstTimeAttacking = false;
 	}
 
 	run(character) {
@@ -250,7 +260,7 @@ class EnemySearchState extends State {
 		let checkIndex = Math.floor(currentLevel.mapGrid[currentIndex]) === 2 ? currentIndex : destIndex;
 		if (Math.floor(currentLevel.mapGrid[checkIndex]) === 2 && currentLevel.doorOffsets[checkIndex] === 64)
 			currentLevel.toggleDoor(destIndex);
-		
+
 		if (dist > TILE_SIZE / 4) {
 			character.moveSpeed = 1;
 		} else if (character.path.length > 1) {
@@ -300,16 +310,16 @@ class EnemyDyingState extends State {
 		super();
 		this.name = 'Dying'
 	}
-	onEnter(character, from) { 
+	onEnter(character, from) {
 		character.createSprite('white');
 	}
 
-	run(character) { 
+	run(character) {
 		character.scale -= 0.05;
 		character.altitude -= 0.025;
 		if (character.scale <= 0) character.isDead = true;
 	}
-	checkConditions() { 
+	checkConditions() {
 		//End state. No transitions.
 		return;
 	}

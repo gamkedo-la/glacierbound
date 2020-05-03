@@ -50,8 +50,8 @@ class GameStarted extends State {
 
     onEnter() {
         console.log("GameStarted state enter");
-        this.music = new BackgroundMusicClass(currentLevel.musicTrack); // TODO: change the music depending on the level
-        this.music.play();
+        currentBGM = new BackgroundMusicClass(currentLevel.musicTrack);
+        currentBGM.play();
         return;
     }
 
@@ -76,7 +76,7 @@ class GameStarted extends State {
 
     onExit() {
         console.log("GameStarted state exit");
-        this.music.stop();
+        currentBGM.stop();
         this.levelEdit = false;
     }
 }
