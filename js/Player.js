@@ -12,11 +12,11 @@ class Player {
         this.maxArmor = 15;
         this.armorPickup = 0;
 
-        this.normaldamage = 20; 
+        this.normaldamage = 20;
         //Damage Boost Type 1 - Normal damage is multiplied by dBoost1damageMultiplier for 1 attack. Stacks.
         this.dBoost1Pickup = 0;
-        this.dBoost1damageMultiplier = 3; 
-        this.dBoost1active = 0; 
+        this.dBoost1damageMultiplier = 3;
+        this.dBoost1active = 0;
         //Damage Boost Type 2 - Normal damage is multiplied by dBoost2damageMultiplier for dBoost2duration seconds. Does not stack.
         this.dBoost2Pickup = 0;
         this.dBoost2active = false;
@@ -106,8 +106,8 @@ class Player {
         var newProj = new Projectile(pX, pY, 10, spriteList['projectile'], -0.5, 0.2, this.rotationAngle, false);
         if (this.dBoost1active && this.dBoost2active) {
             newProj.pic = spriteList['projectile_comboboost'];
-            newProj.shootFrom(this, this.normaldamage * this.dBoost1damageMultiplier * this.dBoost2damageMultiplier); 
-            this.dBoost1active--;    
+            newProj.shootFrom(this, this.normaldamage * this.dBoost1damageMultiplier * this.dBoost2damageMultiplier);
+            this.dBoost1active--;
         } else if (this.dBoost1active) {
             newProj.pic = spriteList['projectile_boost1'];
             newProj.shootFrom(this, this.normaldamage * this.dBoost1damageMultiplier);
@@ -159,7 +159,7 @@ class Player {
                             player.health = player.maxHealth;
                         } //end of if statement to check that player does not go above max Health
                     } //end of else statement for pickup to activate if player is damaged
-                } //end of else statement checking that player has health pickup 
+                } //end of else statement checking that player has health pickup
                 break;
             case 'armor':
                 if (player.armorPickup == 0) {
@@ -175,7 +175,7 @@ class Player {
                             player.armor = player.maxArmor;
                         } //end of if statement to check that player does not go above max armor
                     } // end of else statement for pickup to activate if armor is damaged
-                } // end of else statement checking that player has armor pickup       
+                } // end of else statement checking that player has armor pickup
                 break;
             case 'damageboost1':
                 if (player.dBoost1Pickup == 0){
@@ -183,7 +183,7 @@ class Player {
                 } else {
                     player.dBoost1Pickup--;
                     player.dBoost1active++;
-                    if (player.dBoost1active == 1) {    
+                    if (player.dBoost1active == 1) {
                         messageConsole.push('Damage of next attack increased by '+this.dBoost1damageMultiplier+'00%.', 'coral');
                     } else {
                         messageConsole.push('Damage of next '+player.dBoost1active+' attacks increased by '+this.dBoost1damageMultiplier+'00%.', 'coral');
@@ -195,7 +195,7 @@ class Player {
                     messageConsole.push("No Damage Boost Type 2 available.", 'red');
                 } else {
                     if (player.dBoost2active == true){
-                       messageConsole.push("Damage Boost Type 2 is still active.", 'lightblue'); 
+                       messageConsole.push("Damage Boost Type 2 is still active.", 'lightblue');
                     } else {
                         player.dBoost2Pickup--;
                         messageConsole.push('Damage increased by '+this.dBoost2damageMultiplier+'00% for the next '+this.dBoost2duration+' seconds.', 'hotpink');
@@ -207,7 +207,7 @@ class Player {
                 break;
             default:
                 break;
-        }        
+        }
     }
 
     pauseBoost2TimerPause(){
@@ -217,7 +217,7 @@ class Player {
 
     pauseBoost2Timer(){
             if(player.dBoost2timeLeft > 0) {
-            player.dboost2Timer = setInterval(function(){ 
+            player.dboost2Timer = setInterval(function(){
                               if(player.dBoost2timeLeft <= 0){
                                 clearInterval(player.dboost2Timer);
                                 player.dBoost2active = false;
@@ -273,6 +273,11 @@ class Player {
             damageRemaining -= mitigated;
         }
         this.health = clamp(this.health - damageRemaining, 0, this.maxHealth);
+        if(damageRemaining > 0){
+            let hurtSounds = [ soundPlayerHurt1, soundPlayerHurt2 ];
+            let sound = hurtSounds[Math.floor(Math.random() * hurtSounds.length)];
+            sound.play();
+        }
     }
 
     castAllRays() {

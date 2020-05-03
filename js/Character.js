@@ -90,7 +90,6 @@ class Character extends GameObject {
 			currentLevel.stats.enemiesKilled++;
 			this.die();
 		} else {
-			console.log("HIT");
 			soundMonster3.play();
 		}
 
