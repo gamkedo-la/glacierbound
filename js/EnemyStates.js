@@ -156,6 +156,10 @@ class EnemyAttackState extends State {
 		super();
 		this.name = 'Attacking'
 		this.firstTimeAttacking = true;
+		if(currentLevel.index == 5)
+		{
+			this.battleMusic = new BackgroundMusicClass("klaim-ice_wizard-battle");
+		}
 	}
 
 	onEnter(character, from) {
@@ -163,9 +167,7 @@ class EnemyAttackState extends State {
 
 		if(this.firstTimeAttacking && currentLevel.index == 5) // Special case for when the boss starts attacking the player for the first time
 		{
-			currentBGM.stop();
-			currentBGM = new BackgroundMusicClass("klaim-ice_wizard-battle");
-			currentBGM.play();
+			playBGM(this.battleMusic);
 		}
 
 		this.firstTimeAttacking = false;

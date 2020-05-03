@@ -353,7 +353,7 @@ class Level {
 
         this.doorOffsets = this.doorStates.slice();
         this.doorOffsets.fill(64);
-        this.musicTrack = levelObject.music;
+        this.musicTrack = new BackgroundMusicClass(levelObject.music);
     }
 
     checkLevelCompletion() {
@@ -651,6 +651,7 @@ class LevelTransition extends State {
         super();
         this.name = 'Level Transition'
         this.timer = 0;
+        this.music = new BackgroundMusicClass("klaim-avalanche");
     }
 
 	onEnter() {
@@ -663,9 +664,7 @@ class LevelTransition extends State {
             enemyPercent: Math.floor(currentLevel.stats.enemiesKilled / currentLevel.stats.totalEnemies * 100),
             playTime: Math.floor((levelEndTime - currentLevel.stats.startTime) / 1000),
         };
-        currentBGM.stop();
-        currentBGM = new BackgroundMusicClass("klaim-avalanche");
-        currentBGM.play();
+        playBGM(this.music, false); // no looping
     }
 
     run() {
@@ -680,6 +679,7 @@ class LevelTransition extends State {
                 canvasContext.font = '60px Arial';
                 canvasContext.textAlign = 'center';
                 canvasContext.fillText('Entering ' + newLevel, canvas.width/2, canvas.height/2);
+                stopBGM();
             }
         }
 

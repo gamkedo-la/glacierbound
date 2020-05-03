@@ -9,7 +9,7 @@ class TitleScreen extends State {
         this.creditsButton = {x: canvas.width / 2 - 50, y: canvas.height - 100, w: 100, h: 30};
         this.showingCredits = false;
         this.showingControls = false;
-        currentBGM = new BackgroundMusicClass("klaim-main_menu");
+        this.music = new BackgroundMusicClass("klaim-main_menu");
     }
 
     onEnter() {
@@ -19,7 +19,7 @@ class TitleScreen extends State {
         this.controlsHighlighted = false;
         this.timer = 0;
         resetMouse();
-        currentBGM.play(false); // no looping
+        playBGM(this.music, false); // no looping
     }
 
     run() {
@@ -27,7 +27,7 @@ class TitleScreen extends State {
         this.draw();
 
         // this is to workaround the protection preventing non-interracted pages to play audio.
-        if(!currentBGM.isPlaying()){
+        if(currentBGM && !currentBGM.isPlaying()){
             currentBGM.play(false); // no looping
         }
     }
@@ -157,7 +157,6 @@ class TitleScreen extends State {
 
     onExit() {
         console.log("TitleScreen state exit");
-        currentBGM.stop();
         resetMouse();
     }
 }

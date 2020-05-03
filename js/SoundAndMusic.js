@@ -34,6 +34,19 @@ function decreaseBGMVolume(){
 	updateAllBGMVolumes();
 }
 
+function playBGM(newBGM, withLooping = true) {
+	if(currentBGM) currentBGM.stop();
+	currentBGM = newBGM;
+	currentBGM.setVolume(musicVolume);
+	currentBGM.play(withLooping);
+}
+
+function stopBGM()
+{
+	if(currentBGM)
+		currentBGM.stop();
+}
+
 //sounds
 //background music
 var hauntedHoedownSound = new BackgroundMusicClass("HauntedHoedown"); //borrowed from Ghost Rustlers

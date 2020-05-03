@@ -50,9 +50,7 @@ class GameStarted extends State {
 
     onEnter() {
         console.log("GameStarted state enter");
-        currentBGM.stop();
-        currentBGM = new BackgroundMusicClass(currentLevel.musicTrack);
-        currentBGM.play();
+        playBGM(currentLevel.musicTrack);
         return;
     }
 
@@ -78,6 +76,7 @@ class GameStarted extends State {
     onExit() {
         console.log("GameStarted state exit");
         this.levelEdit = false;
+        stopBGM();
     }
 }
 
@@ -86,13 +85,12 @@ class GameOver extends State {
         super();
         this.name = 'Game Over';
         this.timer = 0;
+        this.music = new BackgroundMusicClass("klaim-avalanche");
     }
 
     onEnter() {
         this.timer = 0;
-        currentBGM.stop();
-        currentBGM = new BackgroundMusicClass("klaim-avalanche");
-        currentBGM.play();
+        playBGM(this.music, false); // no looping
     }
 
     run() {
@@ -130,6 +128,7 @@ class GameOver extends State {
 
     onExit() {
         resetMouse();
+        stopBGM();
     }
 }
 
