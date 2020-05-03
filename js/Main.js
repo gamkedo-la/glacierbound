@@ -52,7 +52,7 @@ class GameStarted extends State {
         console.log("GameStarted state enter");
         playBGM(currentLevel.musicTrack);
         if(currentLevel.ambientTrack){
-            currentLevel.ambientTrack.setVolume(0.3); // TODO: have a way to change the volume of ambiant, sounds, and general audio
+            currentLevel.ambientTrack.setVolume(0.1); // TODO: have a way to change the volume of ambiant, sounds, and general audio
             currentLevel.ambientTrack.play(true);
         }
         return;
