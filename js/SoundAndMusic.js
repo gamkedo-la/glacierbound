@@ -6,34 +6,31 @@ var soundSetforMeetings = false; //make false to hear at normal level
 
 let musicVolume = 0.5; // TODO: add menu option to up and down volume
 let musicVolumeStep = 0.1;
-let allBGMs = [];
 let currentBGM = null;
 
 if(soundSetforMeetings){
 	musicVolume = 0.04; //quieter for screen sharing during meetings
 }
 
-function updateAllBGMVolumes() {
+function updateBGMVolume() {
 	if(musicVolume < 0.0)
 		musicVolume = 0.0;
 	if(musicVolume > 1.0)
 		musicVolume = 1.0;
-	allBGMs.forEach(bgm => {
-		bgm.setVolume(musicVolume);
-		console.log("new volume = " + bgm.getVolume());
-	});
+	currentBGM.setVolume(musicVolume);
+	console.log("new volume = " + currentBGM.getVolume());
 }
 
 function increaseBGMVolume(){
 	console.log("BGM Volume UP");
 	musicVolume += musicVolumeStep;
-	updateAllBGMVolumes();
+	updateBGMVolume();
 }
 
 function decreaseBGMVolume(){
 	console.log("BGM Volume DOWN");
 	musicVolume -= musicVolumeStep;
-	updateAllBGMVolumes();
+	updateBGMVolume();
 }
 
 function playBGM(newBGM, withLooping = true) {
@@ -120,7 +117,6 @@ function BackgroundMusicClass(filenameWithPath) {
 		musicSound.loop = loop;
 		musicSound.play().then(() => {
 			playing = true;
-			allBGMs.push(this); // Make sure changes applied to BGM reach this object.
 			console.log("Playing " + filePath);
 		 }, (error_reason) => {
 			console.warn(`Failed to play music ${filePath} : ${error_reason}`);
@@ -130,11 +126,5 @@ function BackgroundMusicClass(filenameWithPath) {
 	this.stop = function() {
 		musicSound.pause();
 		playing = false;
-
-		// Remove from BGMs if not playing.
-		const index = allBGMs.indexOf(this);
-		if (index > -1) {
-			allBGMs.splice(index, 1);
-		}
 	};
 }
