@@ -230,7 +230,7 @@ function Credits() {
         "Catherine San Luis: Health and armor systems (UI, art, related code), inventory pick up messages, damage boost power-ups, credits display improvement, game over fixes, projectile sprites, pause screen, controls page improvements"," ",
         "Klaim (A. Joël Lamotte): Music (Banquise, Avalanche, Glacier, Ice Wizard (boss), main menu, gameover, end of level), music system improvements, music volume keys, testing"," ",
         "Vince McKeown: Player hands graphics, 2 enemy sprites, initial enemy placement, addl. wall texture, sound code integration, sounds for laser and fireball"," ",
-        "Ashleigh M.: Logo, hit feedback for player and enemy, title screen improvements, game over image, testing"," ",
+        "Ashleigh M.: Logo, hit feedback for player and enemy, title screen improvements, intro and game over image, testing"," ",
         "Powerproust: Intro and end text display"," ",
         "Yong Wei: Strafe input"," ",
         "Joshua Rigley: Health tracking"," ",
