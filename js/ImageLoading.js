@@ -10,6 +10,7 @@ function loadImages() {
 
 	var imageList = [
 		{spriteName: 'logo', fileName: 'logo.png'},
+		{spriteName: 'intro-story-screen', fileName: 'intro-story-screen2.png'},
 		{spriteName: 'gameover', fileName: 'game-over.png'},
 		{spriteName: 'cursor', fileName: 'cursor.png'},
 		{spriteName: 'leftHand', fileName: 'leftHand.png'},

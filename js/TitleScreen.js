@@ -304,9 +304,13 @@ class StoryIntroduction extends State {
                     "riding his Wonderful Dragon, giving him a fatal blow.",
                     "He remembered the pain and rubbed his temples.",
                     "But then came the image of a young boy.",
-                    "'The Prince! He must know that I am alive and I should protect him'",
+                    "'The Prince!', he exclaimed.",
+                    "'He must know that I am alive,",
+                    "and I should protect him'",
                     "He stood up.",
-                    "'Where am I? It looks like a crypt. I had better be on the lookout for danger...'",];
+                    "'Where am I? It looks like a crypt",
+                    "I had better be on the lookout for danger..."
+                ];
     }
 
 	onEnter() {
@@ -317,16 +321,24 @@ class StoryIntroduction extends State {
     run() {
         this.animateAlpha();
 
-        colorRect(0, 0, canvas.width, canvas.height, '#3F3F74');
+        colorRect(0, 0, canvas.width, canvas.height, 'black');
         canvasContext.fillStyle = 'white';
         if (this.animation === 1) {
+            let storyImg = spriteList['intro-story-screen'];
+            let drawRatio = storyImg.width >= canvas.width ? canvas.width/storyImg.width : storyImg.width/canvas.width;
+                drawRatio *= 0.8;
+            let drawWidth = storyImg.width * drawRatio,
+                drawHeight = storyImg.height * drawRatio,
+                drawX = (canvas.width - drawWidth) / 2,
+                drawY = (canvas.height - drawHeight) / 2;
+            canvasContext.drawImage(storyImg, 0, 0, storyImg.width, storyImg.height, drawX, drawY, drawWidth, drawHeight);
             let weight = this.timer/60;
-            let startY = (canvas.height / 2) - (this.text.length * 25) / 2;
+            let startY = 30;
             let displayLength = Math.ceil(lerp(0, this.text.length, weight));
-            canvasContext.font = '16px Arial';
-            canvasContext.textAlign = 'center';
+            canvasContext.font = '12.5px Arial';
+            canvasContext.textAlign = 'left';
             for (let t = 0; t < displayLength; t++) {
-                canvasContext.fillText(this.text[t], canvas.width/2, startY + t * 25);
+                canvasContext.fillText(this.text[t], 15, startY + t * 25);
             }
             //draw main content
         } else if (this.animation === 2) {
